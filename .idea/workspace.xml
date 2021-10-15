@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e1ea0e12-91a6-4a98-adb9-592f90df9484" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/MavenWrapperDownloader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stundenplan-Bachelor_Informatik_1.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/App.test.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/App.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/react-app-env.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/reportWebVitals.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/src/setupTests.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hbrs-ical-generator-frontend/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Controller/CalenderExportController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Controller/ExcelImportController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/DBRepo/StundenplanDateMNRepo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/DBRepo/StundenplanRepo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/DBRepo/VeranstaltungsRepo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/HbrsiCalGeneratorApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Models/CustomCalender/CustomCalenderBase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Models/StundenplanDatumMN.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Models/StundenplanEintrag.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Models/Veranstaltung.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Service/CalenderGeneratorService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/Service/HbrsExcelParser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ical4j.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/student/aschm22s/hbrsiCalGenerator/hbrsiCalGenerator/HbrsiCalGeneratorApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1zYYChKbqOVJNtDYCwGEIYC6sEA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e1ea0e12-91a6-4a98-adb9-592f90df9484" name="Changes" comment="" />
+      <created>1634326367319</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1634326367319</updated>
+      <workItem from="1634326369844" duration="87000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
