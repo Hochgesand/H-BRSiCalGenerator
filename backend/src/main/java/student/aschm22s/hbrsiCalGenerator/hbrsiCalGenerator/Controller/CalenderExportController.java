@@ -4,11 +4,9 @@ import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAORecieveObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service.CalenderGeneratorService;
 
@@ -24,14 +22,33 @@ public class CalenderExportController {
     @Autowired
     VeranstaltungsRepo veranstaltungsRepo;
 
+    class veranstaltungsIds{
+        List<Integer> veranstaltungsIds;
+
+        public List<Integer> getVeranstaltungsIds() {
+            return veranstaltungsIds;
+        }
+
+        public void setVeranstaltungsIds(List<Integer> veranstaltungsIds) {
+            this.veranstaltungsIds = veranstaltungsIds;
+        }
+
+        public veranstaltungsIds(List<Integer> veranstaltungsIds) {
+            this.veranstaltungsIds = veranstaltungsIds;
+        }
+    }
+
     @RequestMapping(
             value = "/sememesteriCal",
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public byte[] getCalenderForSemester(@RequestParam(value = "veranstaltungsIds") List<Integer> veranstaltungsIds) throws IOException {
+    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
+        if (veranstaltungsIds.getVeranstaltungsIds().size() == 0)
+            return new byte[0x00];
+
         Calendar calenderToReturn = calenderGeneratorService
-                .createCalenderForVeranstaltungen(veranstaltungsIds);
+                .createCalenderForVeranstaltungen(veranstaltungsIds.getVeranstaltungsIds());
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
