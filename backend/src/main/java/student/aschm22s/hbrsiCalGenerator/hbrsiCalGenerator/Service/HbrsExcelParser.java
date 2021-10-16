@@ -48,14 +48,14 @@ public class HbrsExcelParser {
         Row row = sheet.getRow(0);
 
         ArrayList<Veranstaltung> veranstaltungsListe = new ArrayList<>();
-        String studienGangSemester = row.getCell(0) + "";
+        String studienGangSemester = (row.getCell(0) + "").substring(16);
 
         veranstaltungsRepo.deleteAllByStudienGangSemester(studienGangSemester);
 
         for (int i = 5; i < rows - 1; ++i) {
             String veranstaltungsname;
             row = sheet.getRow(i);
-            veranstaltungsname = row.getCell(4) + "";
+            veranstaltungsname = (row.getCell(4) + "");
 
             Veranstaltung neueVeranstaltung = new Veranstaltung();
             neueVeranstaltung.setName(veranstaltungsname);
@@ -78,7 +78,7 @@ public class HbrsExcelParser {
         Row row = sheet.getRow(0);
 
         String aktuellerTag = "";
-        String studienGangSemester = row.getCell(0) + "";
+        String studienGangSemester = (row.getCell(0) + "").substring(16);
 
         for (int i = 5; i < rows - 1; ++i) {
             row = sheet.getRow(i);

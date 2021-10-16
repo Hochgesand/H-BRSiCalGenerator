@@ -1,22 +1,22 @@
 package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service.HbrsExcelParser;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -27,11 +27,18 @@ public class ExcelImportController {
     @Autowired
     HbrsExcelParser hbrsExcelParser;
 
-    @RequestMapping(value = "/uploadFile", method = POST)
-    public String submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, ModelMap modelMap) throws IOException {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+    @Value("${upload.key}")
+    private String userBucketPath;
 
+    @RequestMapping(value = "/uploadFile", method = POST)
+    public String submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
+        if (!key.equals(userBucketPath))
+            return "Could not verify uploadkey";
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         modelMap.addAttribute("file", files);
+
+        AtomicInteger counterPlaene = new AtomicInteger();
 
         for (MultipartFile x : files) {
             executorService.submit(() -> {
@@ -52,6 +59,7 @@ public class ExcelImportController {
                     System.out.println("Stundenplanimport fehler, siehe Stacktrace");
                 } else
                     System.out.println("Stundenplan: " + veranstaltung.getStudienGangSemester() + " wurde importiert");
+                counterPlaene.getAndIncrement();
             });
         }
 
@@ -64,8 +72,10 @@ public class ExcelImportController {
             e.printStackTrace();
         }
 
-        System.out.println("Alle Stundenpläne wurden importiert");
+        if(counterPlaene.get() != files.length){
+            return "Es gab einen Fehler beim importieren. " + counterPlaene.get() + " von" + files.length + " wurden importiert";
+        }
 
-        return "Alle Stundenpläne wurden importiert";
+        return "Alle " + files.length + " Stundenpläne wurden importiert";
     }
 }
