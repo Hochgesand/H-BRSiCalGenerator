@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAORecieveObjects;
+package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAOObjects;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 

@@ -8,22 +8,17 @@ import org.joda.time.DateTime;
 import org.joda.time.Weeks;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimePrinter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanDateMNRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAORecieveObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanDatumMN;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
 
 import java.io.*;
-import java.sql.Array;
-import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -36,6 +31,14 @@ public class HbrsExcelParser {
     private StundenplanRepo stundenplanRepo;
     @Autowired
     private StundenplanDateMNRepo stundenplanDateMNRepo;
+
+    public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
+        for (Veranstaltung x : veranstaltungen) {
+            if (veranstaltung.getName().equals(x.getName()))
+                return true;
+        }
+        return false;
+    }
 
     @Transactional
     public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException {
@@ -54,11 +57,14 @@ public class HbrsExcelParser {
             row = sheet.getRow(i);
             veranstaltungsname = row.getCell(4) + "";
 
-
             Veranstaltung neueVeranstaltung = new Veranstaltung();
             neueVeranstaltung.setName(veranstaltungsname);
             neueVeranstaltung.setProf(row.getCell(6) + "");
             neueVeranstaltung.setStudienGangSemester(studienGangSemester);
+
+            if (veranstaltungAlreadyExists(neueVeranstaltung, veranstaltungsListe))
+                continue;
+
             veranstaltungsListe.add(neueVeranstaltung);
         }
         veranstaltungsRepo.saveAll(veranstaltungsListe);
@@ -74,7 +80,6 @@ public class HbrsExcelParser {
         String aktuellerTag = "";
         String studienGangSemester = row.getCell(0) + "";
 
-        int soos = 0;
         for (int i = 5; i < rows - 1; ++i) {
             row = sheet.getRow(i);
             String tempDay = row.getCell(0) + "";
@@ -108,9 +113,7 @@ public class HbrsExcelParser {
                 stundenplanDatumMN.setStundenplanEintrag(newObjectInDB);
                 stundenplanDateMNRepo.save(stundenplanDatumMN);
             }
-            soos = i;
         }
-        System.out.println(soos);
 
         return stundenplanRepo.findAll();
     }

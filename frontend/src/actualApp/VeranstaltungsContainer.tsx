@@ -87,6 +87,7 @@ export default function VeranstaltungsContainer() {
           enableRangeSelection={true}
           rowSelection={"multiple"}
           ref={gridRef}
+          floatingFilter={true}
           rowMultiSelectWithClick={true}
           // @ts-ignore
           onFirstDataRendered={() => gridRef.current.api.sizeColumnsToFit()}
