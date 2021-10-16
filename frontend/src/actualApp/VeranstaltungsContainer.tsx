@@ -75,10 +75,12 @@ export default function VeranstaltungsContainer() {
         <p>Anleitung: Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
           Du kannst die Tabelle nach belieben sortieren und mit dem Burgerbutton kannst du auch gezielt
           nach Keywords suchen. Wenn du alle Veranstaltungen ausgewählt hast klick einfach
-          auf dem Button "Hol dir deinen Kalender!" Du kriegst deinen Kalender als .ics Datei ausgegeben,
+          auf den Button "Hol dir deinen Kalender!" Du kriegst deinen Kalender als .ics Datei ausgegeben,
           diese Datei kannst du einfach in der Kalendersoftware deiner Wahl importieren.
           Wenn du nicht weißt wie das geht, google es für deine Software.</p>
         <h3><a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"}>Gebt mir einen Stern auf Github ❤</a></h3>
+        <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und Gewissen.</p>
+        <p>Die Seite befindet sich noch in der Beta Phase, Fehler bitte melden! (a(at)andrevr.de)</p>
         <button onClick={onButtonClick}>Hol dir deinen Kalender!</button>
         <AgGridReact
           rowData={veranstaltungsData}
@@ -101,6 +103,11 @@ export default function VeranstaltungsContainer() {
       <br/>
       <br/>
       <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
       <h3>Packages und Technologien die ich benutzt habe:</h3>
       <p>Spring Boot (Java):</p>
       <ul>
@@ -110,7 +117,7 @@ export default function VeranstaltungsContainer() {
       <p>React:</p>
       <ul>
         <li>AGGrid für die Tabelle, kein Bock gehabt selber Sortieralgorithmen zu implementieren</li>
-        <li>Locker noch ca. 2000 Packages mehr die mit React gekommen sind, npm macht npm nachen</li>
+        <li>Locker noch ca. 2000 Packages mehr die mit React gekommen sind, npm macht npm sachen</li>
       </ul>
     </div>
 
