@@ -126,7 +126,7 @@ export default function VeranstaltungsContainer() {
         </AgGridReact>
       </div>
       <button onClick={onButtonClick} className={"btn btn-lg mt-4 mb-2"}>Hol dir deinen Kalender!</button>
-      <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"}>
+      <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
         <button className={"btn btn-lg mt-4 mb-2 ml-4"}>Gib mir einen Stern auf Github ❤</button>
       </a>
       <button className={"btn btn-lg mt-4 mb-2 ml-4"} onClick={() => handleClick()}>HILFE!</button>
