@@ -89,7 +89,7 @@ export default function VeranstaltungsContainer() {
           // @ts-ignore
           onFirstDataRendered={() => gridRef.current.api.sizeColumnsToFit()}
         >
-          <AgGridColumn field="name" width={400} sortable={true} filter={true} checkboxSelection={true} resizable={true} headerName={"Veranstaltung"} headerCheckboxSelection={true}/>
+          <AgGridColumn field="name" width={400} sortable={true} filter={true} checkboxSelection={true} resizable={true} headerName={"Veranstaltung"}/>
           <AgGridColumn field="prof" width={150} sortable={true} filter={true} resizable={true}/>
           <AgGridColumn field="studienGangSemester" width={400} sortable={true} filter={true} resizable={true} headerName={"Fachbereich / Semester"} />
         </AgGridReact>
