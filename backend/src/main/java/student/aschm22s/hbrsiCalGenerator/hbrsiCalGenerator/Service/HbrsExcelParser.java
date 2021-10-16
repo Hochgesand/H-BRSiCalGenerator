@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanDateMNRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAORecieveObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanDatumMN;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
@@ -36,14 +37,6 @@ public class HbrsExcelParser {
     @Autowired
     private StundenplanDateMNRepo stundenplanDateMNRepo;
 
-    public boolean veranstaltungAlreadyExists(String veranstaltungsName, Iterable<Veranstaltung> veranstaltungen) {
-        for (Veranstaltung x : veranstaltungen) {
-            if (veranstaltungsName.equals(x.getName()))
-                return true;
-        }
-        return false;
-    }
-
     @Transactional
     public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException {
         Workbook workbook = new HSSFWorkbook(excelFile);
@@ -56,13 +49,11 @@ public class HbrsExcelParser {
 
         veranstaltungsRepo.deleteAllByStudienGangSemester(studienGangSemester);
 
-        for (int i = 5; i < rows - 2; ++i) {
+        for (int i = 5; i < rows - 1; ++i) {
             String veranstaltungsname;
             row = sheet.getRow(i);
             veranstaltungsname = row.getCell(4) + "";
 
-            if (veranstaltungAlreadyExists(veranstaltungsname, veranstaltungsListe))
-                continue;
 
             Veranstaltung neueVeranstaltung = new Veranstaltung();
             neueVeranstaltung.setName(veranstaltungsname);
@@ -83,7 +74,8 @@ public class HbrsExcelParser {
         String aktuellerTag = "";
         String studienGangSemester = row.getCell(0) + "";
 
-        for (int i = 5; i < rows - 2; ++i) {
+        int soos = 0;
+        for (int i = 5; i < rows - 1; ++i) {
             row = sheet.getRow(i);
             String tempDay = row.getCell(0) + "";
             if (!tempDay.equals(""))
@@ -103,14 +95,12 @@ public class HbrsExcelParser {
             Veranstaltung temp = veranstaltungsRepo.findFirstByNameAndStudienGangSemester(tempModulName, studienGangSemester);
             neuerStundenplanEintrag.setVeranstaltung(temp);
             neuerStundenplanEintrag.setTag(aktuellerTag);
-
             StundenplanEintrag newObjectInDB = stundenplanRepo.save(neuerStundenplanEintrag);
 
             for (int j = 0; j < weeksInBetweenAmount; j++) {
                 dateVon = dateVon.plusWeeks(1);
                 DateTime dateTimeWithCorrectTime = dateVon;
                 long tempTimeToAdd = neuerStundenplanEintrag.getVon().getTime();
-                // Add one for our localtime, dont have the energy to fix that now.
                 dateTimeWithCorrectTime = dateTimeWithCorrectTime.plus(tempTimeToAdd).plusHours(1);
 
                 StundenplanDatumMN stundenplanDatumMN = new StundenplanDatumMN();
@@ -118,9 +108,9 @@ public class HbrsExcelParser {
                 stundenplanDatumMN.setStundenplanEintrag(newObjectInDB);
                 stundenplanDateMNRepo.save(stundenplanDatumMN);
             }
-
+            soos = i;
         }
-
+        System.out.println(soos);
 
         return stundenplanRepo.findAll();
     }
