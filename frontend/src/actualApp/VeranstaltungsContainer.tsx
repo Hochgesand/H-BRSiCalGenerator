@@ -11,9 +11,10 @@ import {saveAs} from 'file-saver'
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 import '../index.scss'
+import {useHistory} from "react-router-dom";
 
 export default function VeranstaltungsContainer() {
-
+  const history = useHistory();
   const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("")
@@ -40,6 +41,10 @@ export default function VeranstaltungsContainer() {
 
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function handleClick() {
+    history.push("/FAQ");
+  }
 
   const onButtonClick = () => {
     // @ts-ignore
@@ -124,9 +129,7 @@ export default function VeranstaltungsContainer() {
       <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"}>
         <button className={"btn btn-lg mt-4 mb-2 ml-4"}>Gib mir einen Stern auf Github ❤</button>
       </a>
-      <a href={"/FAQ"}>
-        <button className={"btn btn-lg mt-4 mb-2 ml-4"}>HILFE!</button>
-      </a>
+      <button className={"btn btn-lg mt-4 mb-2 ml-4"} onClick={() => handleClick()}>HILFE!</button>
     </div>
   );
 
