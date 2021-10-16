@@ -69,29 +69,51 @@ export default function VeranstaltungsContainer() {
   }
 
   return (
-    <div className="ag-theme-material" style={{height: 800, width: 1300}}>
-      <h2>H-BRS Kalendergenerator</h2>
-      <p>Anleitung: Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
-        Du kannst die Tabelle nach belieben sortieren und mit dem Burgerbutton kannst du auch gezielt
-        nach Keywords suchen. Wenn du alle Veranstaltungen ausgewählt hast klick einfach
-        auf dem Button "Hol dir deinen Kalender!" Du kriegst deinen Kalender als .ics Datei ausgegeben,
-        diese Datei kannst du einfach in der Kalendersoftware deiner Wahl importieren.
-        Wenn du nicht weißt wie das geht, google es für deine Software.</p>
-      <button onClick={onButtonClick}>Hol dir deinen Kalender!</button>
-      <AgGridReact
-        rowData={veranstaltungsData}
-        enableRangeSelection={true}
-        rowSelection={"multiple"}
-        ref={gridRef}
-        rowMultiSelectWithClick={true}
-        // @ts-ignore
-        onFirstDataRendered={() => gridRef.current.api.sizeColumnsToFit()}
-      >
-        <AgGridColumn field="name" width={400} sortable={true} filter={true} checkboxSelection={true} resizable={true} headerName={"Veranstaltung"}/>
-        <AgGridColumn field="prof" width={150} sortable={true} filter={true} resizable={true}/>
-        <AgGridColumn field="studienGangSemester" width={400} sortable={true} filter={true} resizable={true} headerName={"Fachbereich / Semester"} />
-      </AgGridReact>
+    <div>
+      <div className="ag-theme-material" style={{height: 800, width: 1300}}>
+        <h2>H-BRS Kalendergenerator</h2>
+        <p>Anleitung: Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
+          Du kannst die Tabelle nach belieben sortieren und mit dem Burgerbutton kannst du auch gezielt
+          nach Keywords suchen. Wenn du alle Veranstaltungen ausgewählt hast klick einfach
+          auf dem Button "Hol dir deinen Kalender!" Du kriegst deinen Kalender als .ics Datei ausgegeben,
+          diese Datei kannst du einfach in der Kalendersoftware deiner Wahl importieren.
+          Wenn du nicht weißt wie das geht, google es für deine Software.</p>
+        <h3><a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"}>Gebt mir einen Stern auf Github ❤</a></h3>
+        <button onClick={onButtonClick}>Hol dir deinen Kalender!</button>
+        <AgGridReact
+          rowData={veranstaltungsData}
+          enableRangeSelection={true}
+          rowSelection={"multiple"}
+          ref={gridRef}
+          rowMultiSelectWithClick={true}
+          // @ts-ignore
+          onFirstDataRendered={() => gridRef.current.api.sizeColumnsToFit()}
+        >
+          <AgGridColumn field="name" width={400} sortable={true} filter={true} checkboxSelection={true} resizable={true} headerName={"Veranstaltung"} headerCheckboxSelection={true}/>
+          <AgGridColumn field="prof" width={150} sortable={true} filter={true} resizable={true}/>
+          <AgGridColumn field="studienGangSemester" width={400} sortable={true} filter={true} resizable={true} headerName={"Fachbereich / Semester"} />
+        </AgGridReact>
+      </div>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <h3>Packages und Technologien die ich benutzt habe:</h3>
+      <p>Spring Boot (Java):</p>
+      <ul>
+        <li>Apache POI um Exceltabellen zu parsen</li>
+        <li>ical4j um den Calender zu generieren</li>
+      </ul>
+      <p>React:</p>
+      <ul>
+        <li>AGGrid für die Tabelle, kein Bock gehabt selber Sortieralgorithmen zu implementieren</li>
+        <li>Locker noch ca. 2000 Packages mehr die mit React gekommen sind, npm macht npm nachen</li>
+      </ul>
     </div>
+
   );
 
 }

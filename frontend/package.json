@@ -1,5 +1,6 @@
 {
   "name": "hbrs-ical-generator-frontend",
+  "homepage": "https://hochgesand.github.io/H-BRSiCalGenerator/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -5,3 +5,9 @@ Lasst euch einfach alle Module die ihr belegt bequem als iCal Format ausgeben un
 
 Als Bezahlung nehme ich gerne ein Stern hier auf GitHub oder unterstützt mich mit ein paar Cent auf PayPal.
 https://paypal.me/ASchmitz703
+
+
+Ihr findet den Generator unter folgender Adresse:
+https://hochgesand.github.io/H-BRSiCalGenerator/
+
+Achtung! Der bums ist noch quasi Alpha, erwartet kein künstlerisches Meisterwerk.
