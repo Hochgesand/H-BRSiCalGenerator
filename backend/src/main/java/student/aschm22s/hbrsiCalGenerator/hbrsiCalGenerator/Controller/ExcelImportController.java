@@ -2,6 +2,7 @@ package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,11 +21,11 @@ import java.util.concurrent.TimeUnit;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ExcelImportController {
 
     @Autowired
     HbrsExcelParser hbrsExcelParser;
-
 
     @RequestMapping(value = "/uploadFile", method = POST)
     public String submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, ModelMap modelMap) throws IOException {
