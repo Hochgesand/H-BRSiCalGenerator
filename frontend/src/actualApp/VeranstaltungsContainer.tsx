@@ -7,12 +7,12 @@ import Error from "../Error";
 import {AgGridColumn, AgGridReact} from "ag-grid-react";
 import usePostRequestCalendar from "../api/usePostRequestCalendar";
 import {saveAs} from 'file-saver'
+import {useHistory} from "react-router-dom";
+import usePostRequestCalendarEmail from "../api/usePostRequestCalendarEmail";
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 import '../index.scss'
-import {useHistory} from "react-router-dom";
-import usePostRequestCalendarEmail from "../api/usePostRequestCalendarEmail";
 
 export default function VeranstaltungsContainer() {
   const history = useHistory();
@@ -81,6 +81,8 @@ export default function VeranstaltungsContainer() {
     const sentCalendarEmail = () => {
       getCalendarEmailResponse()
         .then(response => {
+          alert("Deine Email wurde rausgeschickt^^ Wenn du keine E-Mail bekommen hast, versuche es erneut, " +
+            "vergiss aber nicht das ich dich nach zu vielen Versuchen für eine gewisse Zeit blockieren werde!")
         })
         .catch(err => {
             setError(err.message)
@@ -102,29 +104,26 @@ export default function VeranstaltungsContainer() {
 
   return (
     <div className={""}>
-      <div className={"grid grid-cols-3 mb-4 max-h-96 gap-4"}>
-        <div className={"col-span-2 2xl:col-span-1 rounded-box p-4 bg-base-300 flex-grow-0"}>
-          <h2 className={"text-4xl mb-2"}>H-BRS Kalendergenerator</h2>
+      <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-7/12 mb-4 xl:w-9/12"}>
+        <div className={"rounded-box p-4 bg-base-300 "}>
+          <h2 className={"text-4xl mb-2"}>H-BRS iCal Kalendergenerator</h2>
           <p>Die Seite befindet sich noch in der Beta Phase, Fehler bitte melden! (a(at)andrevr.de)</p>
           <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
             Gewissen.</p>
         </div>
-      </div>
-
-      <div className={"grid grid-rows-2 mt-4 gap-4 xl:w-9/12 mb-4"}>
-        <div className={"grid grid-cols-2 gap-4 w-5/12 rounded-box p-3 bg-base-300"}>
-          <button onClick={onButtonClickDownloadCalendar} className={"btn btn-lg"}>Hol dir deinen Kalender!</button>
+        <div className={"grid grid-cols-2 gap-4 rounded-box p-3 bg-base-300"}>
+          <button onClick={onButtonClickDownloadCalendar} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>
           <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
-            <button className={"btn btn-lg"}>Gib mir einen Stern auf Github ❤</button>
+            <button className={"btn btn-lg w-full"}>Gib mir einen Stern auf Github ❤</button>
           </a>
         </div>
-        <div className={"grid grid-cols-3 gap-4 w-1/2 rounded-box p-3 bg-base-300 flex-row"}>
+        <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300 flex-row"}>
           <input
-            className="appearance-none w-auto bg-base-200 text-white border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 text-2xl"
+            className="appearance-none  w-full bg-base-200 text-white border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 text-2xl"
             id="grid-first-email" type="text" placeholder="E-Mail" onChange={e => setEmail(e.target.value)}
           />
-          <button className={"btn btn-lg"} type={"submit"} onClick={onEmailWantToSchick}>Schicks per E-Mail</button>
-          <button className={"btn btn-lg"} onClick={handleClick}>HILFE!</button>
+          <button className={"btn btn-lg w-full"} type={"submit"} onClick={onEmailWantToSchick}>Schicks per E-Mail</button>
+          <button className={"btn btn-lg w-full"} onClick={handleClick}>HILFE!</button>
         </div>
       </div>
 
