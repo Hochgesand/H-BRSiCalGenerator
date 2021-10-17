@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.scss';
-import VeranstaltungsContainer from "./actualApp/VeranstaltungsContainer";
+import Lander from "./actualApp/Lander";
 
 function App() {
   return (
     <div className="App">
-      <VeranstaltungsContainer/>
+      <Lander/>
     </div>
   );
 }

@@ -14,12 +14,12 @@ export default function FAQ(){
         <p className={"text-2xl"}>Schritt 1:</p>
         <p>Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
           Du kannst die Tabelle nach belieben sortieren und mit dem Burgerbutton kannst du auch gezielt
-          nach Keywords suchen. Wenn du alle Veranstaltungen ausgewählt hast... </p>
+          nach Keywords suchen. Wenn du alle Veranstaltungen ausgewählt hast klicke auf "Hol dir deinen Kalender" ... </p>
         <p className={"text-2xl"}>Schritt 2: </p>
         <p>Jetzt hast du zwei Möglichkeiten:
-          1.: Klicke auf "Hol dir deinen Kalender" und importiere es wie in Beispiel 3 einfach selber am Rechner.
+          1.: Klicke auf "Download calendar.ics" und importiere es wie in Beispiel 3 einfach selber am Rechner.
           2.: Tippe deine E-Mail Adresse ein und lasse es dir bequem per E-Mail Schicken. Klicke dafür einfach nachdem
-           du deine E-Mail Adresse eingetragen hast auf "Schicks per E-Mail".
+           du deine E-Mail Adresse eingetragen hast auf "Schick's per E-Mail".
         </p>
         <p className={"text-2xl"}>Misc:</p>
         <p>Packages und Technologien die ich benutzt habe:</p>
