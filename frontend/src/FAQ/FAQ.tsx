@@ -20,6 +20,7 @@ export default function FAQ(){
           1.: Klicke auf "Download calendar.ics" und importiere es wie in Beispiel 3 einfach selber am Rechner.
           2.: Tippe deine E-Mail Adresse ein und lasse es dir bequem per E-Mail Schicken. Klicke dafür einfach nachdem
            du deine E-Mail Adresse eingetragen hast auf "Schick's per E-Mail".
+          Damit kriegste dann die ics auf's Handy und kannst sie ggf. sogar noch einfacher importieren.
         </p>
         <p className={"text-2xl"}>Misc:</p>
         <p>Packages und Technologien die ich benutzt habe:</p>
@@ -33,6 +34,18 @@ export default function FAQ(){
           <li> - AGGrid für die Tabelle, kein Bock gehabt selber Sortieralgorithmen zu implementieren</li>
           <li> - Locker noch ca. 2000 Packages mehr die mit React gekommen sind, npm macht npm sachen</li>
         </ul>
+        <p className={"text-2xl"}>FAQ:</p>
+        <p>Q: Warum machste die App nicht responsive damit ich das auch bequem auf dem Handy nutzen kann?</p>
+        <p>A: Warum nutzt du die App nicht einfach auf dem Rechner?</p>
+        <p>Q: Warum werden manche Veranstaltungen doppelt angezeigt?</p>
+        <p>A: Manche Veranstaltungen gibt es Fachbereich/Semester übergreifend und ich habe noch kein Ablauf im Backend
+          implementiert die schaut ob die Eventuhrzeiten/Räume übereinstimmen damit ich gewährleisten kann das die auch
+          tatsächlich die gleichen Veranstaltungen sind. Beispielsweise könnte ja eine Veranstaltung für Nachschreiber
+          existieren und damit z.B. in einem anderen Raum stattfinden.
+          Wählt daher immer die Veranstaltung für euren Fachbereich/Semester.</p>
+        <p>Q: Wie kriegst du die Stundenpläne in die Anwendung importiert?</p>
+        <p>A: Aktuell importiere ich die Stundenpläne noch per Hand. Ich arbeite daran die Stundenpläne von Eva zu webscrapen.
+          Heißt wenn sich die Stundenpläne aktualisieren kann es passieren das die hier noch nicht uptodate sind.</p>
       </div>
 
       <div className={"mt-5"}>
@@ -44,7 +57,8 @@ export default function FAQ(){
         <img src={process.env.PUBLIC_URL + "/aTkfaQusHi.gif"} alt={""}/>
       </div>
       <div className={"mt-5"}>
-        <p className={"text-3xl"}>Beispiel 3: "Is ja alles schön und toll, aber was mache ich jetzt mit dieser komischen calendar.ics Datei (Beispiel an Google Kalender)"</p>
+        <p className={"text-3xl"}>Beispiel 3: "Is ja alles schön und toll, aber was mache ich jetzt mit dieser komischen
+          calendar.ics Datei (Beispiel an Google Kalender)"</p>
         <img src={process.env.PUBLIC_URL + "/Z795yqtZO4.gif"} alt={""}/>
       </div>
 
