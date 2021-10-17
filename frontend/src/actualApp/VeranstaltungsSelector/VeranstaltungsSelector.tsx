@@ -71,7 +71,7 @@ export default function VeranstaltungsSelector() {
       <GenerateKalendarModal showKalendarModal={showKalendarModal} setShowKalendarModal={setShowKalendarModal}
                              selectedData={selectedDataProp} veranstaltungsIds={veranstaltungsIds}/>
       <div className={showKalendarModal ? "filter blur-lg" : ""}>
-        <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-7/12 mb-4 xl:w-9/12"}>
+        <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12"}>
           <div className={"rounded-box p-4 bg-base-300 "}>
             <h2 className={"text-4xl mb-2"}>H-BRS iCal Kalendergenerator</h2>
             <p>Die Seite befindet sich noch in der Beta Phase, Fehler bitte melden! (a(at)andrevr.de)</p>

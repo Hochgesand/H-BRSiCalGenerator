@@ -67,7 +67,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
     <>
       {props.showKalendarModal ?
         <div className={"container flex mx-auto z-10 absolute inset-0 justify-center rounded-box h-screen"}>
-          <div className={"m-auto rounded-box bg-base-300 w-1/2 h-3/4 flex-none"}>
+          <div className={"m-auto rounded-box bg-base-300 w-3/4 xl:w-2/3 2xl:1 h-3/4 flex-none"}>
             <div className={"h-30 p-4"}>
               <button className={"btn btn-lg w-full mb-4"} type={"submit"}
                       disabled={props.veranstaltungsIds.length === 0}
