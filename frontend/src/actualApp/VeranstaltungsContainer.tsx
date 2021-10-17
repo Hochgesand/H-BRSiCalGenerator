@@ -12,18 +12,25 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 import '../index.scss'
 import {useHistory} from "react-router-dom";
+import usePostRequestCalendarEmail from "../api/usePostRequestCalendarEmail";
 
 export default function VeranstaltungsContainer() {
   const history = useHistory();
   const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
+  const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("")
   let veranstaltungsIds = [] as number[]
-  const path = `${baseUrl}/getVeranstaltungen`;
-  const {getData} = useGetRequest({path: path})
+  const veranstaltungsPath = `${baseUrl}/getVeranstaltungen`;
+  const {getData} = useGetRequest({path: veranstaltungsPath})
   const {getCalendar} = usePostRequestCalendar({
     path: `${baseUrl}/sememesteriCal`,
     veranstaltungsIds: veranstaltungsIds
+  })
+  const {getCalendarEmailResponse} = usePostRequestCalendarEmail({
+    path: `${baseUrl}/sememesteriCalEmail`,
+    veranstaltungsIds: veranstaltungsIds,
+    email: email
   })
   const gridRef = useRef(null)
 
@@ -46,7 +53,7 @@ export default function VeranstaltungsContainer() {
     history.push("/FAQ");
   }
 
-  const onButtonClick = () => {
+  const onButtonClickDownloadCalendar = () => {
     // @ts-ignore
     const selectedNodes = gridRef.current.api.getSelectedNodes()
     // @ts-ignore
@@ -62,8 +69,25 @@ export default function VeranstaltungsContainer() {
         );
     }
     downloadCalendar();
+  }
 
-
+  const onEmailWantToSchick = () => {
+    // @ts-ignore
+    const selectedNodes = gridRef.current.api.getSelectedNodes()
+    // @ts-ignore
+    const selectedData = selectedNodes.map(node => node.data)
+    // @ts-ignore
+    selectedData.map(node => veranstaltungsIds.push(node.id))
+    const sentCalendarEmail = () => {
+      getCalendarEmailResponse()
+        .then(response => {
+        })
+        .catch(err => {
+            setError(err.message)
+          }
+        );
+    }
+    sentCalendarEmail();
   }
 
   if (loading) {
@@ -125,11 +149,19 @@ export default function VeranstaltungsContainer() {
                         headerName={"Fachbereich / Semester"}/>
         </AgGridReact>
       </div>
-      <button onClick={onButtonClick} className={"btn btn-lg mt-4 mb-2"}>Hol dir deinen Kalender!</button>
-      <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
-        <button className={"btn btn-lg mt-4 mb-2 ml-4"}>Gib mir einen Stern auf Github ❤</button>
-      </a>
-      <button className={"btn btn-lg mt-4 mb-2 ml-4"} onClick={() => handleClick()}>HILFE!</button>
+      <div className={"grid grid-rows-1 grid-cols-5 mt-4 gap-4 xl:w-9/12 "}>
+        <button onClick={onButtonClickDownloadCalendar} className={"btn btn-lg"}>Hol dir deinen Kalender!</button>
+        <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
+          <button className={"btn btn-lg"}>Gib mir einen Stern auf Github ❤</button>
+        </a>
+        <input
+          className="appearance-none w-auto bg-base-200 text-white border border-red-500 rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 text-2xl"
+          id="grid-first-email" type="text" placeholder="E-Mail" onChange={e => setEmail(e.target.value)}
+        />
+        <button className={"btn btn-lg"} type={"submit"} onClick={() => onEmailWantToSchick()}>Schicks per E-Mail</button>
+        <button className={"btn btn-lg"} onClick={() => handleClick()}>HILFE!</button>
+        <button className={"btn btn-lg"} >DIE E-MAIL WIRD RAUSGEHEN, ICH HAB NUR NOCH KEIN FEEDBACK IMPLEMENTIERT!!!</button>
+      </div>
     </div>
   );
 
