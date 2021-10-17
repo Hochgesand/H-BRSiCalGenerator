@@ -139,10 +139,10 @@ export default function VeranstaltungsContainer() {
         >
           <AgGridColumn field="name" width={380} sortable={true} filter={true} checkboxSelection={true} resizable={true}
                         headerName={"Veranstaltung"} floatingFilter={true}/>
-          <AgGridColumn field="prof" width={150} sortable={true} filter={true} resizable={true}
-                        floatingFilter={true}/>
           <AgGridColumn field="studienGangSemester" width={400} sortable={true} filter={true} resizable={true}
                         floatingFilter={true} headerName={"Fachbereich / Semester"}/>
+          <AgGridColumn field="prof" width={150} sortable={true} filter={true} resizable={true}
+                        floatingFilter={true}/>
         </AgGridReact>
       </div>
 
