@@ -74,9 +74,10 @@ export default function VeranstaltungsSelector() {
         <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12"}>
           <div className={"rounded-box p-4 bg-base-300 "}>
             <h2 className={"text-4xl mb-2"}>H-BRS iCal Kalendergenerator</h2>
-            <p>Die Seite befindet sich noch in der Beta Phase, Fehler bitte melden! (a(at)andrevr.de)</p>
+            <p>Die Seite befindet sich noch in der Beta Phase, Fehler bitte melden! (a@andrevr.de)</p>
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
               Gewissen.</p>
+            <p>Stundenplanstand 17.10.2021 / 20:32</p>
           </div>
           <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300"}>
             <button onClick={onHolDirKalender} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>

@@ -45,7 +45,9 @@ export default function FAQ(){
           Wählt daher immer die Veranstaltung für euren Fachbereich/Semester.</p>
         <p>Q: Wie kriegst du die Stundenpläne in die Anwendung importiert?</p>
         <p>A: Aktuell importiere ich die Stundenpläne noch per Hand. Ich arbeite daran die Stundenpläne von Eva zu webscrapen.
-          Heißt wenn sich die Stundenpläne aktualisieren kann es passieren das die hier noch nicht uptodate sind.</p>
+          Heißt wenn sich die Stundenpläne aktualisieren kann es passieren das die hier noch nicht uptodate sind.
+          Wenn ihr da mehr wisst, sagt mir gerne bescheid und ich aktualisiere alle Stundenpläne. Sobald das
+          Webscraping implementiert ist wird dieser FAQ Eintrag verschwinden.</p>
       </div>
 
       <div className={"mt-5"}>
