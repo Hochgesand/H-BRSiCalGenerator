@@ -1,15 +1,8 @@
 package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Controller;
 
-import net.fortuna.ical4j.data.CalendarOutputter;
-import net.fortuna.ical4j.model.Calendar;
+import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAOObjects.VeranstaltungsIds;
@@ -19,16 +12,14 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service.CalenderGene
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service.EmailSendingService;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
+
+    RateLimiter rateLimiter = RateLimiter.create(0.2);
 
     @Autowired
     CalenderGeneratorService calenderGeneratorService;
@@ -59,11 +50,13 @@ public class CalenderExportController {
             produces = "text/calender"
     )
     public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
+        rateLimiter.acquire(3);
         return calenderGeneratorService.createCalender(veranstaltungsIds);
     }
 
     @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Veranstaltung> getVeranstaltungen(){
+        rateLimiter.acquire();
         List<Veranstaltung> veranstaltungen = (List<Veranstaltung>) veranstaltungsRepo.findAll();
         return veranstaltungen;
     }
@@ -74,6 +67,7 @@ public class CalenderExportController {
             produces = "text/calender"
     )
     public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) throws MessagingException, IOException {
+        rateLimiter.acquire(6);
         emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail);
 
         return "E-Mail will be sent";
