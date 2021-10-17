@@ -1,18 +1,23 @@
 package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service;
 
+import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanDateMNRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.CustomCalender.CustomCalenderBase;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAOObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanDatumMN;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -73,5 +78,19 @@ public class CalenderGeneratorService {
         }
 
         return customCalenderBase.getiCalender();
+    }
+
+    public byte[] createCalender(VeranstaltungsIds veranstaltungsIds) throws IOException {
+        if (veranstaltungsIds.getVeranstaltungsIds().size() == 0)
+            return new byte[0x00];
+
+        Calendar calenderToReturn = createCalenderForVeranstaltungen(veranstaltungsIds.getVeranstaltungsIds());
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        CalendarOutputter outputter = new CalendarOutputter();
+        outputter.output(calenderToReturn, byteArrayOutputStream);
+
+        return byteArrayOutputStream.toByteArray();
     }
 }
