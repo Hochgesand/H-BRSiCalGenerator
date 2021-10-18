@@ -11,6 +11,6 @@ public class ControllerConfiguration {
 
     @Bean
     public RateLimiter rateLimiter() {
-        return RateLimiter.create(0.4, Duration.ofSeconds(30));
+        return RateLimiter.create(0.6, Duration.ofSeconds(30));
     }
 }

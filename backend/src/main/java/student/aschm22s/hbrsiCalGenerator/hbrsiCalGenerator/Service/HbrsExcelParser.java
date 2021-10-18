@@ -11,7 +11,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanDateMNRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
@@ -19,8 +18,10 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanDa
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
 
-import java.io.*;
-import java.sql.Array;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
