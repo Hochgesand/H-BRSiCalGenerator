@@ -86,7 +86,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                   id="grid-first-email" type="text" placeholder="E-Mail" onChange={e => setEmail(e.target.value)}
                 />
                 <button className={`btn btn-lg w-full ${loading ? 'loading' : null}`} type={"submit"}
-                        disabled={props.veranstaltungsIds.length === 0 || loading}
+                        disabled={props.veranstaltungsIds.length === 0 || loading || email.length === 0}
                         onClick={onEmailWantToSchick}>Schick's per E-Mail
                 </button>
               </div>
