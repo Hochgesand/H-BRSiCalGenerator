@@ -20,6 +20,7 @@ export interface kalendarModalInterface {
 export default function GenerateKalendarModal(props: kalendarModalInterface) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false)
   const gridRef = useRef(null);
   const {getCalendar} = usePostRequestCalendar({
     path: `${baseUrl}/sememesteriCal`,
@@ -32,10 +33,17 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
   })
 
   const onButtonClickDownloadCalendar = () => {
+    setLoading(true)
+
     const downloadCalendar = () => {
-      getCalendar().then(blob => saveAs(blob, 'calendar.ics'))
+      getCalendar().then(blob => {
+        setLoading(false)
+        saveAs(blob, 'calendar.ics')
+        props.setShowKalendarModal(false)
+      })
         .catch(err => {
             setError(err.message)
+            setLoading(false)
           }
         );
     }
@@ -43,24 +51,22 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
   }
 
   const onEmailWantToSchick = () => {
+    setLoading(true)
     const sentCalendarEmail = () => {
       getCalendarEmailResponse()
         .then(response => {
-          alert("Deine Email wurde rausgeschickt^^ Wenn du keine E-Mail bekommen hast, versuche es erneut, " +
-            "vergiss aber nicht das ich dich nach zu vielen Versuchen für eine gewisse Zeit blockieren werde!")
+          setLoading(false)
+          alert("Deine Email wurde rausgeschickt^^ Wenn du keine E-Mail bekommen hast, versuche es erneut. " +
+            "Vergiss aber nicht das ich dich nach zu vielen Versuchen für eine gewisse Zeit blockieren werde!")
+          props.setShowKalendarModal(false)
         })
         .catch(err => {
             setError(err.message)
+            setLoading(false)
           }
         );
     }
     sentCalendarEmail();
-  }
-
-  if (error.length > 0) {
-    return (
-      <Error msg={error}/>
-    );
   }
 
   return (
@@ -69,8 +75,9 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
         <div className={"container flex mx-auto z-10 absolute inset-0 justify-center rounded-box h-screen"}>
           <div className={"m-auto rounded-box bg-base-300 w-3/4 xl:w-2/3 2xl:1 h-3/4 flex-none"}>
             <div className={"h-30 p-4"}>
-              <button className={"btn btn-lg w-full mb-4"} type={"submit"}
-                      disabled={props.veranstaltungsIds.length === 0}
+              {error.length > 0 ? <Error msg={error} /> : null}
+              <button className={`btn btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
+                      disabled={props.veranstaltungsIds.length === 0 || loading}
                       onClick={onButtonClickDownloadCalendar}>Download calendar.ics
               </button>
               <div className={"rounded-box bg-base-300 grid grid-cols-2 gap-4 mb-4 w-auto"}>
@@ -78,12 +85,12 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                   className="appearance-none w-full bg-base-200 text-white border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 text-2xl"
                   id="grid-first-email" type="text" placeholder="E-Mail" onChange={e => setEmail(e.target.value)}
                 />
-                <button className={"btn btn-lg w-full"} type={"submit"} disabled={props.veranstaltungsIds.length === 0}
-                        onClick={onEmailWantToSchick}>Schick's per
-                  E-Mail
+                <button className={`btn btn-lg w-full ${loading ? 'loading' : null}`} type={"submit"}
+                        disabled={props.veranstaltungsIds.length === 0 || loading}
+                        onClick={onEmailWantToSchick}>Schick's per E-Mail
                 </button>
               </div>
-              <button className={"btn btn-lg w-full mb-4"} onClick={() => props.setShowKalendarModal(false)}>Abbrechen
+              <button className={"btn btn-lg w-full mb-4"} onClick={() => props.setShowKalendarModal(false)} disabled={loading}>Abbrechen
               </button>
             </div>
             <p className={"text-3xl ml-4"}>Ausgewählte Module/Veranstaltungen</p>

@@ -4,7 +4,7 @@ interface errorProp {
 
 export default function Error(error: errorProp){
   return(
-    <div className="alert alert-error m-4">
+    <div className="alert alert-error mb-4">
       <div className="flex-1">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-6 h-6 mx-2 stroke-current">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
