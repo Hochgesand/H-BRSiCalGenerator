@@ -2,6 +2,8 @@ package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,9 +57,9 @@ public class ExcelImportController {
     };
 
     @RequestMapping(value = "/uploadFile", method = POST)
-    public String submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
+    public ResponseEntity submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
         if (!key.equals(userBucketPath))
-            return "Could not verify uploadkey";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Could not verify uploadkey, now fuck off!");
 
         modelMap.addAttribute("file", files);
         ArrayList<InputStream> inputstreams = new ArrayList<>();
@@ -66,13 +68,13 @@ public class ExcelImportController {
             inputstreams.add(y.getInputStream());
         }
 
-        return hbrsExcelParser.startParser(inputstreams);
+        return new ResponseEntity(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/webscrapeEva", method = POST)
-    public String updateStundenplaene(@RequestParam("key") String key) throws IOException {
+    public ResponseEntity updateStundenplaene(@RequestParam("key") String key) throws IOException {
         if (!key.equals(userBucketPath))
-            return "Could not verify updateKey";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Could not verify uploadkey, now fuck off!");
 
         veranstaltungsRepo.deleteAll();
 
@@ -83,6 +85,6 @@ public class ExcelImportController {
             inputstreams.add(Channels.newInputStream(readableByteChannel));
         }
 
-        return hbrsExcelParser.startParser(inputstreams);
+        return new ResponseEntity(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
     }
 }
