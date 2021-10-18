@@ -11,6 +11,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanDateMNRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
@@ -19,8 +20,13 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEi
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
 
 import java.io.*;
+import java.sql.Array;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class HbrsExcelParser {
@@ -116,5 +122,56 @@ public class HbrsExcelParser {
         }
 
         return stundenplanRepo.findAll();
+    }
+
+    @Transactional
+    public String startParser(ArrayList<InputStream> files) {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+        AtomicInteger counterPlaene = new AtomicInteger();
+
+        for (InputStream x : files) {
+            executorService.submit(() -> {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                try {
+                    x.transferTo(baos);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ArrayList<Veranstaltung> veranstaltungen = new ArrayList<>();
+                try {
+                    veranstaltungen = parseVeranstaltungen(new ByteArrayInputStream(baos.toByteArray()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Veranstaltung veranstaltung = veranstaltungen.stream().findFirst().orElse(null);
+                if (veranstaltung == null) {
+                    System.out.println("Stundenplanimport fehler, siehe Stacktrace");
+                } else
+                    System.out.println("Stundenplan: " + veranstaltung.getStudienGangSemester() + " wurde importiert");
+                counterPlaene.getAndIncrement();
+            });
+        }
+
+        executorService.shutdown();
+
+        System.out.println("Importvorgang wurde gestartet");
+        try {
+            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(counterPlaene.get() != files.size()){
+            return "Es gab einen Fehler beim importieren. " + counterPlaene.get() + " von" + files.size() + " wurden importiert";
+        }
+
+        return "Alle " + files.size() + " Stundenpläne wurden importiert";
     }
 }
