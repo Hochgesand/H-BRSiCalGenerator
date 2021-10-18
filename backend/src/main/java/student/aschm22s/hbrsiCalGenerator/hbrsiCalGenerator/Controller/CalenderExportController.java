@@ -50,13 +50,11 @@ public class CalenderExportController {
             produces = "text/calender"
     )
     public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
-        rateLimiter.acquire(3);
         return calenderGeneratorService.createCalender(veranstaltungsIds);
     }
 
     @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Veranstaltung> getVeranstaltungen(){
-        rateLimiter.acquire();
         List<Veranstaltung> veranstaltungen = (List<Veranstaltung>) veranstaltungsRepo.findAll();
         return veranstaltungen;
     }
@@ -67,7 +65,6 @@ public class CalenderExportController {
             produces = "text/calender"
     )
     public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) throws MessagingException, IOException {
-        rateLimiter.acquire(6);
         emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail);
 
         return "E-Mail will be sent";
