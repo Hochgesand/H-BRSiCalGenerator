@@ -11,7 +11,7 @@ export default function useGetRequest({ path }: GetRequestProps) {
       }) : undefined
   }).then(async (response) => {
     if (!response.ok){
-      throw Error("Could not fetch data");
+      return response.text().then(text => {throw Error(text)});
     }
     return response.json()
   });

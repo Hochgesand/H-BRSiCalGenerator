@@ -2,8 +2,11 @@ package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Controller;
 
 import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAOObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAOObjects.VeranstaltungsIdsAndEmail;
@@ -19,7 +22,8 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
 
-    RateLimiter rateLimiter = RateLimiter.create(0.2);
+    @Autowired
+    private final RateLimiter rateLimiter;
 
     @Autowired
     CalenderGeneratorService calenderGeneratorService;
@@ -27,6 +31,10 @@ public class CalenderExportController {
     VeranstaltungsRepo veranstaltungsRepo;
     @Autowired
     EmailSendingService emailSendingService;
+
+    public CalenderExportController(RateLimiter rateLimiter) {
+        this.rateLimiter = rateLimiter;
+    }
 
     class veranstaltungsIds{
         List<Integer> veranstaltungsIds;
@@ -49,14 +57,29 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
-        return calenderGeneratorService.createCalender(veranstaltungsIds);
+    public ResponseEntity getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
+        boolean acc = rateLimiter.tryAcquire();
+        if (acc){
+            return new ResponseEntity(
+                calenderGeneratorService.createCalender(veranstaltungsIds),
+                HttpStatus.OK
+            );
+        }
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase());
     }
 
     @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Veranstaltung> getVeranstaltungen(){
-        List<Veranstaltung> veranstaltungen = (List<Veranstaltung>) veranstaltungsRepo.findAll();
-        return veranstaltungen;
+    public ResponseEntity getVeranstaltungen(){
+        boolean acc = rateLimiter.tryAcquire();
+        if (acc){
+            List<Veranstaltung> veranstaltungen = (List<Veranstaltung>) veranstaltungsRepo.findAll();
+            return new ResponseEntity<List<Veranstaltung>>(
+                veranstaltungen,
+                HttpStatus.OK
+            );
+        }
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase());
     }
 
     @RequestMapping(
@@ -64,10 +87,17 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) throws MessagingException, IOException {
-        emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail);
+    public ResponseEntity getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) throws MessagingException, IOException {
+        boolean acc = rateLimiter.tryAcquire(3);
+        if (acc){
+            emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail);
+            return new ResponseEntity<String>(
+                    "E-Mail will be sent",
+                    HttpStatus.OK
+            );
+        }
 
-        return "E-Mail will be sent";
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase());
     }
 
 }

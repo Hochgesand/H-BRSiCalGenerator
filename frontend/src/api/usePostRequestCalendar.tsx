@@ -10,7 +10,7 @@ export default function usePostRequestCalendar({ path, veranstaltungsIds }: Post
     body: JSON.stringify({veranstaltungsIds} )
   }).then(async (response) => {
     if (!response.ok){
-      throw Error("Could not fetch data");
+      return response.text().then(text => {throw Error(text)});
     }
     return response.blob()
   });

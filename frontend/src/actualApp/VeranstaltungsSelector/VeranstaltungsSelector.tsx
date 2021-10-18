@@ -29,6 +29,7 @@ export default function VeranstaltungsSelector() {
       await getData().then(function (json) {
         setVeranstaltungsData(json);
         setLoading(false)
+        setError("")
       }).catch(err => {
           setError(err.message)
           setLoading(false);
@@ -39,11 +40,11 @@ export default function VeranstaltungsSelector() {
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function handleClick() {
+  function showHelp() {
     history.push("/FAQ");
   }
 
-  const onHolDirKalender = () => {
+  const showCalendarGenerationModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     let veranstaltungsIdsTemp = [] as number[]
     // @ts-ignore
     const selectedNodes = gridRef.current.api.getSelectedNodes()
@@ -53,6 +54,8 @@ export default function VeranstaltungsSelector() {
     selectedData.map(node => veranstaltungsIdsTemp.push(node.id))
     setSelectedDataProp(selectedData)
     setVeranstaltungsIds(veranstaltungsIdsTemp)
+    e.stopPropagation()
+    setError("")
     setShowKalendarModal(true);
   }
 
@@ -70,7 +73,7 @@ export default function VeranstaltungsSelector() {
     <>
       <GenerateKalendarModal showKalendarModal={showKalendarModal} setShowKalendarModal={setShowKalendarModal}
                              selectedData={selectedDataProp} veranstaltungsIds={veranstaltungsIds}/>
-      <div className={showKalendarModal ? "filter blur-lg" : ""}>
+      <div className={showKalendarModal ? "filter blur-lg" : ""} onClick={() => setShowKalendarModal(false)}>
         <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12"}>
           <div className={"rounded-box p-4 bg-base-300 "}>
             <h2 className={"text-4xl mb-2"}>H-BRS iCal Kalendergenerator</h2>
@@ -79,11 +82,11 @@ export default function VeranstaltungsSelector() {
               Gewissen.</p>
           </div>
           <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300"}>
-            <button onClick={onHolDirKalender} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>
+            <button onClick={e => showCalendarGenerationModal(e)} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>
             <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
               <button className={"btn btn-lg w-full"}>Gib mir einen Stern auf Github ❤</button>
             </a>
-            <button className={"btn btn-lg w-full"} onClick={handleClick}>HILFE!</button>
+            <button className={"btn btn-lg w-full"} onClick={showHelp}>HILFE!</button>
           </div>
         </div>
 
