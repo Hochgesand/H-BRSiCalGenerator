@@ -71,7 +71,7 @@ public class CalenderGeneratorService {
             customCalenderBase.addEventToCalender(
                     veranstaltung.getName(),
                     new DateTime(x.getDate().getTime()),
-                    new DateTime(x.getDate().getTime() + (stundenplanEintrag.getBis().getTime() - x.getDate().getTime())),
+                    new DateTime(x.getDate().getTime() + (stundenplanEintrag.getBis().getTime() - stundenplanEintrag.getVon().getTime())),
                     veranstaltung.getName(),
                     veranstaltung.getProf(),
                     stundenplanEintrag.getRaum());

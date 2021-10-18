@@ -77,8 +77,6 @@ export default function VeranstaltungsSelector() {
             <p>Die Seite befindet sich noch in der Beta Phase, Fehler bitte melden! (a@andrevr.de)</p>
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
               Gewissen.</p>
-            <p>Bug: die ical datei kann nicht im Apple Kalender hinzugefügt werden. Irgendwie Paradox da das Format von
-              Apple entwickelt wurde. Ich konnte es auch meinem iPhone und ein Kommilitone auf dem Macbook reproduzieren.</p>
           </div>
           <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300"}>
             <button onClick={onHolDirKalender} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>

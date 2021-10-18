@@ -40,7 +40,7 @@ public class HbrsExcelParser {
 
     public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
         for (Veranstaltung x : veranstaltungen) {
-            if (veranstaltung.getName().equals(x.getName()))
+            if (veranstaltung.getName().equals(x.getName()) && veranstaltung.getProf().equals(x.getProf()))
                 return true;
         }
         return false;
