@@ -36,7 +36,7 @@ export default function FAQ(){
         </ul>
         <p className={"text-2xl"}>FAQ:</p>
         <p>Q: Warum machste die App nicht responsive damit ich das auch bequem auf dem Handy nutzen kann?</p>
-        <p>A: Warum nutzt du die App nicht einfach auf dem Rechner?</p>
+        <p>A: Warum nutzt du die App nicht einfach auf dem Rechner und schickst dir den Stundenplan per E-Mail?</p>
         <p>Q: Warum werden manche Veranstaltungen doppelt angezeigt?</p>
         <p>A: Manche Veranstaltungen gibt es Fachbereich/Semester übergreifend und ich habe noch kein Ablauf im Backend
           implementiert die schaut ob die Eventuhrzeiten/Räume übereinstimmen damit ich gewährleisten kann das die auch
@@ -44,10 +44,8 @@ export default function FAQ(){
           existieren und damit z.B. in einem anderen Raum stattfinden.
           Wählt daher immer die Veranstaltung für euren Fachbereich/Semester.</p>
         <p>Q: Wie kriegst du die Stundenpläne in die Anwendung importiert?</p>
-        <p>A: Aktuell importiere ich die Stundenpläne noch per Hand. Ich arbeite daran die Stundenpläne von Eva zu webscrapen.
-          Heißt wenn sich die Stundenpläne aktualisieren kann es passieren das die hier noch nicht uptodate sind.
-          Wenn ihr da mehr wisst, sagt mir gerne bescheid und ich aktualisiere alle Stundenpläne. Sobald das
-          Webscraping implementiert ist wird dieser FAQ Eintrag verschwinden.</p>
+        <p>A: Ich zieh mir einfach die Stundenpläne von Eva und aktualisiere Sie jeden Tag damit alle
+          Änderungen frisch auf meinem Backend liegen.</p>
       </div>
 
       <div className={"mt-5"}>
