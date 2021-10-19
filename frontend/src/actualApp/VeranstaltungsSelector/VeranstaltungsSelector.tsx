@@ -87,7 +87,7 @@ export default function VeranstaltungsSelector() {
             <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
               <button className={"btn btn-lg w-full"}>Gib mir einen Stern auf Github ❤</button>
             </a>
-            <button className={"btn btn-lg w-full"} onClick={showHelp}>HILFE!</button>
+            <button className={"btn btn-lg w-full"} onClick={showHelp}>FAQ / HILFE!</button>
           </div>
         </div>
 

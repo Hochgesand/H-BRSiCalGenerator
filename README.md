@@ -9,5 +9,3 @@ https://paypal.me/ASchmitz703
 
 Ihr findet den Generator unter folgender Adresse:
 https://hochgesand.github.io/H-BRSiCalGenerator/
-
-Achtung! Der Bums ist noch quasi Alpha, erwartet kein künstlerisches Meisterwerk.
