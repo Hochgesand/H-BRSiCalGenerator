@@ -89,7 +89,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
               <div className={"rounded-box bg-base-200 h-6 w-full mb-4"}><p className={"w-full text-center"}>ODER</p></div>
               <div className={"rounded-box bg-base-300 grid grid-cols-2 gap-4 mb-4 w-auto"}>
                 <input
-                  className="appearance-none w-full bg-base-200 text-white border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 text-2xl"
+                  className="appearance-none w-full bg-base-200 border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 text-2xl"
                   id="grid-first-email" type="email" placeholder="E-Mail" onChange={e => setEmail(e.target.value)}
                 />
                 <button className={`btn btn-lg w-full ${loading ? 'loading' : null}`} type={"submit"}
