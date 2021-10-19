@@ -33,6 +33,7 @@ export default function FAQ(){
         <ul>
           <li> - AGGrid für die Tabelle, kein Bock gehabt selber Sortieralgorithmen zu implementieren</li>
           <li> - Locker noch ca. 2000 Packages mehr die mit React gekommen sind, npm macht npm sachen</li>
+          <li> - TailwindCSS für's CSS</li>
         </ul>
         <p className={"text-2xl"}>FAQ:</p>
         <p>Q: Warum machste die App nicht responsive damit ich das auch bequem auf dem Handy nutzen kann?</p>
@@ -46,6 +47,13 @@ export default function FAQ(){
         <p>Q: Wie kriegst du die Stundenpläne in die Anwendung importiert?</p>
         <p>A: Ich zieh mir einfach die Stundenpläne von Eva und aktualisiere Sie jeden Tag damit alle
           Änderungen frisch auf meinem Backend liegen.</p>
+        <p>Q: Welche Daten erhebst du?</p>
+        <p>A: Fast keine. Ich logge nichts und möchte das auch nicht. Die einzigen Daten die ich logge bzw.
+          speichere sind die Stundenpläne die in dem moin@meister.ovh Gesendet Ordner landen, die lösche ich aber alle 24h, restlos und autonom.
+          Ich habe überlegt ob ich vielleicht Metriken darüber erfasse und vielleicht jedes Semesterende anonymisierte
+          Statistiken bereitstelle (das erstellen eines Kalenders ist sowieso anonym solange man es ohne E-Mail macht).
+          Das wäre vielleicht interessant. Allerdings bin ich mir da noch nicht ganz so sicher ob ich das mache.
+          Wenn ich daran arbeite, werde ich das hier vorher bekannt geben. Ich nutze keine Daten ohne vorher zu fragen.</p>
       </div>
 
       <div className={"mt-5"}>
