@@ -18,6 +18,7 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -93,7 +94,7 @@ public class CalenderGeneratorService {
 
     public String createCalenderAsCSV(VeranstaltungsIds veranstaltungsIds) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("tag;von;bis;raum;veranstaltung;zeitraum;wer\n");
+        stringBuilder.append("tag;von;bis;raum;veranstaltung;wer\n");
 
         ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsRepo.findByIdIn(veranstaltungsIds.getVeranstaltungsIds());
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
@@ -114,6 +115,7 @@ public class CalenderGeneratorService {
             if (x.getDate().getTime() < 1634508000000L || x.getDate().getTime() > 1635109200000L){
                 continue;
             }
+
             Veranstaltung veranstaltung;
             StundenplanEintrag stundenplanEintrag;
 
@@ -135,7 +137,7 @@ public class CalenderGeneratorService {
 
             DateTime von = new DateTime(x.getDate());
             String vonString = von.toString();
-            stringBuilder.append("Tag");
+            stringBuilder.append(new SimpleDateFormat("EEEE").format(x.getDate()));
             stringBuilder.append(";");
             vonString = vonString.substring(9,11) + ":" + vonString.substring(11,13);
             stringBuilder.append(vonString);
@@ -147,8 +149,6 @@ public class CalenderGeneratorService {
             stringBuilder.append(stundenplanEintrag.getRaum());
             stringBuilder.append(";");
             stringBuilder.append(veranstaltung.getName());
-            stringBuilder.append(";");
-            stringBuilder.append("Zeitraum");
             stringBuilder.append(";");
             stringBuilder.append(veranstaltung.getProf());
             stringBuilder.append("\n");

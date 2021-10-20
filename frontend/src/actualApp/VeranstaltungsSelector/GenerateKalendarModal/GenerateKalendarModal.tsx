@@ -20,10 +20,15 @@ export interface kalendarModalInterface {
 export default function GenerateKalendarModal(props: kalendarModalInterface) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  let downloadUrl: string = "";
   const [loading, setLoading] = useState(false)
   const gridRef = useRef(null);
-  const {getCalendar} = usePostRequestCalendar({
-    path: `${baseUrl}/sememesteriCal`,
+  const postGetiCal = usePostRequestCalendar({
+    path: (`${baseUrl}/sememesteriCal`),
+    veranstaltungsIds: props.veranstaltungsIds
+  })
+  const postGetCSV = usePostRequestCalendar({
+    path: (`${baseUrl}/sememesteriCalAsCSV`),
     veranstaltungsIds: props.veranstaltungsIds
   })
   const {getCalendarEmailResponse} = usePostRequestCalendarEmail({
@@ -36,11 +41,29 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
 
   const onButtonClickDownloadCalendar = () => {
     setLoading(true)
-
     const downloadCalendar = () => {
-      getCalendar().then(blob => {
+      postGetiCal.getCalendar().then(blob => {
         setLoading(false)
         saveAs(blob, 'calendar.ics')
+        props.setShowKalendarModal(false)
+        setError("")
+      })
+      .catch(err => {
+          setError(err.message)
+          console.log(error)
+          setLoading(false)
+        }
+      );
+    }
+    downloadCalendar();
+  }
+
+  const onButtonClickDownloadCalendarAsCsv = () => {
+    setLoading(true)
+    const downloadCalendar = () => {
+      postGetCSV.getCalendar().then(blob => {
+        setLoading(false)
+        saveAs(blob, 'calendar.csv')
         props.setShowKalendarModal(false)
         setError("")
       })
@@ -82,10 +105,21 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
           <div className={"m-auto rounded-box bg-base-300 w-3/4 xl:w-2/3 2xl:1 h-screen flex-none z-20"} >
             <div className={"h-30 p-4"}>
               {error.length > 0 ? <Error msg={error} /> : null}
-              <button className={`btn btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
-                      disabled={props.veranstaltungsIds.length === 0 || loading}
-                      onClick={onButtonClickDownloadCalendar}>Download calendar.ics
-              </button>
+              <div className={"grid grid-cols-2 grid-rows-1 gap-4"}>
+                <button className={`btn btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
+                        disabled={props.veranstaltungsIds.length === 0 || loading}
+                        onClick={() => {
+                          downloadUrl = (`${baseUrl}/sememesteriCal`)
+                          console.log(downloadUrl)
+                          onButtonClickDownloadCalendar()
+                        }}>Download calendar.ics</button>
+                <button className={`btn btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
+                        disabled={props.veranstaltungsIds.length === 0 || loading}
+                        onClick={() => {
+                          downloadUrl = `${baseUrl}/sememesteriCalAsCSV`
+                          onButtonClickDownloadCalendarAsCsv()
+                        }}>Download Kalender as CSV (BETA)</button>
+              </div>
               <div className={"rounded-box bg-base-200 h-6 w-full mb-4"}><p className={"w-full text-center"}>ODER</p></div>
               <div className={"rounded-box bg-base-300 grid grid-cols-2 gap-4 mb-4 w-auto"}>
                 <input
