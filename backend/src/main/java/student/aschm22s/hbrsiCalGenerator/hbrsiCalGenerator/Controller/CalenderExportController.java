@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
 
     @Autowired
@@ -49,22 +48,6 @@ public class CalenderExportController {
         public veranstaltungsIds(List<Integer> veranstaltungsIds) {
             this.veranstaltungsIds = veranstaltungsIds;
         }
-    }
-
-    @RequestMapping(
-            value = "/sememesteriCal",
-            method = {RequestMethod.POST},
-            produces = "text/calender"
-    )
-    public ResponseEntity getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
-        boolean acc = rateLimiter.tryAcquire();
-        if (acc){
-            return new ResponseEntity(
-                calenderGeneratorService.createCalender(veranstaltungsIds),
-                HttpStatus.OK
-            );
-        }
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase());
     }
 
     @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -99,4 +82,36 @@ public class CalenderExportController {
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase());
     }
 
+    @RequestMapping(
+            value = "/sememesteriCal",
+            method = {RequestMethod.POST},
+            produces = "text/calender"
+    )
+    public ResponseEntity getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
+        boolean acc = rateLimiter.tryAcquire();
+        if (acc){
+            return new ResponseEntity(
+                    calenderGeneratorService.createCalender(veranstaltungsIds),
+                    HttpStatus.OK
+            );
+        }
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase());
+    }
+
+
+    @RequestMapping(
+            value = "/sememesteriCalAsCSV",
+            method = {RequestMethod.POST},
+            produces = "text/csv"
+    )
+    public ResponseEntity getCalenderForSemesterAsCSV(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
+        boolean acc = rateLimiter.tryAcquire();
+        if (acc){
+            return new ResponseEntity(
+                    calenderGeneratorService.createCalenderAsCSV(veranstaltungsIds),
+                    HttpStatus.OK
+            );
+        }
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase());
+    }
 }

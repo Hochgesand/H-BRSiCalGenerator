@@ -81,6 +81,9 @@ export default function VeranstaltungsSelector() {
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
               Gewissen.</p>
             <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
+            <p>E-Mail Versand ist momentan deaktiviert, mein E-Mail Hoster hat mich gekündigt weil ich keine
+              automatisierten E-Mails schicken darf. Wenn ihr euch mal für einen Dienstleister entscheidet,
+              entscheidet euch nicht für zoho.eu. Ich hätte zwar auch die AGB lesen können, aber naja. Wenn die schon bei 10 E-Mails/Tag Stressdurchfall bekommen geh ich halt wo anders hin.</p>
           </div>
           <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300"}>
             <button onClick={e => showCalendarGenerationModal(e)} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>

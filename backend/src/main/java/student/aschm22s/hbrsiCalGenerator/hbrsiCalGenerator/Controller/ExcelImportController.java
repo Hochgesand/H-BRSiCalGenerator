@@ -57,7 +57,7 @@ public class ExcelImportController {
     };
 
     @RequestMapping(value = "/uploadFile", method = POST)
-    public ResponseEntity submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
+    public ResponseEntity<? extends String> submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
         if (!key.equals(userBucketPath))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Could not verify uploadkey, now fuck off!");
 
@@ -68,11 +68,11 @@ public class ExcelImportController {
             inputstreams.add(y.getInputStream());
         }
 
-        return new ResponseEntity(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
+        return new ResponseEntity<>(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/webscrapeEva", method = POST)
-    public ResponseEntity updateStundenplaene(@RequestParam("key") String key) throws IOException {
+    public ResponseEntity<? extends String> updateStundenplaene(@RequestParam("key") String key) throws IOException {
         if (!key.equals(userBucketPath))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Could not verify uploadkey, now fuck off!");
 
@@ -85,6 +85,6 @@ public class ExcelImportController {
             inputstreams.add(Channels.newInputStream(readableByteChannel));
         }
 
-        return new ResponseEntity(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
+        return new ResponseEntity<>(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
     }
 }

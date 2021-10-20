@@ -18,10 +18,7 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CalenderGeneratorService {
@@ -92,5 +89,71 @@ public class CalenderGeneratorService {
         outputter.output(calenderToReturn, byteArrayOutputStream);
 
         return byteArrayOutputStream.toByteArray();
+    }
+
+    public String createCalenderAsCSV(VeranstaltungsIds veranstaltungsIds) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("tag;von;bis;raum;veranstaltung;zeitraum;wer\n");
+
+        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsRepo.findByIdIn(veranstaltungsIds.getVeranstaltungsIds());
+        ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
+        ArrayList<StundenplanDatumMN> stundenplanDateMNRepoArrayList = new ArrayList<>();
+
+        for (Veranstaltung x : veranstaltungIterable) {
+            stundenplanEintragArrayList.addAll((Collection<? extends StundenplanEintrag>) stundenplanRepo.findByVeranstaltung(x));
+        }
+
+        for (StundenplanEintrag x: stundenplanEintragArrayList) {
+            stundenplanDateMNRepoArrayList.addAll((Collection<? extends StundenplanDatumMN>) stundenplanDateMNRepo.findAllByStundenplanEintragOrderByDateAsc(x));
+        }
+
+        for (StundenplanDatumMN x: stundenplanDateMNRepoArrayList) {
+            // Need to get this value from appplication.properties.
+            // This is a timeframe where every Event in a Week should take place, so I can extract information to make
+            // a standard Stundenplan. English vocabulary 11/10
+            if (x.getDate().getTime() < 1634508000000L || x.getDate().getTime() > 1635109200000L){
+                continue;
+            }
+            Veranstaltung veranstaltung;
+            StundenplanEintrag stundenplanEintrag;
+
+            stundenplanEintrag = stundenplanEintragArrayList.stream()
+                    .filter(j -> Objects.equals(x.getStundenplanEintrag().getId(), j.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (stundenplanEintrag == null)
+                continue;
+
+            veranstaltung = veranstaltungIterable.stream()
+                    .filter(j -> Objects.equals(stundenplanEintrag.getVeranstaltung().getId(), j.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (veranstaltung == null)
+                continue;
+
+            DateTime von = new DateTime(x.getDate());
+            String vonString = von.toString();
+            stringBuilder.append("Tag");
+            stringBuilder.append(";");
+            vonString = vonString.substring(9,11) + ":" + vonString.substring(11,13);
+            stringBuilder.append(vonString);
+            stringBuilder.append(";");
+            String bis = new DateTime(x.getDate().getTime() + (stundenplanEintrag.getBis().getTime() - stundenplanEintrag.getVon().getTime())).toString();
+            bis = bis.substring(9,11) + ":" + bis.substring(11,13);
+            stringBuilder.append(bis);
+            stringBuilder.append(";");
+            stringBuilder.append(stundenplanEintrag.getRaum());
+            stringBuilder.append(";");
+            stringBuilder.append(veranstaltung.getName());
+            stringBuilder.append(";");
+            stringBuilder.append("Zeitraum");
+            stringBuilder.append(";");
+            stringBuilder.append(veranstaltung.getProf());
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
     }
 }

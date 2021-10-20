@@ -6,4 +6,5 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEi
 
 public interface StundenplanDateMNRepo extends CrudRepository<StundenplanDatumMN, Integer> {
     Iterable<StundenplanDatumMN> findByStundenplanEintrag(StundenplanEintrag stundenplanEintrag);
+    Iterable<StundenplanDatumMN> findAllByStundenplanEintragOrderByDateAsc(StundenplanEintrag stundenplanEintrag);
 }
