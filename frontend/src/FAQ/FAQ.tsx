@@ -48,12 +48,19 @@ export default function FAQ(){
         <p>A: Ich zieh mir einfach die Stundenpläne von Eva und aktualisiere Sie jeden Tag damit alle
           Änderungen frisch auf meinem Backend liegen.</p>
         <p>Q: Welche Daten erhebst du?</p>
-        <p>A: Fast keine. Ich logge nichts und möchte das auch nicht. Die einzigen Daten die ich logge bzw.
-          speichere sind die Stundenpläne die in dem moin@meister.ovh Gesendet Ordner landen, die lösche ich aber alle 24h, restlos und autonom.
+        <p>A: Fast keine. Ich logge nichts und möchte das auch nicht. Die einzigen Dinge die ich speichere sind IP Adressen die die Api missbrauchen.
+          Wie ich die erfasse erkläre ich weiter unten.
           Ich habe überlegt ob ich vielleicht Metriken darüber erfasse und vielleicht jedes Semesterende anonymisierte
           Statistiken bereitstelle (das erstellen eines Kalenders ist sowieso anonym solange man es ohne E-Mail macht).
           Das wäre vielleicht interessant. Allerdings bin ich mir da noch nicht ganz so sicher ob ich das mache.
           Wenn ich daran arbeite, werde ich das hier vorher bekannt geben. Ich nutze keine Daten ohne vorher zu fragen.</p>
+        <p>Q: Und wann werde ich jetzt genau geloggt?</p>
+        <p>A: Sobald ihr ein 429er Error bekommt (Too Many Requests) wird eure IP Adresse gespeichert. Wenn diese IP
+          Adresse weiterhin versucht Requests zu schicken wird sie dauerhaft gebannt. Wenn das Problem öfter auftritt
+          werde ich die IP Adresse dem entsprechenden Anbieter melden. Dafür müsst ihr aber schon sehr aggressiv vorgehen.
+          Wenn ihr blockiert werdet weil ihr spaß dran habt meine Anwendung zu testen oder eure Hackerskills beweisen
+          wollt, dürft ihr das gerne tun. Meldet euch bei mir ich hab damit keine Probleme, ganz im gegenteil, ich würde mich sogar freuen :)
+          Schickt mir einfach ne E-Mail an a@andrevr.de.</p>
       </div>
 
       <div className={"mt-5"}>
