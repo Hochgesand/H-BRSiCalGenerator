@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.DAOObjects.VeranstaltungsIdsAndEmail;
 
 import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Properties;
@@ -49,20 +51,26 @@ public class EmailSendingService {
         return mailSender;
     }
 
-    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) throws MessagingException, IOException {
+    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) {
         MimeMessage message = emailSender.createMimeMessage();
 
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = null;
+        try {
+            helper = new MimeMessageHelper(message, true);helper.setFrom(emailUsername);
+            helper.setTo(veranstaltungsIdsAndEmail.getEmail());
+            helper.setSubject("Dein Kalender");
+            helper.setText("Hier ist dein Kalender :)");
 
-        helper.setFrom(emailUsername);
-        helper.setTo(veranstaltungsIdsAndEmail.getEmail());
-        helper.setSubject("Dein Kalender");
-        helper.setText("Hier ist dein Kalender :)");
+            helper.addAttachment("Calendar.ics", new ByteArrayResource(calenderGeneratorService.createCalender(veranstaltungsIdsAndEmail)));
+        } catch (MessagingException | IOException e) {
+            return "Beim E-Mail zusammenstellen ist ein Fehler aufgetreten. Denke mal das ist ein Bug, würd mich freuen wenn du den mir melden würdest :)";
+        }
 
-        helper.addAttachment("Calendar.ics", new ByteArrayResource(calenderGeneratorService.createCalender(veranstaltungsIdsAndEmail)));
-
-        emailSender.send(message);
-
-        return "E-Mail will be sent";
+        try {
+            emailSender.send(message);
+            return "Deine Email wurde rausgeschickt^^ Wenn du keine E-Mail bekommen hast, versuche es erneut. Vergiss aber nicht das ich dich nach zu vielen Versuchen für eine gewisse Zeit blockieren werde!";
+        } catch (Exception e) {
+            return "Senden fehlgeschlagen, ich denke mal deine E-Mail Adresse ist nicht korrekt.";
+        }
     }
 }

@@ -68,9 +68,9 @@ public class CalenderExportController {
                     HttpStatus.OK
             );
         }
-        emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail);
+
         return new ResponseEntity<String>(
-                "E-Mail will be sent",
+                emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail),
                 HttpStatus.OK
         );
     }

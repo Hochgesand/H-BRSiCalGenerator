@@ -11,7 +11,7 @@ export default function useGetRequest({ path }: GetRequestProps) {
       }) : undefined
   }).then(async (response) => {
     if (!response.ok){
-      return response.text().then(text => {throw Error(text)});
+      return response.text().then(text => {throw Error(response.status + ": " + text)});
     }
     return response.json()
   });

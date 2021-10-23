@@ -31,6 +31,7 @@ export default function VeranstaltungsSelector() {
         setLoading(false)
         setError("")
       }).catch(err => {
+          console.log(err.message)
           setError(err.message)
           setLoading(false);
         }

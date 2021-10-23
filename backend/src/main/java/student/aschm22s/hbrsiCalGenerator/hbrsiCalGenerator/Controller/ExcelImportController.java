@@ -76,8 +76,6 @@ public class ExcelImportController {
         if (!key.equals(userBucketPath))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Could not verify uploadkey, now fuck off!");
 
-
-
         veranstaltungsRepo.deleteAll();
 
         ArrayList<InputStream> inputstreams = new ArrayList<>();

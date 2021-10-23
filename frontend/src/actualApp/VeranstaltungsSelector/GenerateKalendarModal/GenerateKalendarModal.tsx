@@ -81,10 +81,9 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
     setLoading(true)
     const sentCalendarEmail = () => {
       getCalendarEmailResponse()
-        .then(response => {
+        .then(async response => {
           setLoading(false)
-          alert("Deine Email wurde rausgeschickt^^ Wenn du keine E-Mail bekommen hast, versuche es erneut. " +
-            "Vergiss aber nicht das ich dich nach zu vielen Versuchen für eine gewisse Zeit blockieren werde!")
+          alert(await response.text())
           setError("")
           props.setShowKalendarModal(false)
         })
