@@ -81,6 +81,8 @@ export default function VeranstaltungsSelector() {
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
               Gewissen.</p>
             <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
+            <p>An den Hackerman der meine API mit E-Mail Requests geflooded hat, mach bitte weiter, vielleicht findest
+              du noch weitere Lücken^^ Kannst dich auch gerne melden, man braucht immer gute Tester :)</p>
           </div>
           <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300"}>
             <button onClick={e => showCalendarGenerationModal(e)} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>
