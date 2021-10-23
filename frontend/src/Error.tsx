@@ -10,7 +10,8 @@ export default function Error(error: errorProp){
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
         d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
           </svg>
-          <label>{error.msg}</label>
+          <label>{error.msg} Wartungsarbeiten: muss ein besseres Ratelimiting einbauen, war zwar mit Ansage das jemand
+            die API missbrauchen wird aber hey, da lern ich jetzt draus. Denke mal in ein paar Stunden is die Page wieder online.</label>
       </div>
     </div>
   )
