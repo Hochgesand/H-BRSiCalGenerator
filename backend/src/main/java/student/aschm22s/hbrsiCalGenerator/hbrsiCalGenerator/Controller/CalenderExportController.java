@@ -29,7 +29,7 @@ public class CalenderExportController {
     @Autowired
     EmailSendingService emailSendingService;
 
-    String blacklistedEMails[] = new String[]{"a@andrevr.de", "moin@meister.ovh"};
+    String[] blacklistedEMails = new String[]{"a@andrevr.de", "moin@meister.ovh"};
 
     class veranstaltungsIds {
         List<Integer> veranstaltungsIds;
@@ -49,6 +49,15 @@ public class CalenderExportController {
 
     @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<? extends Object> getVeranstaltungen() {
+        List<Veranstaltung> veranstaltungen = (List<Veranstaltung>) veranstaltungsRepo.findAll();
+        return new ResponseEntity<List<Veranstaltung>>(
+                veranstaltungen,
+                HttpStatus.OK
+        );
+    }
+
+    @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<? extends Object> getSpecificVeranstaltungen(@RequestParam(value = )) {
         List<Veranstaltung> veranstaltungen = (List<Veranstaltung>) veranstaltungsRepo.findAll();
         return new ResponseEntity<List<Veranstaltung>>(
                 veranstaltungen,
