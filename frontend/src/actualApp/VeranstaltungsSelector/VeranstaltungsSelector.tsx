@@ -77,13 +77,10 @@ export default function VeranstaltungsSelector() {
       <div className={showKalendarModal ? "filter blur-lg" : ""} onClick={() => setShowKalendarModal(false)}>
         <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12"}>
           <div className={"rounded-box p-4 bg-base-300 "}>
-            <h2 className={"text-4xl mb-2"}>H-BRS iCal Kalendergenerator</h2>
-            <p>Die Seite befindet sich noch in der Beta Phase, Fehler bitte melden! (a@andrevr.de)</p>
+            <h2 className={"text-4xl mb-2"}>H-BRS Kalendergenerator v1.0</h2>
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
-              Gewissen.</p>
+              Gewissen. Fehler bitte an a@andrevr.de melden.</p>
             <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
-            <p>An den Hackerman der meine API mit E-Mail Requests geflooded hat, mach bitte weiter, vielleicht findest
-              du noch weitere Lücken^^ Kannst dich auch gerne melden, man braucht immer gute Tester :) Im FAQ habe ich beschrieben was ich verändert habe um diesen Angriff zu unterbinden.</p>
           </div>
           <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300"}>
             <button onClick={e => showCalendarGenerationModal(e)} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>

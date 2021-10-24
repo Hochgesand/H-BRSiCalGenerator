@@ -21,20 +21,20 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RequestThrottleFilter implements Filter {
 
-    @Autowired
-    private AbusingIPAddressRepo abusingIPAddressRepo;
+    private final AbusingIPAddressRepo abusingIPAddressRepo;
 
-    private int MAX_REQUESTS_PER_MINUTE = 5;
+    private final int MAX_REQUESTS_PER_MINUTE = 5;
 
-    private LoadingCache<String, Integer> requestCountsPerIpAddress;
+    private final LoadingCache<String, Integer> requestCountsPerIpAddress;
 
-    public RequestThrottleFilter() {
+    public RequestThrottleFilter(AbusingIPAddressRepo abusingIPAddressRepo) {
         requestCountsPerIpAddress = CacheBuilder.newBuilder().
                 expireAfterWrite(60, TimeUnit.SECONDS).build(new CacheLoader<String, Integer>() {
                     public Integer load(String key) {
                         return 0;
                     }
                 });
+        this.abusingIPAddressRepo = abusingIPAddressRepo;
     }
 
     @Override

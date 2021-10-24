@@ -2,11 +2,9 @@ package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanDateMNRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
@@ -19,7 +17,10 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CalenderGeneratorService {
@@ -31,7 +32,7 @@ public class CalenderGeneratorService {
     @Autowired
     private StundenplanDateMNRepo stundenplanDateMNRepo;
 
-    public Calendar createCalenderForVeranstaltungen(List<Integer> Ids){
+    public Calendar createCalenderForVeranstaltungen(List<Integer> Ids) {
         ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsRepo.findByIdIn(Ids);
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
         ArrayList<StundenplanDatumMN> stundenplanDateMNRepoArrayList = new ArrayList<>();
@@ -40,13 +41,13 @@ public class CalenderGeneratorService {
             stundenplanEintragArrayList.addAll((Collection<? extends StundenplanEintrag>) stundenplanRepo.findByVeranstaltung(x));
         }
 
-        for (StundenplanEintrag x: stundenplanEintragArrayList) {
+        for (StundenplanEintrag x : stundenplanEintragArrayList) {
             stundenplanDateMNRepoArrayList.addAll((Collection<? extends StundenplanDatumMN>) stundenplanDateMNRepo.findByStundenplanEintrag(x));
         }
 
         CustomCalenderBase customCalenderBase = new CustomCalenderBase();
 
-        for (StundenplanDatumMN x: stundenplanDateMNRepoArrayList) {
+        for (StundenplanDatumMN x : stundenplanDateMNRepoArrayList) {
             Veranstaltung veranstaltung;
             StundenplanEintrag stundenplanEintrag;
 
@@ -104,15 +105,15 @@ public class CalenderGeneratorService {
             stundenplanEintragArrayList.addAll((Collection<? extends StundenplanEintrag>) stundenplanRepo.findByVeranstaltung(x));
         }
 
-        for (StundenplanEintrag x: stundenplanEintragArrayList) {
+        for (StundenplanEintrag x : stundenplanEintragArrayList) {
             stundenplanDateMNRepoArrayList.addAll((Collection<? extends StundenplanDatumMN>) stundenplanDateMNRepo.findAllByStundenplanEintragOrderByDateAsc(x));
         }
 
-        for (StundenplanDatumMN x: stundenplanDateMNRepoArrayList) {
+        for (StundenplanDatumMN x : stundenplanDateMNRepoArrayList) {
             // Need to get this value from appplication.properties.
             // This is a timeframe where every Event in a Week should take place, so I can extract information to make
             // a standard Stundenplan. English vocabulary 11/10
-            if (x.getDate().getTime() < 1634508000000L || x.getDate().getTime() > 1635109200000L){
+            if (x.getDate().getTime() < 1634508000000L || x.getDate().getTime() > 1635109200000L) {
                 continue;
             }
 
@@ -139,11 +140,11 @@ public class CalenderGeneratorService {
             String vonString = von.toString();
             stringBuilder.append(new SimpleDateFormat("EEEE").format(x.getDate()));
             stringBuilder.append(";");
-            vonString = vonString.substring(9,11) + ":" + vonString.substring(11,13);
+            vonString = vonString.substring(9, 11) + ":" + vonString.substring(11, 13);
             stringBuilder.append(vonString);
             stringBuilder.append(";");
             String bis = new DateTime(x.getDate().getTime() + (stundenplanEintrag.getBis().getTime() - stundenplanEintrag.getVon().getTime())).toString();
-            bis = bis.substring(9,11) + ":" + bis.substring(11,13);
+            bis = bis.substring(9, 11) + ":" + bis.substring(11, 13);
             stringBuilder.append(bis);
             stringBuilder.append(";");
             stringBuilder.append(stundenplanEintrag.getRaum());

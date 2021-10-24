@@ -9,7 +9,7 @@ export default function FAQ(){
         onClick={() => history.goBack()}>
         Back
       </button>
-      <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-1/2"}>
+      <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-3/4"}>
         <p className={"text-3xl"}>Anleitung:</p>
         <p className={"text-2xl"}>Schritt 1:</p>
         <p>Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
