@@ -1,14 +1,13 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Filter;
+package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.filter;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.AbusingIPAddressRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.AbusingIPAddress;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.AbusingIPAddressRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.AbusingIPAddress;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
