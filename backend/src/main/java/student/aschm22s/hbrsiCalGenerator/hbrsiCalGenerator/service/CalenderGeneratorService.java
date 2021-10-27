@@ -3,16 +3,15 @@ package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.CustomCalender.CustomCalenderBase;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanDatumMN;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,12 +24,15 @@ import java.util.Objects;
 @Service
 public class CalenderGeneratorService {
 
-    @Autowired
-    private VeranstaltungsRepo veranstaltungsRepo;
-    @Autowired
-    private StundenplanRepo stundenplanRepo;
-    @Autowired
-    private StundenplanDateMNRepo stundenplanDateMNRepo;
+    private final VeranstaltungsRepo veranstaltungsRepo;
+    private final StundenplanRepo stundenplanRepo;
+    private final StundenplanDateMNRepo stundenplanDateMNRepo;
+
+    public CalenderGeneratorService(VeranstaltungsRepo veranstaltungsRepo, StundenplanRepo stundenplanRepo, StundenplanDateMNRepo stundenplanDateMNRepo) {
+        this.veranstaltungsRepo = veranstaltungsRepo;
+        this.stundenplanRepo = stundenplanRepo;
+        this.stundenplanDateMNRepo = stundenplanDateMNRepo;
+    }
 
     public Calendar createCalenderForVeranstaltungen(List<Integer> Ids) {
         ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsRepo.findByIdIn(Ids);

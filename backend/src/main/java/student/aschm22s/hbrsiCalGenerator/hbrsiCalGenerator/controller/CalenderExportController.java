@@ -21,14 +21,17 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
 
-    @Autowired
-    CalenderGeneratorService calenderGeneratorService;
-    @Autowired
-    VeranstaltungsRepo veranstaltungsRepo;
-    @Autowired
-    EmailSendingService emailSendingService;
+    private final CalenderGeneratorService calenderGeneratorService;
+    private final VeranstaltungsRepo veranstaltungsRepo;
+    private final EmailSendingService emailSendingService;
 
     String[] blacklistedEMails = new String[]{"a@andrevr.de", "moin@meister.ovh"};
+
+    public CalenderExportController(CalenderGeneratorService calenderGeneratorService, VeranstaltungsRepo veranstaltungsRepo, EmailSendingService emailSendingService) {
+        this.calenderGeneratorService = calenderGeneratorService;
+        this.veranstaltungsRepo = veranstaltungsRepo;
+        this.emailSendingService = emailSendingService;
+    }
 
     class veranstaltungsIds {
         List<Integer> veranstaltungsIds;

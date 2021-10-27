@@ -8,15 +8,14 @@ import org.joda.time.DateTime;
 import org.joda.time.Weeks;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanDatumMN;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,12 +31,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class HbrsExcelParser {
 
-    @Autowired
-    private VeranstaltungsRepo veranstaltungsRepo;
-    @Autowired
-    private StundenplanRepo stundenplanRepo;
-    @Autowired
-    private StundenplanDateMNRepo stundenplanDateMNRepo;
+    private final VeranstaltungsRepo veranstaltungsRepo;
+    private final StundenplanRepo stundenplanRepo;
+    private final StundenplanDateMNRepo stundenplanDateMNRepo;
+
+    public HbrsExcelParser(VeranstaltungsRepo veranstaltungsRepo, StundenplanRepo stundenplanRepo, StundenplanDateMNRepo stundenplanDateMNRepo) {
+        this.veranstaltungsRepo = veranstaltungsRepo;
+        this.stundenplanRepo = stundenplanRepo;
+        this.stundenplanDateMNRepo = stundenplanDateMNRepo;
+    }
 
     public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
         for (Veranstaltung x : veranstaltungen) {
@@ -94,8 +96,8 @@ public class HbrsExcelParser {
                 aktuellerTag = tempDay;
 
             DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yyyy");
-            DateTime dateVon = DateTime.parse((row.getCell(5) + "").substring(0,  10), dateTimeFormatter);
-            DateTime dateBis = DateTime.parse((row.getCell(5) + "").substring(11,  21), dateTimeFormatter);
+            DateTime dateVon = DateTime.parse((row.getCell(5) + "").substring(0, 10), dateTimeFormatter);
+            DateTime dateBis = DateTime.parse((row.getCell(5) + "").substring(11, 21), dateTimeFormatter);
 
             int weeksInBetweenAmount = Weeks.weeksBetween(dateVon, dateBis).getWeeks();
 
@@ -169,7 +171,7 @@ public class HbrsExcelParser {
             e.printStackTrace();
         }
 
-        if(counterPlaene.get() != files.size()){
+        if (counterPlaene.get() != files.size()) {
             return "Es gab einen Fehler beim importieren. " + counterPlaene.get() + " von" + files.size() + " wurden importiert";
         }
 
