@@ -3,13 +3,13 @@ package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service.HbrsExcelParser;
 
@@ -25,14 +25,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ExcelImportController {
-
-    @Autowired
-    HbrsExcelParser hbrsExcelParser;
-    @Autowired
-    VeranstaltungsRepo veranstaltungsRepo;
-
-    @Value("${upload.key}")
-    private String userBucketPath;
 
     private final String[] evaLinks = new String[]{
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS3D9E23&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6",
@@ -55,11 +47,18 @@ public class ExcelImportController {
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS4E1743&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6",
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS689FC6&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6"
     };
+    @Autowired
+    HbrsExcelParser hbrsExcelParser;
+    @Autowired
+    VeranstaltungsRepo veranstaltungsRepo;
+    @Value("${upload.key}")
+    private String userBucketPath;
 
     @RequestMapping(value = "/uploadFile", method = POST)
-    public ResponseEntity<? extends String> submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
-        if (!key.equals(userBucketPath))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Could not verify uploadkey, now fuck off!");
+    public String submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
+        if (!key.equals(userBucketPath)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not verify uploadkey, now fuck off!");
+        }
 
         modelMap.addAttribute("file", files);
         ArrayList<InputStream> inputstreams = new ArrayList<>();
@@ -68,13 +67,14 @@ public class ExcelImportController {
             inputstreams.add(y.getInputStream());
         }
 
-        return new ResponseEntity<>(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
+        return hbrsExcelParser.startParser(inputstreams);
     }
 
     @RequestMapping(value = "/webscrapeEva", method = POST)
-    public ResponseEntity<? extends String> updateStundenplaene(@RequestParam("key") String key) throws IOException {
-        if (!key.equals(userBucketPath))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Could not verify uploadkey, now fuck off!");
+    public String updateStundenplaene(@RequestParam("key") String key) throws IOException {
+        if (!key.equals(userBucketPath)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not verify uploadkey, now fuck off!");
+        }
 
         veranstaltungsRepo.deleteAll();
 
@@ -85,6 +85,6 @@ public class ExcelImportController {
             inputstreams.add(Channels.newInputStream(readableByteChannel));
         }
 
-        return new ResponseEntity<>(hbrsExcelParser.startParser(inputstreams), HttpStatus.OK);
+        return hbrsExcelParser.startParser(inputstreams);
     }
 }
