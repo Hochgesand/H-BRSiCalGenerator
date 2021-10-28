@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service;
+package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

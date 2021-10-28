@@ -1,9 +1,9 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo;
+package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
 
 @Repository
 public interface StundenplanRepo extends CrudRepository<StundenplanEintrag, Integer> {

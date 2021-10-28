@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Service;
+package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,12 +11,12 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanDateMNRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.StundenplanRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.DBRepo.VeranstaltungsRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanDatumMN;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanDatumMN;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

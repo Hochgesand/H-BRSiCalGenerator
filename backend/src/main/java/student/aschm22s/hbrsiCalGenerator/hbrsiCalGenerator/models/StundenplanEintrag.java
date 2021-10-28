@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.Models;
+package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models;
 
 import javax.persistence.*;
 import java.sql.Time;
