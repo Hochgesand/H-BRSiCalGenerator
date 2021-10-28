@@ -1,6 +1,5 @@
 package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,13 +15,18 @@ import java.io.IOException;
 @Service
 public class EmailSendingService {
 
-    @Value("${ical.mail.username}")
-    private String emailUsername;
+    private final String emailUsername;
+    private final JavaMailSender emailSender;
+    private final CalenderGeneratorService calenderGeneratorService;
 
-    @Autowired
-    private JavaMailSender emailSender;
-    @Autowired
-    private CalenderGeneratorService calenderGeneratorService;
+    public EmailSendingService(
+            @Value("${ical.mail.username}") String emailUsername,
+            JavaMailSender emailSender,
+            CalenderGeneratorService calenderGeneratorService) {
+        this.emailUsername = emailUsername;
+        this.emailSender = emailSender;
+        this.calenderGeneratorService = calenderGeneratorService;
+    }
 
     public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) {
         MimeMessage message = emailSender.createMimeMessage();

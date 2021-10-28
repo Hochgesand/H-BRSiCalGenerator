@@ -12,12 +12,18 @@ import java.util.Properties;
 public class
 EmailSendingConfiguration {
 
-    @Value("${ical.mail.username}")
-    private String emailUsername;
-    @Value("${ical.mail.password}")
-    private String emailPassword;
-    @Value("${ical.mail.host}")
-    private String emailhost;
+    private final String emailUsername;
+    private final String emailPassword;
+    private final String emailhost;
+
+    public EmailSendingConfiguration(
+            @Value("${ical.mail.username}") String emailUsername,
+            @Value("${ical.mail.password}") String emailPassword,
+            @Value("${ical.mail.host}") String emailhost) {
+        this.emailUsername = emailUsername;
+        this.emailPassword = emailPassword;
+        this.emailhost = emailhost;
+    }
 
     @Bean
     public JavaMailSender getJavaMailSender() {
