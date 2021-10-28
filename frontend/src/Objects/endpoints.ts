@@ -1,1 +1,1 @@
-export const baseUrl = "https://moin.meister.ovh:8443"
+export const baseUrl = "http://localhost:8080"
