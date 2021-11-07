@@ -1,14 +1,7 @@
-package student.aschm22s.hbrsiCalGenerator.controller;
+package student.aschm22s.hbrsiCalGenerator.exelImport.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import student.aschm22s.hbrsiCalGenerator.service.HbrsExcelParser;
 import student.aschm22s.hbrsiCalGenerator.service.VeranstaltungsService;
 
@@ -19,15 +12,12 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
-@RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-public class ExcelImportController {
+@Service
+public class ExcelImportService {
 
     private final HbrsExcelParser hbrsExcelParser;
     private final VeranstaltungsService veranstaltungsService;
-    private final String userBucketPath;
+
     private final String[] evaLinks = new String[]{
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS3D9E23&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6",
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS1428E2&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6",
@@ -50,42 +40,26 @@ public class ExcelImportController {
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS689FC6&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6"
     };
 
-    public ExcelImportController(
-            @Value("${upload.key}") String userBucketPath,
-            HbrsExcelParser hbrsExcelParser,
-            VeranstaltungsService veranstaltungsService) {
-        this.userBucketPath = userBucketPath;
+    public ExcelImportService(HbrsExcelParser hbrsExcelParser, VeranstaltungsService veranstaltungsService) {
         this.hbrsExcelParser = hbrsExcelParser;
         this.veranstaltungsService = veranstaltungsService;
     }
 
-    @RequestMapping(value = "/uploadFile", method = POST)
-    public String submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
-        if (!key.equals(userBucketPath)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not verify uploadkey, now fuck off!");
-        }
-
-        modelMap.addAttribute("file", files);
+    public String importFiles(MultipartFile[] files) throws IOException {
         ArrayList<InputStream> inputstreams = new ArrayList<>();
-        for (MultipartFile y :
-                files) {
+        for (MultipartFile y : files) {
             inputstreams.add(y.getInputStream());
         }
 
         return hbrsExcelParser.startParser(inputstreams);
     }
 
-    @RequestMapping(value = "/webscrapeEva", method = POST)
-    public String updateStundenplaene(@RequestParam("key") String key) throws IOException {
-        if (!key.equals(userBucketPath)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not verify uploadkey, now fuck off!");
-        }
-
+    public String updateStundenplaene() throws IOException {
+        //TODO: Refactor deleteAll after successful parsing
         veranstaltungsService.deleteAll();
 
         ArrayList<InputStream> inputstreams = new ArrayList<>();
-        for (String string :
-                evaLinks) {
+        for (String string : evaLinks) {
             ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(string).openStream());
             inputstreams.add(Channels.newInputStream(readableByteChannel));
         }
