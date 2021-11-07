@@ -9,6 +9,7 @@ import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIds
 import java.io.IOException;
 import java.util.Arrays;
 
+//TODO: Refactoring: Endpoints don't implement the REST paradigm
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
