@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.filter;
+package student.aschm22s.hbrsiCalGenerator.configuration;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

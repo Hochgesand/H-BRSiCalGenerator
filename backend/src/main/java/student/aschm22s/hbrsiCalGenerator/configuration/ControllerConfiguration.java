@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.controller;
+package student.aschm22s.hbrsiCalGenerator.configuration;
 
 import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.context.annotation.Bean;
