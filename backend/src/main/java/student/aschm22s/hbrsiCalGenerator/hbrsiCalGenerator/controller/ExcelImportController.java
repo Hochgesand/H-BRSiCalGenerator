@@ -49,13 +49,6 @@ public class ExcelImportController {
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS4E1743&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6",
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS689FC6&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6"
     };
-    @Autowired
-    HbrsExcelParser hbrsExcelParser;
-    @Autowired
-    VeranstaltungsRepo veranstaltungsRepo;
-    @Value("${upload.key}")
-    private String userBucketPath;
-
 
     public ExcelImportController(
             @Value("${upload.key}") String userBucketPath,
