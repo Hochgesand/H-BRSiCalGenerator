@@ -67,20 +67,4 @@ public class CalenderExportController {
     public String getCalenderForSemesterAsCSV(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
         return calenderGeneratorService.createCalenderAsCSV(veranstaltungsIds);
     }
-
-    class veranstaltungsIds {
-        List<Integer> veranstaltungsIds;
-
-        public veranstaltungsIds(List<Integer> veranstaltungsIds) {
-            this.veranstaltungsIds = veranstaltungsIds;
-        }
-
-        public List<Integer> getVeranstaltungsIds() {
-            return veranstaltungsIds;
-        }
-
-        public void setVeranstaltungsIds(List<Integer> veranstaltungsIds) {
-            this.veranstaltungsIds = veranstaltungsIds;
-        }
-    }
 }
