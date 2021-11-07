@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.models;
+package student.aschm22s.hbrsiCalGenerator.stundenplan.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

@@ -2,8 +2,8 @@ package student.aschm22s.hbrsiCalGenerator.exelImport.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import student.aschm22s.hbrsiCalGenerator.service.HbrsExcelParser;
-import student.aschm22s.hbrsiCalGenerator.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.exelImport.domain.HbrsExcelParser;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.service.VeranstaltungsService;
 
 import java.io.IOException;
 import java.io.InputStream;

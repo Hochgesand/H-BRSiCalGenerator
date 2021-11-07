@@ -1,8 +1,8 @@
-package student.aschm22s.hbrsiCalGenerator.repository;
+package student.aschm22s.hbrsiCalGenerator.veranstaltung.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import student.aschm22s.hbrsiCalGenerator.models.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
 
 @Repository
 public interface VeranstaltungsRepository extends JpaRepository<Veranstaltung, Integer> {

@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.service;
+package student.aschm22s.hbrsiCalGenerator.email.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -6,7 +6,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import student.aschm22s.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIdsAndEmail;
+import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsAndEmail;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -17,15 +18,15 @@ public class EmailSendingService {
 
     private final String emailUsername;
     private final JavaMailSender emailSender;
-    private final CalenderGeneratorService calenderGeneratorService;
+    private final CalenderExportService calenderExportService;
 
     public EmailSendingService(
             @Value("${ical.mail.username}") String emailUsername,
             JavaMailSender emailSender,
-            CalenderGeneratorService calenderGeneratorService) {
+            CalenderExportService calenderExportService) {
         this.emailUsername = emailUsername;
         this.emailSender = emailSender;
-        this.calenderGeneratorService = calenderGeneratorService;
+        this.calenderExportService = calenderExportService;
     }
 
     public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) {
@@ -39,7 +40,7 @@ public class EmailSendingService {
             helper.setSubject("Dein Kalender");
             helper.setText("Hier ist dein Kalender :)");
 
-            helper.addAttachment("Calendar.ics", new ByteArrayResource(calenderGeneratorService.createCalender(veranstaltungsIdsAndEmail)));
+            helper.addAttachment("Calendar.ics", new ByteArrayResource(calenderExportService.createCalender(veranstaltungsIdsAndEmail)));
         } catch (MessagingException | IOException e) {
             return "Beim E-Mail zusammenstellen ist ein Fehler aufgetreten. Denke mal das ist ein Bug, würd mich freuen wenn du den mir melden würdest :)";
         }

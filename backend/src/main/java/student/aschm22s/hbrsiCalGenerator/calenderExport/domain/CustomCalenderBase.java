@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.models.CustomCalender;
+package student.aschm22s.hbrsiCalGenerator.calenderExport.domain;
 
 import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.VEvent;

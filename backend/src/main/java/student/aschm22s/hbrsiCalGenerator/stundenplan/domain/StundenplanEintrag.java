@@ -1,4 +1,6 @@
-package student.aschm22s.hbrsiCalGenerator.models;
+package student.aschm22s.hbrsiCalGenerator.stundenplan.domain;
+
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
 
 import javax.persistence.*;
 import java.sql.Time;

@@ -6,8 +6,6 @@ import com.google.common.cache.LoadingCache;
 import org.joda.time.DateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import student.aschm22s.hbrsiCalGenerator.models.AbusingIPAddress;
-import student.aschm22s.hbrsiCalGenerator.repository.AbusingIPAddressRepository;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
