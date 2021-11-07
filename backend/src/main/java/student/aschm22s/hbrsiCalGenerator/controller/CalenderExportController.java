@@ -1,13 +1,13 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.controller;
+package student.aschm22s.hbrsiCalGenerator.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIds;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIdsAndEmail;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepository;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service.CalenderGeneratorService;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service.EmailSendingService;
+import student.aschm22s.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIds;
+import student.aschm22s.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIdsAndEmail;
+import student.aschm22s.hbrsiCalGenerator.models.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.service.CalenderGeneratorService;
+import student.aschm22s.hbrsiCalGenerator.service.EmailSendingService;
 
 import java.io.IOException;
 import java.util.Arrays;

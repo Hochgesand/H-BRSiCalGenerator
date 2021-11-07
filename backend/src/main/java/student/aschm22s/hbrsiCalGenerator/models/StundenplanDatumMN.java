@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models;
+package student.aschm22s.hbrsiCalGenerator.models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,6 +13,14 @@ public class StundenplanDatumMN {
     @JoinColumn(name = "stundenplan_eintrag_id", nullable = false)
     private StundenplanEintrag stundenplanEintrag;
     private Timestamp date;
+
+    public StundenplanDatumMN() {
+    }
+
+    public StundenplanDatumMN(StundenplanEintrag stundenplanEintrag, Timestamp date) {
+        this.stundenplanEintrag = stundenplanEintrag;
+        this.date = date;
+    }
 
     public StundenplanEintrag getStundenplanEintrag() {
         return stundenplanEintrag;
@@ -32,13 +40,5 @@ public class StundenplanDatumMN {
 
     public void setDate(long date) {
         this.date = new Timestamp(date);
-    }
-
-    public StundenplanDatumMN() {
-    }
-
-    public StundenplanDatumMN(StundenplanEintrag stundenplanEintrag, Timestamp date) {
-        this.stundenplanEintrag = stundenplanEintrag;
-        this.date = date;
     }
 }

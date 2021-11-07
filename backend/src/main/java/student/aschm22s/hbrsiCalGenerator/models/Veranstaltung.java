@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models;
+package student.aschm22s.hbrsiCalGenerator.models;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,7 +12,7 @@ public class Veranstaltung {
     private String name;
     private String prof;
     private String studienGangSemester;
-    @OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="veranstaltung")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "veranstaltung")
     private Collection<StundenplanEintrag> stundenplanEintrags;
 
     public Veranstaltung(String name, String prof, String studienGangSemester) {
@@ -41,12 +41,12 @@ public class Veranstaltung {
         return name;
     }
 
-    public String getProf() {
-        return prof;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getProf() {
+        return prof;
     }
 
     public void setProf(String prof) {

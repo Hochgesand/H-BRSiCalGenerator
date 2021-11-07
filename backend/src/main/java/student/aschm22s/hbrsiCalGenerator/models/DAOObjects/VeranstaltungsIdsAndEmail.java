@@ -1,8 +1,8 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects;
+package student.aschm22s.hbrsiCalGenerator.models.DAOObjects;
 
 import java.util.List;
 
-public class VeranstaltungsIdsAndEmail extends VeranstaltungsIds{
+public class VeranstaltungsIdsAndEmail extends VeranstaltungsIds {
     String email;
 
     public String getEmail() {

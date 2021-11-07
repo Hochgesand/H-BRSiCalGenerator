@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.CustomCalender;
+package student.aschm22s.hbrsiCalGenerator.models.CustomCalender;
 
 import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.VEvent;
@@ -12,14 +12,14 @@ import net.fortuna.ical4j.util.UidGenerator;
 
 public class CustomCalenderBase {
     private final String MAKER = "André Schmitz (a@andrevr.de)";
+    private final UidGenerator uidGenerator;
+    private final Calendar iCalender;
     private String eventName;
     private DateTime startTime;
     private DateTime endTime;
     private String modul;
     private String prof;
     private String raum;
-    private final UidGenerator uidGenerator;
-    private final Calendar iCalender;
 
     public CustomCalenderBase() {
         uidGenerator = new RandomUidGenerator();
@@ -30,7 +30,7 @@ public class CustomCalenderBase {
         iCalender.getProperties().add(CalScale.GREGORIAN);
     }
 
-    public void addEventToCalender(String eventName, DateTime startTime, DateTime endTime, String modul, String prof, String raum){
+    public void addEventToCalender(String eventName, DateTime startTime, DateTime endTime, String modul, String prof, String raum) {
         this.eventName = eventName;
         this.startTime = startTime;
         this.endTime = endTime;

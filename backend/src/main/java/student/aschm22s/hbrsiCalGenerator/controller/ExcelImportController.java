@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.controller;
+package student.aschm22s.hbrsiCalGenerator.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepository;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service.HbrsExcelParser;
+import student.aschm22s.hbrsiCalGenerator.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.service.HbrsExcelParser;
 
 import java.io.IOException;
 import java.io.InputStream;

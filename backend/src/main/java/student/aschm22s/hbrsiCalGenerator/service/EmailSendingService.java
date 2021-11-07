@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service;
+package student.aschm22s.hbrsiCalGenerator.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -6,7 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIdsAndEmail;
+import student.aschm22s.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIdsAndEmail;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -33,7 +33,8 @@ public class EmailSendingService {
 
         MimeMessageHelper helper = null;
         try {
-            helper = new MimeMessageHelper(message, true);helper.setFrom(emailUsername);
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(emailUsername);
             helper.setTo(veranstaltungsIdsAndEmail.getEmail());
             helper.setSubject("Dein Kalender");
             helper.setText("Hier ist dein Kalender :)");

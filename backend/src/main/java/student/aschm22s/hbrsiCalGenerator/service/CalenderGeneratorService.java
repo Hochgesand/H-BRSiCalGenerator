@@ -1,17 +1,17 @@
-package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service;
+package student.aschm22s.hbrsiCalGenerator.service;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import org.springframework.stereotype.Service;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.CustomCalender.CustomCalenderBase;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIds;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanDatumMN;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepository;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepository;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.models.CustomCalender.CustomCalenderBase;
+import student.aschm22s.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIds;
+import student.aschm22s.hbrsiCalGenerator.models.StundenplanDatumMN;
+import student.aschm22s.hbrsiCalGenerator.models.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.models.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.repository.StundenplanDateMNRepository;
+import student.aschm22s.hbrsiCalGenerator.repository.StundenplanRepository;
+import student.aschm22s.hbrsiCalGenerator.repository.VeranstaltungsRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
