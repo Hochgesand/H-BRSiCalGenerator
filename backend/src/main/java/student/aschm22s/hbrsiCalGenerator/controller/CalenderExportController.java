@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIdsAndEmail;
 import student.aschm22s.hbrsiCalGenerator.models.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.repository.VeranstaltungsRepository;
 import student.aschm22s.hbrsiCalGenerator.service.CalenderGeneratorService;
 import student.aschm22s.hbrsiCalGenerator.service.EmailSendingService;
+import student.aschm22s.hbrsiCalGenerator.service.VeranstaltungsService;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,23 +18,23 @@ import java.util.List;
 public class CalenderExportController {
 
     private final CalenderGeneratorService calenderGeneratorService;
-    private final VeranstaltungsRepository veranstaltungsRepo;
+    private final VeranstaltungsService veranstaltungsService;
     private final EmailSendingService emailSendingService;
 
     String[] blacklistedEMails = new String[]{"a@andrevr.de", "moin@meister.ovh"};
 
     public CalenderExportController(
             CalenderGeneratorService calenderGeneratorService,
-            VeranstaltungsRepository veranstaltungsRepo,
+            VeranstaltungsService veranstaltungsService,
             EmailSendingService emailSendingService) {
         this.calenderGeneratorService = calenderGeneratorService;
-        this.veranstaltungsRepo = veranstaltungsRepo;
+        this.veranstaltungsService = veranstaltungsService;
         this.emailSendingService = emailSendingService;
     }
 
     @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Veranstaltung> getVeranstaltungen() {
-        return veranstaltungsRepo.findAll();
+        return veranstaltungsService.findAll();
     }
 
     @RequestMapping(
