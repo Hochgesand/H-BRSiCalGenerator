@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
 
 @Repository
-public interface VeranstaltungsRepo extends JpaRepository<Veranstaltung, Integer> {
+public interface VeranstaltungsRepository extends JpaRepository<Veranstaltung, Integer> {
     Iterable<Veranstaltung> findByIdIn(Iterable<Integer> Ids);
 
     Veranstaltung findFirstByNameAndStudienGangSemester(String name, String studienGangSemester);

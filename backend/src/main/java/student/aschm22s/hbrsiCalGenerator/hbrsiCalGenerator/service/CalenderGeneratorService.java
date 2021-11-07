@@ -9,9 +9,9 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.Ve
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanDatumMN;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepo;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanDateMNRepository;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.StundenplanRepository;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,11 +24,11 @@ import java.util.Objects;
 @Service
 public class CalenderGeneratorService {
 
-    private final VeranstaltungsRepo veranstaltungsRepo;
-    private final StundenplanRepo stundenplanRepo;
-    private final StundenplanDateMNRepo stundenplanDateMNRepo;
+    private final VeranstaltungsRepository veranstaltungsRepo;
+    private final StundenplanRepository stundenplanRepo;
+    private final StundenplanDateMNRepository stundenplanDateMNRepo;
 
-    public CalenderGeneratorService(VeranstaltungsRepo veranstaltungsRepo, StundenplanRepo stundenplanRepo, StundenplanDateMNRepo stundenplanDateMNRepo) {
+    public CalenderGeneratorService(VeranstaltungsRepository veranstaltungsRepo, StundenplanRepository stundenplanRepo, StundenplanDateMNRepository stundenplanDateMNRepo) {
         this.veranstaltungsRepo = veranstaltungsRepo;
         this.stundenplanRepo = stundenplanRepo;
         this.stundenplanDateMNRepo = stundenplanDateMNRepo;

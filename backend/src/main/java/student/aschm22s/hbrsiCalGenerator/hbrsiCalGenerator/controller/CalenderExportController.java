@@ -1,12 +1,11 @@
 package student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIds;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.DAOObjects.VeranstaltungsIdsAndEmail;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepository;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service.CalenderGeneratorService;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service.EmailSendingService;
 
@@ -19,14 +18,14 @@ import java.util.List;
 public class CalenderExportController {
 
     private final CalenderGeneratorService calenderGeneratorService;
-    private final VeranstaltungsRepo veranstaltungsRepo;
+    private final VeranstaltungsRepository veranstaltungsRepo;
     private final EmailSendingService emailSendingService;
 
     String[] blacklistedEMails = new String[]{"a@andrevr.de", "moin@meister.ovh"};
 
     public CalenderExportController(
             CalenderGeneratorService calenderGeneratorService,
-            VeranstaltungsRepo veranstaltungsRepo,
+            VeranstaltungsRepository veranstaltungsRepo,
             EmailSendingService emailSendingService) {
         this.calenderGeneratorService = calenderGeneratorService;
         this.veranstaltungsRepo = veranstaltungsRepo;

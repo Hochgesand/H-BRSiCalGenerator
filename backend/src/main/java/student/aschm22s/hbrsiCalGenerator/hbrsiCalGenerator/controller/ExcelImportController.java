@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepo;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.VeranstaltungsRepository;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.service.HbrsExcelParser;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class ExcelImportController {
 
     private final HbrsExcelParser hbrsExcelParser;
-    private final VeranstaltungsRepo veranstaltungsRepo;
+    private final VeranstaltungsRepository veranstaltungsRepo;
     private final String userBucketPath;
     private final String[] evaLinks = new String[]{
             "https://eva2.inf.h-brs.de/stundenplan/anzeigen/?weeks=39;40;41;42;43;44;45;46;47;48;49;50;51;54;55&days=1-7&mode=xls&identifier_semester=%23SPLUS3D9E23&show_semester=&identifier_dozent=&identifier_raum=&term=e4e488484864f3046d4b77c253f3d3a6",
@@ -53,7 +53,7 @@ public class ExcelImportController {
     public ExcelImportController(
             @Value("${upload.key}") String userBucketPath,
             HbrsExcelParser hbrsExcelParser,
-            VeranstaltungsRepo veranstaltungsRepo) {
+            VeranstaltungsRepository veranstaltungsRepo) {
         this.userBucketPath = userBucketPath;
         this.hbrsExcelParser = hbrsExcelParser;
         this.veranstaltungsRepo = veranstaltungsRepo;

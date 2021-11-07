@@ -6,6 +6,6 @@ import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.StundenplanEi
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.Veranstaltung;
 
 @Repository
-public interface StundenplanRepo extends CrudRepository<StundenplanEintrag, Integer> {
+public interface StundenplanRepository extends CrudRepository<StundenplanEintrag, Integer> {
     Iterable<StundenplanEintrag> findByVeranstaltung(Veranstaltung veranstaltung);
 }

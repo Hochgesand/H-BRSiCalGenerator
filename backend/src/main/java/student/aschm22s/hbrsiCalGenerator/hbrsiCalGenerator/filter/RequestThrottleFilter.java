@@ -6,8 +6,8 @@ import com.google.common.cache.LoadingCache;
 import org.joda.time.DateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.AbusingIPAddressRepo;
 import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.models.AbusingIPAddress;
+import student.aschm22s.hbrsiCalGenerator.hbrsiCalGenerator.repository.AbusingIPAddressRepository;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -20,13 +20,13 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RequestThrottleFilter implements Filter {
 
-    private final AbusingIPAddressRepo abusingIPAddressRepo;
+    private final AbusingIPAddressRepository abusingIPAddressRepo;
 
     private final int MAX_REQUESTS_PER_MINUTE = 5;
 
     private final LoadingCache<String, Integer> requestCountsPerIpAddress;
 
-    public RequestThrottleFilter(AbusingIPAddressRepo abusingIPAddressRepo) {
+    public RequestThrottleFilter(AbusingIPAddressRepository abusingIPAddressRepo) {
         requestCountsPerIpAddress = CacheBuilder.newBuilder().
                 expireAfterWrite(60, TimeUnit.SECONDS).build(new CacheLoader<String, Integer>() {
                     public Integer load(String key) {
@@ -46,7 +46,7 @@ public class RequestThrottleFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String clientIpAddress = getClientIP((HttpServletRequest) request);
-        if(isMaximumRequestsPerMinuteExceeded(clientIpAddress)){
+        if (isMaximumRequestsPerMinuteExceeded(clientIpAddress)) {
             httpServletResponse.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             httpServletResponse.getWriter().write("Too many requests");
             return;
@@ -60,12 +60,12 @@ public class RequestThrottleFilter implements Filter {
         Filter.super.destroy();
     }
 
-    private boolean isMaximumRequestsPerMinuteExceeded(String clientIpAddress){
+    private boolean isMaximumRequestsPerMinuteExceeded(String clientIpAddress) {
         int requests = 0;
         try {
             if (abusingIPAddressRepo.countAbusingIPAddressByIpAddress(clientIpAddress) > 10) return true;
             requests = requestCountsPerIpAddress.get(clientIpAddress);
-            if(requests > MAX_REQUESTS_PER_MINUTE){
+            if (requests > MAX_REQUESTS_PER_MINUTE) {
                 requestCountsPerIpAddress.put(clientIpAddress, requests);
                 AbusingIPAddress abusingIPAddress = new AbusingIPAddress();
                 abusingIPAddress.setTimestamp(new Timestamp(DateTime.now().getMillis()));
@@ -83,7 +83,7 @@ public class RequestThrottleFilter implements Filter {
 
     public String getClientIP(HttpServletRequest request) {
         String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null){
+        if (xfHeader == null) {
             return request.getRemoteAddr();
         }
         return xfHeader.split(",")[0];
