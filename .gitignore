@@ -2,3 +2,5 @@
 backend/src/main/resources/application.properties
 
 .idea/
+
+frontend/package-lock.json
