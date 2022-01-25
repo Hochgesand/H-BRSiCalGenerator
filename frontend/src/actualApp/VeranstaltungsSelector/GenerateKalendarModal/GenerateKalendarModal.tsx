@@ -7,7 +7,7 @@ import Error from "../../../Error";
 import {AgGridColumn, AgGridReact} from "ag-grid-react";
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
+import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import '../../../index.scss'
 
 export interface kalendarModalInterface {
@@ -137,7 +137,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
               </button>
             </div>
             <p className={"text-3xl ml-4"}>Ausgewählte Module/Veranstaltungen</p>
-            <div className={"ag-theme-alpine-dark rounded-box p-4 bg-base-300 h-1/2"} >
+            <div className={"ag-theme-material rounded-box p-4 bg-base-300 h-1/2"} >
               <AgGridReact
                 ref={gridRef}
                 rowData={props.selectedData}

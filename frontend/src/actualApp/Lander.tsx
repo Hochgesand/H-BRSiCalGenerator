@@ -48,9 +48,9 @@ export default function Lander() {
 
   return(
     <div className={"max-h-screen"}>
-        {selectedStudiengang.length === 0 ? <div className={"rounded-box p-3 bg-base-300 md:w-1/3 w-full"}>
+        {selectedStudiengang.length === 0 ? <div className={"rounded-box p-3 bg-base-300 md:w-1/2 w-full m-auto"}>
           <div className={"rounded-box p-4 bg-base-100 mb-4"}>
-            <h2 className={"text-4xl mb-2"}>H-BRS Kalendergenerator v1.1</h2>
+            <h2 className={"text-4xl mb-2 text-center"}>H-BRS Kalendergenerator v1.1</h2>
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
               Gewissen. </p>
             <p>Fehler bitte an a@andrevr.de melden.</p>
@@ -58,20 +58,23 @@ export default function Lander() {
             <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
           </div>
           <div className={"dropdown w-full"}>
+            <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
+              <button className={"btn md:btn-lg w-full mb-2 btn-ghost"}>Gib mir einen Stern auf Github ❤</button>
+            </a>
             <button className={"btn md:btn-lg w-full"} onClick={showHelp}>FAQ / HILFE!</button>
-          <div tabIndex={0} className="btn md:btn-lg w-full mt-2">Bitte Studiengang auswählen!</div>
-          <ul tabIndex={0} className="p-2 shadow menu dropdown-content bg-base-300 rounded-box w-full">
-            {studiengaenge.map(studiengang => (
-              <li className={"m-1"}>
-                <button
-                  className={"btn"}
-                  onClick={() => setSelectedStudiengang(studiengang)}
-                >
-                  {studiengang}
-                </button>
-              </li>
-            ))}
-          </ul>
+            <div tabIndex={0} className="btn md:btn-lg w-full mt-2">Bitte Studiengang auswählen!</div>
+            <ul tabIndex={0} className="p-2 shadow menu dropdown-content bg-base-300 rounded-box w-full">
+              {studiengaenge.map(studiengang => (
+                <li className={"m-1 text-white"}>
+                  <button
+                    className={"btn"}
+                    onClick={() => setSelectedStudiengang(studiengang)}
+                  >
+                    {studiengang}
+                  </button>
+                </li>
+              ))}
+            </ul>
         </div>
       </div> : ""}
 

@@ -80,17 +80,14 @@ export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsPr
                              selectedData={selectedDataProp} veranstaltungsIds={veranstaltungsIds}/>
 
       <div className={showKalendarModal ? "filter blur-lg" : ""} onClick={() => setShowKalendarModal(false)}>
-        <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12 m-auto max-h-screen"}>
+        <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12 m-auto"}>
           <div className={"rounded-box md:p-4 p-2 bg-base-300"}>
             <h2 className={"md:text-4xl text-2xl mb-2 text-center"}>H-BRS Kalendergenerator v1.1</h2>
           </div>
           <div
-            className={"grid md:grid-cols-3 md:grid-rows-1 grid-cols-1 grid-rows-3 gap-4 rounded-box p-3 bg-base-300"}>
+            className={"grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 gap-4 rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
+            <button className={"btn md:btn-lg w-fully"} onClick={showHelp}>FAQ / HILFE!</button>
             <button onClick={e => showCalendarGenerationModal(e)} className={"btn md:btn-lg w-full"}>Kalender generieren!</button>
-            <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
-              <button className={"btn md:btn-lg w-full"}>Gib mir einen Stern auf Github ❤</button>
-            </a>
-            <button className={"btn md:btn-lg w-full"} onClick={showHelp}>FAQ / HILFE!</button>
           </div>
 
           <div className={"ag-theme-material rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"} style={{height: 800}}>
