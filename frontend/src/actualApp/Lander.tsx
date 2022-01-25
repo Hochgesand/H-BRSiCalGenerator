@@ -49,7 +49,7 @@ export default function Lander() {
   return(
     <div className={"max-h-screen"}>
         {selectedStudiengang.length === 0 ? <div className={"rounded-box p-3 bg-base-300 md:w-1/3 w-full"}>
-          <div className={"rounded-box p-4 bg-base-300 mb-4"}>
+          <div className={"rounded-box p-4 bg-base-100 mb-4"}>
             <h2 className={"text-4xl mb-2"}>H-BRS Kalendergenerator v1.1</h2>
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
               Gewissen. </p>

@@ -8,7 +8,7 @@ import Error from "../../Error";
 import {AgGridColumn, AgGridReact} from "ag-grid-react";
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
+import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import '../../index.scss'
 import GenerateKalendarModal from "./GenerateKalendarModal/GenerateKalendarModal";
 
@@ -86,16 +86,14 @@ export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsPr
           </div>
           <div
             className={"grid md:grid-cols-3 md:grid-rows-1 grid-cols-1 grid-rows-3 gap-4 rounded-box p-3 bg-base-300"}>
-            <button onClick={e => showCalendarGenerationModal(e)} className={"btn md:btn-lg w-full"}>Hol dir deinen
-              Kalender!
-            </button>
+            <button onClick={e => showCalendarGenerationModal(e)} className={"btn md:btn-lg w-full"}>Kalender generieren!</button>
             <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
               <button className={"btn md:btn-lg w-full"}>Gib mir einen Stern auf Github ❤</button>
             </a>
             <button className={"btn md:btn-lg w-full"} onClick={showHelp}>FAQ / HILFE!</button>
           </div>
 
-          <div className={"ag-theme-alpine-dark rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"} style={{height: 800}}>
+          <div className={"ag-theme-material rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"} style={{height: 800}}>
             <AgGridReact
               rowData={veranstaltungsData}
               enableRangeSelection={true}
