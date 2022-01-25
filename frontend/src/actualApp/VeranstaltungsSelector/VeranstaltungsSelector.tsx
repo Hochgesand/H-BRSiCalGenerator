@@ -12,7 +12,11 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 import '../../index.scss'
 import GenerateKalendarModal from "./GenerateKalendarModal/GenerateKalendarModal";
 
-export default function VeranstaltungsSelector() {
+interface veranstaltungsProp {
+  readonly veranstaltung: string
+}
+
+export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsProp) {
   const history = useHistory();
   const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
   const [selectedDataProp, setSelectedDataProp] = useState([])
@@ -20,7 +24,7 @@ export default function VeranstaltungsSelector() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showKalendarModal, setShowKalendarModal] = useState(false);
-  const veranstaltungsPath = `${baseUrl}/getVeranstaltungen`;
+  const veranstaltungsPath = `${baseUrl}/getVeranstaltungByStudiengang?studiengang=${veranstaltung}`;
   const {getData} = useGetRequest({path: veranstaltungsPath})
   const gridRef = useRef(null)
 
@@ -75,13 +79,7 @@ export default function VeranstaltungsSelector() {
       <GenerateKalendarModal showKalendarModal={showKalendarModal} setShowKalendarModal={setShowKalendarModal}
                              selectedData={selectedDataProp} veranstaltungsIds={veranstaltungsIds}/>
       <div className={showKalendarModal ? "filter blur-lg" : ""} onClick={() => setShowKalendarModal(false)}>
-        <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12"}>
-          <div className={"rounded-box p-4 bg-base-300 "}>
-            <h2 className={"text-4xl mb-2"}>H-BRS Kalendergenerator v1.0</h2>
-            <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
-              Gewissen. Fehler bitte an a@andrevr.de melden.</p>
-            <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
-          </div>
+        <div className={"grid grid-rows-2 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12"}>
           <div className={"grid grid-cols-3 gap-4 rounded-box p-3 bg-base-300"}>
             <button onClick={e => showCalendarGenerationModal(e)} className={"btn btn-lg w-full"}>Hol dir deinen Kalender!</button>
             <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
@@ -104,8 +102,6 @@ export default function VeranstaltungsSelector() {
             <AgGridColumn field="name" width={380} sortable={true} filter={true} checkboxSelection={true}
                           resizable={true}
                           headerName={"Veranstaltung"} floatingFilter={true}/>
-            <AgGridColumn field="studienGangSemester" width={400} sortable={true} filter={true} resizable={true}
-                          floatingFilter={true} headerName={"Fachbereich / Semester"}/>
             <AgGridColumn field="prof" width={150} sortable={true} filter={true} resizable={true}
                           floatingFilter={true}/>
           </AgGridReact>
