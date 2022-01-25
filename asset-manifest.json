@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/H-BRSiCalGenerator/static/css/main.9c159da9.chunk.css",
-    "main.js": "/H-BRSiCalGenerator/static/js/main.b8827051.chunk.js",
-    "main.js.map": "/H-BRSiCalGenerator/static/js/main.b8827051.chunk.js.map",
+    "main.css": "/H-BRSiCalGenerator/static/css/main.9f987dbb.chunk.css",
+    "main.js": "/H-BRSiCalGenerator/static/js/main.dd992f6a.chunk.js",
+    "main.js.map": "/H-BRSiCalGenerator/static/js/main.dd992f6a.chunk.js.map",
     "runtime-main.js": "/H-BRSiCalGenerator/static/js/runtime-main.0a081365.js",
     "runtime-main.js.map": "/H-BRSiCalGenerator/static/js/runtime-main.0a081365.js.map",
     "static/css/2.04d3550e.chunk.css": "/H-BRSiCalGenerator/static/css/2.04d3550e.chunk.css",
@@ -12,14 +12,14 @@
     "static/js/3.adb72d60.chunk.js.map": "/H-BRSiCalGenerator/static/js/3.adb72d60.chunk.js.map",
     "index.html": "/H-BRSiCalGenerator/index.html",
     "static/css/2.04d3550e.chunk.css.map": "/H-BRSiCalGenerator/static/css/2.04d3550e.chunk.css.map",
-    "static/css/main.9c159da9.chunk.css.map": "/H-BRSiCalGenerator/static/css/main.9c159da9.chunk.css.map",
+    "static/css/main.9f987dbb.chunk.css.map": "/H-BRSiCalGenerator/static/css/main.9f987dbb.chunk.css.map",
     "static/js/2.87f58fb8.chunk.js.LICENSE.txt": "/H-BRSiCalGenerator/static/js/2.87f58fb8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.0a081365.js",
     "static/css/2.04d3550e.chunk.css",
     "static/js/2.87f58fb8.chunk.js",
-    "static/css/main.9c159da9.chunk.css",
-    "static/js/main.b8827051.chunk.js"
+    "static/css/main.9f987dbb.chunk.css",
+    "static/js/main.dd992f6a.chunk.js"
   ]
 }
