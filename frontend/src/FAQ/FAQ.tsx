@@ -9,7 +9,7 @@ export default function FAQ(){
         onClick={() => history.goBack()}>
         Back
       </button>
-      <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-3/4"}>
+      <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-full md:w-3/4"}>
         <p className={"text-3xl"}>Anleitung:</p>
         <p className={"text-2xl"}>Schritt 1:</p>
         <p>Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
@@ -31,8 +31,7 @@ export default function FAQ(){
         </ul>
         <p>React:</p>
         <ul>
-          <li> - AGGrid für die Tabelle, kein Bock gehabt selber Sortieralgorithmen zu implementieren</li>
-          <li> - Locker noch ca. 2000 Packages mehr die mit React gekommen sind, npm macht npm sachen</li>
+          <li> - AGGrid für die Tabellen</li>
           <li> - TailwindCSS für's CSS</li>
         </ul>
         <p className={"text-2xl"}>FAQ:</p>

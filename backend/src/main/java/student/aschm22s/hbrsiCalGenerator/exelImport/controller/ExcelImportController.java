@@ -39,7 +39,6 @@ public class ExcelImportController {
         return excelImportService.importFiles(files);
     }
 
-
     @RequestMapping(value = "/webscrapeEva", method = POST)
     public String updateStundenplaene(@RequestParam("key") String key) throws IOException {
         if (!key.equals(userBucketPath)) {

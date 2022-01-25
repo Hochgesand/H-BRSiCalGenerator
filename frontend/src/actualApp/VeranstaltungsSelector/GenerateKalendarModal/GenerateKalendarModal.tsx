@@ -101,23 +101,23 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
     <>
       {props.showKalendarModal ?
         <div className={"container flex mx-auto z-10 absolute inset-0 justify-center rounded-box h-screen"}>
-          <div className={"m-auto rounded-box bg-base-300 w-3/4 xl:w-2/3 2xl:1 h-screen flex-none z-20"} >
-            <div className={"h-30 p-4"}>
+          <div className={"m-auto rounded-box bg-base-300 md:w-3/4 w-full xl:w-2/3 2xl:1 h-screen flex-none z-20"} >
+            <div className={"p-4"}>
               {error.length > 0 ? <Error msg={error} /> : null}
               <div className={"grid grid-cols-2 grid-rows-1 gap-4"}>
-                <button className={`btn btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
+                <button className={`btn h-14 md:btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
                         disabled={props.veranstaltungsIds.length === 0 || loading}
                         onClick={() => {
                           downloadUrl = (`${baseUrl}/sememesteriCal`)
                           console.log(downloadUrl)
                           onButtonClickDownloadCalendar()
                         }}>Download calendar.ics</button>
-                <button className={`btn btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
+                <button className={`btn h-14 md:btn-lg w-full mb-4 ${loading ? 'loading' : null}`} type={"submit"}
                         disabled={props.veranstaltungsIds.length === 0 || loading}
                         onClick={() => {
                           downloadUrl = `${baseUrl}/sememesteriCalAsCSV`
                           onButtonClickDownloadCalendarAsCsv()
-                        }}>Download Kalender as CSV (BETA)</button>
+                        }}>Download Kalender as CSV</button>
               </div>
               <div className={"rounded-box bg-base-200 h-6 w-full mb-4"}><p className={"w-full text-center"}>ODER</p></div>
               <div className={"rounded-box bg-base-300 grid grid-cols-2 gap-4 mb-4 w-auto"}>
@@ -130,14 +130,14 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                         onClick={onEmailWantToSchick}>Schick's per E-Mail
                 </button>
               </div>
-              <button className={"btn btn-md w-full mb-4"} onClick={() => {
+              <button className={"btn btn-md w-full md:mb-4"} onClick={() => {
                 props.setShowKalendarModal(false)
                 setError("")
               }} disabled={loading}>Abbrechen
               </button>
             </div>
             <p className={"text-3xl ml-4"}>Ausgewählte Module/Veranstaltungen</p>
-            <div className={"ag-theme-alpine-dark rounded-box p-4 bg-base-300 h-screen"} >
+            <div className={"ag-theme-alpine-dark rounded-box p-4 bg-base-300 h-1/2"} >
               <AgGridReact
                 ref={gridRef}
                 rowData={props.selectedData}

@@ -32,7 +32,7 @@ public class CalenderExportController {
     )
     public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) {
         if (Arrays.stream(blacklistedEMails).anyMatch(x -> veranstaltungsIdsAndEmail.getEmail().equals(x))) {
-            return "Fühlst dich wohl witzig du Penner.";
+            return "ne";
         }
 
         return emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail);

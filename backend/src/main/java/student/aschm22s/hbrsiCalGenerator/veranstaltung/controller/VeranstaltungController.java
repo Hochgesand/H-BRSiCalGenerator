@@ -1,10 +1,7 @@
 package student.aschm22s.hbrsiCalGenerator.veranstaltung.controller;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.veranstaltung.service.VeranstaltungsService;
 
@@ -20,8 +17,30 @@ public class VeranstaltungController {
         this.veranstaltungsService = veranstaltungsService;
     }
 
-    @RequestMapping(value = "/getVeranstaltungen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(
+            value = "/getVeranstaltungen",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public List<Veranstaltung> getVeranstaltungen() {
         return veranstaltungsService.findAll();
+    }
+
+    @RequestMapping(
+            value = "/getVeranstaltungByStudiengang",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public List<Veranstaltung> getVeranstaltungByStudiengang(@RequestParam("studiengang") String studiengang) {
+        return veranstaltungsService.findAllByStudiengang(studiengang);
+    }
+
+    @RequestMapping(
+            value = "/getStudiengaenge",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public List<String> getStudiengaenge() {
+        return veranstaltungsService.findAllStudiengaenge();
     }
 }
