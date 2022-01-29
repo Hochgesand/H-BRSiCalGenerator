@@ -12,7 +12,7 @@ import GenerateKalendarModal from "./GenerateKalendarModal/GenerateKalendarModal
 
 export default function VeranstaltungsSelector() {
     const params = useParams();
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
     const [searchedVeranstaltungsData, setSearchedVeranstaltungsData] = useState([] as Veranstaltung[]);
@@ -66,7 +66,7 @@ export default function VeranstaltungsSelector() {
     }
 
     function showHelp() {
-        history("/FAQ");
+        navigate("/H-BRSiCalGenerator/FAQ");
     }
 
     const showCalendarGenerationModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -122,7 +122,8 @@ export default function VeranstaltungsSelector() {
                 <div
                     className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12 m-auto max-h-screen"}>
                     <div className={"rounded-box md:p-4 p-2 bg-base-300"}>
-                        <h2 className={"md:text-4xl text-2xl mb-2 text-center font-bold"}>H-BRS Kalendergenerator v1.1</h2>
+                        <h2 className={"md:text-4xl text-2xl mb-2 text-center font-bold"}>H-BRS Kalendergenerator
+                            v1.1</h2>
                     </div>
                     <div
                         className={"grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 gap-4 rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
@@ -134,8 +135,9 @@ export default function VeranstaltungsSelector() {
 
 
                     <div className={"rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
-                        <input disabled={false} ref={searchfield} placeholder={"Modulsuche"} onChange={e => debouncedSave(e.target.value)}
-                             className={"appearance-none w-full bg-base-200 border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 mb-4"}/>
+                        <input disabled={false} ref={searchfield} placeholder={"Modulsuche"}
+                               onChange={e => debouncedSave(e.target.value)}
+                               className={"appearance-none w-full bg-base-200 border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 mb-4"}/>
                         <fieldset className="border-t border-b border-gray-500">
                             <div className="divide-y divide-gray-500">
                                 {searchedVeranstaltungsData.map((veranstaltung, id) => (
