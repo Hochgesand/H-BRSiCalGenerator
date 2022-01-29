@@ -54,7 +54,7 @@ export default function Lander() {
             <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen und
               Gewissen. </p>
             <p>Fehler bitte an a@andrevr.de melden.</p>
-            <p>Ich habs nicht fürs Smartphone entwickelt, benutzt es lieber am PC. Mobile first ist noch nicht ganz so meine stärke</p>
+            <p>Jetzt auch mobileoptimized/responsive!</p>
             <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
           </div>
           <div className={"dropdown w-full"}>
