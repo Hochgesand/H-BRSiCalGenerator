@@ -81,7 +81,7 @@ export default function VeranstaltungsSelector() {
     const addItemToSelectedItems = (i: number) => {
         let newSelectedItems = selectedDataProp
 
-        let selectedVeranstaltung: Veranstaltung = veranstaltungsData.find(x => {
+        let selectedVeranstaltung: Veranstaltung | null = veranstaltungsData.find(x => {
             if (x.id === i)
                 return x
             return null
