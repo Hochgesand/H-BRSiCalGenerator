@@ -48,7 +48,7 @@ export default function Lander() {
         <div className={"max-h-screen"}>
             <div className={"rounded-box p-3 bg-base-300 md:w-1/2 w-full m-auto"}>
                 <div className={"rounded-box p-4 bg-base-100 mb-4"}>
-                    <h2 className={"text-4xl mb-2 text-center"}>H-BRS Kalendergenerator v1.1</h2>
+                    <h2 className={"text-4xl mb-2 text-center font-bold"}>H-BRS Kalendergenerator v1.1</h2>
                     <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen
                         und
                         Gewissen. </p>
