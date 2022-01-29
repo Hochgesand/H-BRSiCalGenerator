@@ -144,8 +144,8 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                             <p className={"text-3xl mb-4"}>Ausgewählte Module/Veranstaltungen</p>
                             <fieldset className="border-t border-b border-gray-500">
                                 <div className="divide-y divide-gray-500">
-                                    {props.selectedData.map((veranstaltung) => (
-                                        <div className="relative flex items-start py-2 md:py-4">
+                                    {props.selectedData.map((veranstaltung, id) => (
+                                        <div className="relative flex items-start py-2 md:py-4" key={id}>
                                             <div className="min-w-0 flex-1 text-sm">
                                                 <label htmlFor="comments" className="font-medium text-gray-700">
                                                     {veranstaltung.name}

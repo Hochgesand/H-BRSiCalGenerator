@@ -1,33 +1,37 @@
-import {useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import React, {useEffect, useRef, useState} from "react";
 import Veranstaltung from "../../Objects/Veranstaltung";
 import {baseUrl} from "../../Objects/endpoints";
 import useGetRequest from "../../api/useGetRequest";
 import Loading from "../../Loading";
 import Error from "../../Error";
+import debounce from 'lodash.debounce';
 
 import '../../index.scss'
 import GenerateKalendarModal from "./GenerateKalendarModal/GenerateKalendarModal";
 
-interface veranstaltungsProp {
-    readonly veranstaltung: string
-}
-
-export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsProp) {
+export default function VeranstaltungsSelector() {
+    const params = useParams();
     const history = useNavigate();
+
     const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
+    const [searchedVeranstaltungsData, setSearchedVeranstaltungsData] = useState([] as Veranstaltung[]);
     const [selectedDataProp, setSelectedDataProp] = useState([] as Veranstaltung[])
     const [veranstaltungsIds, setVeranstaltungsIds] = useState([] as number[])
+    const [showKalendarModal, setShowKalendarModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [showKalendarModal, setShowKalendarModal] = useState(false);
-    const veranstaltungsPath = `${baseUrl}/getVeranstaltungByStudiengang?studiengang=${veranstaltung}`;
+
+    const veranstaltungsPath = `${baseUrl}/getVeranstaltungByStudiengang?studiengang=${params.studiengang}`;
+    const searchfield = useRef(null)
+
     const {getData} = useGetRequest({path: veranstaltungsPath})
 
     useEffect(() => {
         async function fetchData() {
             await getData().then(function (json) {
                 setVeranstaltungsData(json);
+                setSearchedVeranstaltungsData(json)
                 setLoading(false)
                 setError("")
             }).catch(err => {
@@ -40,6 +44,26 @@ export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsPr
 
         fetchData();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const debouncedSave = (e: string) => {
+        const callback = debounce(() => {
+            if (e.length === 0) {
+                setSearchedVeranstaltungsData(veranstaltungsData)
+                return
+            }
+
+            const searchVeranstaltung: Veranstaltung[] = []
+            // eslint-disable-next-line array-callback-return
+            veranstaltungsData.find(x => {
+                let name: string = (x.name).toLowerCase()
+                if (name.includes(e.toLowerCase()))
+                    searchVeranstaltung.push(x)
+            })
+
+            setSearchedVeranstaltungsData(searchVeranstaltung)
+        }, 1000)
+        callback()
+    }
 
     function showHelp() {
         history("/FAQ");
@@ -108,11 +132,14 @@ export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsPr
                         </button>
                     </div>
 
+
                     <div className={"rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
+                        <input disabled={false} ref={searchfield} placeholder={"Modulsuche"} onChange={e => debouncedSave(e.target.value)}
+                             className={"appearance-none w-full bg-base-200 border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 mb-4"}/>
                         <fieldset className="border-t border-b border-gray-500">
                             <div className="divide-y divide-gray-500">
-                                {veranstaltungsData.map((veranstaltung) => (
-                                    <div className="relative flex items-start py-2 md:py-4">
+                                {searchedVeranstaltungsData.map((veranstaltung, id) => (
+                                    <div className="relative flex items-start py-2 md:py-4" key={id}>
                                         <div className="mr-3 m-auto flex items-center h-5">
                                             <input
                                                 id="comments"
