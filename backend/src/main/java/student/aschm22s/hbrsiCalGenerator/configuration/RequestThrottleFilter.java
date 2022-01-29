@@ -20,7 +20,7 @@ public class RequestThrottleFilter implements Filter {
 
     private final AbusingIPAddressRepository abusingIPAddressRepo;
 
-    private final int MAX_REQUESTS_PER_MINUTE = 5;
+    private final int MAX_REQUESTS_PER_MINUTE = 10;
 
     private final LoadingCache<String, Integer> requestCountsPerIpAddress;
 

@@ -1,37 +1,37 @@
-import {useHistory} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import Veranstaltung from "../../Objects/Veranstaltung";
 import {baseUrl} from "../../Objects/endpoints";
 import useGetRequest from "../../api/useGetRequest";
 import Loading from "../../Loading";
 import Error from "../../Error";
-import {AgGridColumn, AgGridReact} from "ag-grid-react";
+import debounce from 'lodash.debounce';
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import '../../index.scss'
 import GenerateKalendarModal from "./GenerateKalendarModal/GenerateKalendarModal";
 
-interface veranstaltungsProp {
-  readonly veranstaltung: string
-}
+export default function VeranstaltungsSelector() {
+  const params = useParams();
+  const navigate = useNavigate();
 
-export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsProp) {
-  const history = useHistory();
   const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
-  const [selectedDataProp, setSelectedDataProp] = useState([])
+  const [searchedVeranstaltungsData, setSearchedVeranstaltungsData] = useState([] as Veranstaltung[]);
+  const [selectedDataProp, setSelectedDataProp] = useState([] as Veranstaltung[])
   const [veranstaltungsIds, setVeranstaltungsIds] = useState([] as number[])
+  const [showKalendarModal, setShowKalendarModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showKalendarModal, setShowKalendarModal] = useState(false);
-  const veranstaltungsPath = `${baseUrl}/getVeranstaltungByStudiengang?studiengang=${veranstaltung}`;
+
+  const veranstaltungsPath = `${baseUrl}/getVeranstaltungByStudiengang?studiengang=${params.studiengang}`;
+  const searchfield = useRef(null)
+
   const {getData} = useGetRequest({path: veranstaltungsPath})
-  const gridRef = useRef(null)
 
   useEffect(() => {
     async function fetchData() {
-      await getData().then(function (json) {
+      await getData().then((json: Veranstaltung[]) => {
         setVeranstaltungsData(json);
+        setSearchedVeranstaltungsData(json)
         setLoading(false)
         setError("")
       }).catch(err => {
@@ -45,23 +45,73 @@ export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsPr
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const debouncedSave = (e: string) => {
+    const callback = debounce(() => {
+      setSearchedVeranstaltungsData([])
+
+      if (e.length === 0) {
+        setSearchedVeranstaltungsData(veranstaltungsData)
+        return
+      }
+
+      const searchVeranstaltung: Veranstaltung[] = []
+      // eslint-disable-next-line array-callback-return
+      veranstaltungsData.find(x => {
+        let name: string = (x.name).toLowerCase()
+        if (name.includes(e.toLowerCase()))
+          searchVeranstaltung.push(x)
+      })
+
+      setSearchedVeranstaltungsData(searchVeranstaltung)
+    }, 1000)
+    callback()
+  }
+
   function showHelp() {
-    history.push("/FAQ");
+    navigate("/H-BRSiCalGenerator/FAQ");
   }
 
   const showCalendarGenerationModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    let veranstaltungsIdsTemp = [] as number[]
-    // @ts-ignore
-    const selectedNodes = gridRef.current.api.getSelectedNodes()
-    // @ts-ignore
-    const selectedData = selectedNodes.map(node => node.data)
-    // @ts-ignore
-    selectedData.map(node => veranstaltungsIdsTemp.push(node.id))
-    setSelectedDataProp(selectedData)
-    setVeranstaltungsIds(veranstaltungsIdsTemp)
+    let selectedIdsOfVeranstaltungen: number[] = []
+    selectedDataProp.forEach(x => selectedIdsOfVeranstaltungen.push(x.id))
+    setVeranstaltungsIds(selectedIdsOfVeranstaltungen)
     e.stopPropagation()
     setError("")
     setShowKalendarModal(true);
+  }
+
+  const addItemToSelectedItems = (i: number) => {
+    let newSelectedItems = selectedDataProp
+
+    let selectedVeranstaltung: Veranstaltung | null = veranstaltungsData.find(x => {
+      if (x.id === i)
+        return x
+      return null
+    })!
+
+    if (selectedVeranstaltung === null)
+      return
+
+    newSelectedItems.push(selectedVeranstaltung)
+    setSelectedDataProp(newSelectedItems)
+  }
+
+  const removeItemToSelectedItems = (i: number) => {
+    let newSelectedItems: Veranstaltung[] = []
+    selectedDataProp.forEach(x => {
+      if (x.id !== i)
+        newSelectedItems.push(x)
+    })
+    setSelectedDataProp(newSelectedItems)
+  }
+
+  const checkIfIsSelected = (id: number): boolean => {
+    let temp = false
+    selectedDataProp.forEach(x => {
+      if (x.id === id)
+        temp = true
+    })
+    return temp
   }
 
   if (loading) {
@@ -80,35 +130,58 @@ export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsPr
                              selectedData={selectedDataProp} veranstaltungsIds={veranstaltungsIds}/>
 
       <div className={showKalendarModal ? "filter blur-lg" : ""} onClick={() => setShowKalendarModal(false)}>
-        <div className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12 m-auto max-h-screen"}>
+        <div
+          className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12 m-auto max-h-screen"}>
           <div className={"rounded-box md:p-4 p-2 bg-base-300"}>
-            <h2 className={"md:text-4xl text-2xl mb-2 text-center"}>H-BRS Kalendergenerator v1.1</h2>
+            <h2 className={"md:text-4xl text-2xl mb-2 text-center font-bold"}>H-BRS Kalendergenerator
+              v1.1</h2>
           </div>
           <div
-            className={"grid md:grid-cols-3 md:grid-rows-1 grid-cols-1 grid-rows-3 gap-4 rounded-box p-3 bg-base-300"}>
-            <button onClick={e => showCalendarGenerationModal(e)} className={"btn md:btn-lg w-full"}>Kalender generieren!</button>
-            <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank" rel="noopener noreferrer">
-              <button className={"btn md:btn-lg w-full"}>Gib mir einen Stern auf Github ❤</button>
-            </a>
-            <button className={"btn md:btn-lg w-full"} onClick={showHelp}>FAQ / HILFE!</button>
+            className={"grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 gap-4 rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
+            <button className={"btn md:btn-lg w-fully"} onClick={showHelp}>FAQ / HILFE!</button>
+            <button onClick={e => showCalendarGenerationModal(e)}
+                    className={"btn md:btn-lg w-full"}>Kalender generieren!
+            </button>
           </div>
 
-          <div className={"ag-theme-material rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"} style={{height: 800}}>
-            <AgGridReact
-              rowData={veranstaltungsData}
-              enableRangeSelection={true}
-              rowSelection={"multiple"}
-              ref={gridRef}
-              rowMultiSelectWithClick={true}
-              // @ts-ignore
-              onFirstDataRendered={() => gridRef.current.api.sizeColumnsToFit()}
-            >
-              <AgGridColumn field="name" width={380} sortable={true} filter={true} checkboxSelection={true}
-                            resizable={true}
-                            headerName={"Veranstaltung"} floatingFilter={true}/>
-              <AgGridColumn field="prof" width={150} sortable={true} filter={true} resizable={true}
-                            floatingFilter={true}/>
-            </AgGridReact>
+
+          <div className={"rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
+            <input disabled={false} ref={searchfield} placeholder={"Modulsuche"}
+                   onChange={e => debouncedSave(e.target.value)}
+                   className={"appearance-none w-full bg-base-200 border border-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-base-400 mb-3 md:mb-4"}/>
+            <fieldset className="border-t border-b border-gray-500">
+              <div className="divide-y divide-gray-500">
+                {searchedVeranstaltungsData.map((veranstaltung, id) => (
+                  <div className="relative flex items-start py-2 md:py-4" key={id}>
+                    <div className="mr-3 m-auto flex items-center h-5">
+                      <input
+                        id="comments"
+                        aria-describedby="comments-description"
+                        name="comments"
+                        type="checkbox"
+                        defaultChecked={checkIfIsSelected(veranstaltung.id)}
+                        onChange={event => {
+                          if (event.target.checked) {
+                            addItemToSelectedItems(veranstaltung.id)
+                          } else {
+                            removeItemToSelectedItems(veranstaltung.id)
+                          }
+                        }}
+                        className="focus:ring-base-500 h-10 w-10 text-indigo-600 border-gray-300 rounded"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1 text-sm">
+                      <label htmlFor="comments" className="font-medium text-gray-700">
+                        {veranstaltung.name}
+                      </label>
+                      <p id="comments-description" className="text-gray-500">
+                        {veranstaltung.prof}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </fieldset>
           </div>
         </div>
       </div>

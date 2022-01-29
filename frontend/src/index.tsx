@@ -3,21 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, Route, Switch} from "react-router-dom";
-import FAQ from "./FAQ/FAQ";
+import {HashRouter} from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/FAQ">
-          <FAQ/>
-        </Route>
-        <Route path="/">
-          <App/>
-        </Route>
-      </Switch>
-    </BrowserRouter>
+      <HashRouter>
+        <App/>
+      </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
