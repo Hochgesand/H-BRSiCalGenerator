@@ -4,10 +4,10 @@ import {baseUrl} from "../Objects/endpoints";
 import useGetRequest from "../api/useGetRequest";
 import Loading from "../Loading";
 import Error from "../Error";
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export default function Lander() {
-  const history = useHistory();
+  const history = useNavigate();
   const studiengaengePath = `${baseUrl}/getStudiengaenge`;
   const {getData} = useGetRequest({path: studiengaengePath})
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ export default function Lander() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function showHelp() {
-    history.push("/FAQ");
+    history("/FAQ");
   }
 
   if (loading) {

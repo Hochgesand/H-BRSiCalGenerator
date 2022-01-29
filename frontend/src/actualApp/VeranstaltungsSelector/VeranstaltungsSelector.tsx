@@ -1,4 +1,4 @@
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import Veranstaltung from "../../Objects/Veranstaltung";
 import {baseUrl} from "../../Objects/endpoints";
@@ -14,7 +14,7 @@ interface veranstaltungsProp {
 }
 
 export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsProp) {
-    const history = useHistory();
+    const history = useNavigate();
     const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
     const [selectedDataProp, setSelectedDataProp] = useState([] as Veranstaltung[])
     const [veranstaltungsIds, setVeranstaltungsIds] = useState([] as number[])
@@ -42,7 +42,7 @@ export default function VeranstaltungsSelector({veranstaltung}: veranstaltungsPr
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function showHelp() {
-        history.push("/FAQ");
+        history("/FAQ");
     }
 
     const showCalendarGenerationModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

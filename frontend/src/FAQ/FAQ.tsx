@@ -1,12 +1,12 @@
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export default function FAQ(){
-  let history = useHistory();
+  let history = useNavigate();
   return(
     <div className={"p-5 flex-col gap-3"}>
       <button
         className="btn btn-lg mb-4"
-        onClick={() => history.goBack()}>
+        onClick={() => history("/")}>
         Back
       </button>
       <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-full md:w-3/4"}>
