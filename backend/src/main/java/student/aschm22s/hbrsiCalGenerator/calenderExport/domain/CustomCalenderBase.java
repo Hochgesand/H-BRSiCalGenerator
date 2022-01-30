@@ -14,12 +14,6 @@ public class CustomCalenderBase {
     private final String MAKER = "André Schmitz (a@andrevr.de)";
     private final UidGenerator uidGenerator;
     private final Calendar iCalender;
-    private String eventName;
-    private DateTime startTime;
-    private DateTime endTime;
-    private String modul;
-    private String prof;
-    private String raum;
 
     public CustomCalenderBase() {
         uidGenerator = new RandomUidGenerator();
@@ -31,12 +25,6 @@ public class CustomCalenderBase {
     }
 
     public void addEventToCalender(String eventName, DateTime startTime, DateTime endTime, String modul, String prof, String raum) {
-        this.eventName = eventName;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.modul = modul;
-        this.prof = prof;
-        this.raum = raum;
 
         // Hole mir unsere Timezone
         TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
