@@ -18,6 +18,11 @@ export default function FAQ() {
             </div>
             <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-full md:w-3/4"}>
                 <p className={"text-3xl"}>Anleitung:</p>
+                <p className={"text-2xl"}>Schritt 0:</p>
+                <p>Es sei kurz angemerkt: Handyuser können die .ics Datei nicht direkt runterladen.
+                Hintergrund ist das ich ein iPhone habe und man kann ics Dateien öffnen, aber nicht importieren.
+                Das geht anscheinend nur über die Mailapp... Warum auch immer. Android kann ich nicht testen, daher nur per E-Mail.
+                Alle Datenschutz-Freaks die mir nicht trauen können einfach den Computer benutzen. Da kann man die iCal Dateien runterladen.</p>
                 <p className={"text-2xl"}>Schritt 1:</p>
                 <p>Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
                     Du kannst die Tabelle nach belieben sortieren und mit dem Burgerbutton kannst du auch gezielt

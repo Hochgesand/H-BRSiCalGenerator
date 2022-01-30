@@ -133,12 +133,14 @@ export default function VeranstaltungsSelector() {
         <div
           className={"grid grid-rows-3 grid-rows-none gap-4 2xl:w-10/12 mb-4 xl:w-11/12 m-auto max-h-screen"}>
           <div className={"rounded-box md:p-4 p-2 bg-base-300"}>
-            <h2 className={"md:text-4xl text-2xl mb-2 text-center font-bold"}>H-BRS Kalendergenerator
-              v1.1</h2>
+            <h2 className={"md:text-4xl text-2xl mb-2 text-center font-bold"}>H-BRS Kalendergenerator</h2>
           </div>
           <div
             className={"grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 gap-4 rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
-            <button className={"btn md:btn-lg w-fully"} onClick={showHelp}>FAQ / HILFE!</button>
+            <div className={"w-full grid-cols-2 grid gap-4"}>
+              <button className={"btn md:btn-lg w-fully"} onClick={() => navigate("/H-BRSiCalGenerator")}>Startseite</button>
+              <button className={"btn md:btn-lg w-fully"} onClick={showHelp}>FAQ / HILFE!</button>
+            </div>
             <button onClick={e => showCalendarGenerationModal(e)}
                     className={"btn md:btn-lg w-full"}>Kalender generieren!
             </button>
