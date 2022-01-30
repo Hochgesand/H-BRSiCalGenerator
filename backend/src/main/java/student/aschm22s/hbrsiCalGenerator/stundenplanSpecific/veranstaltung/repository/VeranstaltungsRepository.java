@@ -2,14 +2,14 @@ package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.rep
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Studiengang;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 
 import java.util.List;
 
 @Repository
 public interface VeranstaltungsRepository extends JpaRepository<Veranstaltung, Integer> {
-    Iterable<Veranstaltung> findByIdIn(List<Long> id);
+    List<Veranstaltung> findByIdIn(List<Long> id);
 
     List<Veranstaltung> findAllByStudiengang(Studiengang studiengang);
 

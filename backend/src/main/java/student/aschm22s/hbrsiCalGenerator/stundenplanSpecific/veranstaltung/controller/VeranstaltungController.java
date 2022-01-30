@@ -1,8 +1,8 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
@@ -34,14 +34,5 @@ public class VeranstaltungController {
     )
     public List<Veranstaltung> getVeranstaltungByStudiengang(@RequestParam("studiengang") String studiengang) {
         return veranstaltungsService.findAllByStudiengang(studiengang);
-    }
-
-    @RequestMapping(
-            value = "/getStudiengaenge",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public List<Studiengang> getStudiengaenge() {
-        return veranstaltungsService.findAllStudiengaenge();
     }
 }

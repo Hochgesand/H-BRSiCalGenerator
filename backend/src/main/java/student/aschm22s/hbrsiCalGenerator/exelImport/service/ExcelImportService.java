@@ -53,9 +53,6 @@ public class ExcelImportService {
     }
 
     public String updateStundenplaene() throws IOException {
-        //TODO: Refactor deleteAll after successful parsing
-        veranstaltungsService.deleteAll();
-
         ArrayList<InputStream> inputstreams = new ArrayList<>();
         for (String string : evaLinks) {
             ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(string).openStream());

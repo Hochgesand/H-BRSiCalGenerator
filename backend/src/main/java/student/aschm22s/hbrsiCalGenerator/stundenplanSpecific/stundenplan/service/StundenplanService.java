@@ -2,29 +2,36 @@ package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.servi
 
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanDateMNRepository;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanRepository;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+
+import java.util.List;
 
 @Service
 public class StundenplanService {
     private final StundenplanRepository stundenplanRepository;
-    private final StundenplanDateMNRepository stundenplanDateMNRepository;
 
-    public StundenplanService(StundenplanRepository stundenplanRepository, StundenplanDateMNRepository stundenplanDateMNRepository) {
+    public StundenplanService(StundenplanRepository stundenplanRepository) {
         this.stundenplanRepository = stundenplanRepository;
-        this.stundenplanDateMNRepository = stundenplanDateMNRepository;
     }
 
-    public Object findByVeranstaltung(Veranstaltung x) {
+    public List<StundenplanEintrag> findByVeranstaltung(Veranstaltung x) {
         return stundenplanRepository.findByVeranstaltung(x);
     }
 
-    public Object findByStundenplanEintrag(StundenplanEintrag x) {
-        return stundenplanDateMNRepository.findByStundenplanEintrag(x);
+    public List<StundenplanEintrag> findAllByVeranstaltung(Veranstaltung veranstaltung) {
+        return stundenplanRepository.findAllByVeranstaltung(veranstaltung);
     }
 
-    public Object findAllByStundenplanEintragOrderByDateAsc(StundenplanEintrag x) {
-        return stundenplanDateMNRepository.findAllByStundenplanEintragOrderByDateAsc(x);
+    public void deleteAll(List<StundenplanEintrag> stundenplanEintraege) {
+        stundenplanRepository.deleteAll(stundenplanEintraege);
+    }
+
+    public List<StundenplanEintrag> findAll() {
+        return (List<StundenplanEintrag>) stundenplanRepository.findAll();
+    }
+
+    public StundenplanEintrag save(StundenplanEintrag neuerStundenplanEintrag) {
+        return stundenplanRepository.save(neuerStundenplanEintrag);
     }
 }

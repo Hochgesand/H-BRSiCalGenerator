@@ -11,14 +11,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanDateMNRepository;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanRepository;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Studiengang;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.StudiengangsRepository;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,24 +26,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-//TODO: Refactoring: Parser has only one responsibility. It has not to write into repository.
 @Service
 public class HbrsExcelParser {
+    private final VeranstaltungsService veranstaltungsService;
+    private final StudiengangService studiengangService;
+    private final StundenplanService stundenplanService;
+    private final AppointmentService appointmentService;
 
-    private final VeranstaltungsRepository veranstaltungsRepo;
-    private final StundenplanRepository stundenplanRepo;
-    private final StundenplanDateMNRepository stundenplanDateMNRepo;
-    private final StudiengangsRepository studiengangsRepository;
-
-    public HbrsExcelParser(VeranstaltungsRepository veranstaltungsRepo, StundenplanRepository stundenplanRepo, StundenplanDateMNRepository stundenplanDateMNRepo, StudiengangsRepository studiengangsRepository) {
-        this.veranstaltungsRepo = veranstaltungsRepo;
-        this.stundenplanRepo = stundenplanRepo;
-        this.stundenplanDateMNRepo = stundenplanDateMNRepo;
-        this.studiengangsRepository = studiengangsRepository;
+    public HbrsExcelParser(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, StundenplanService stundenplanService, AppointmentService appointmentService) {
+        this.veranstaltungsService = veranstaltungsService;
+        this.studiengangService = studiengangService;
+        this.stundenplanService = stundenplanService;
+        this.appointmentService = appointmentService;
     }
 
     public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
@@ -63,8 +60,6 @@ public class HbrsExcelParser {
         ArrayList<Veranstaltung> veranstaltungsListe = new ArrayList<>();
         String studiengangSemesterString = (row.getCell(0) + "").substring(16);
         String studiengangString = studiengangSemesterString.substring(0, studiengangSemesterString.length() - 2);
-
-        Studiengang selectedStudiengang = studiengangsRepository.findFirstByNameContaining(studiengangString);
         Integer semester;
         try {
             semester = Integer.parseInt(studiengangSemesterString.substring(studiengangSemesterString.length() - 1));
@@ -72,21 +67,14 @@ public class HbrsExcelParser {
             studiengangString = studiengangSemesterString;
             semester = 0;
         }
-        if (selectedStudiengang == null) {
-            Studiengang studiengang = new Studiengang();
-            studiengang.setName(studiengangString);
-            studiengangsRepository.save(studiengang);
-            selectedStudiengang = studiengangsRepository.findFirstByNameContaining(studiengang.getName());
-        }
+
+        Studiengang selectedStudiengang = studiengangService.findByNameIfNotExistCreate(studiengangString);
 
         {
-            List<Veranstaltung> veranstaltungen = veranstaltungsRepo.findAllByStudiengangAndSemester(selectedStudiengang, semester);
-            for (Veranstaltung veranstaltung : veranstaltungen) {
-                Collection<StundenplanEintrag> stundenplanEintraege = veranstaltung.getStundenplanEintrags();
-                stundenplanRepo.deleteAll(stundenplanEintraege);
-            }
-            veranstaltungsRepo.deleteAll(veranstaltungen);
+            List<Veranstaltung> veranstaltungen = veranstaltungsService.findAllByStudiengangAndSemester(selectedStudiengang, semester);
+            veranstaltungsService.deleteAll(veranstaltungen);
         }
+
         for (int i = 5; i < rows - 1; ++i) {
             String veranstaltungsname;
             row = sheet.getRow(i);
@@ -104,7 +92,7 @@ public class HbrsExcelParser {
 
             veranstaltungsListe.add(neueVeranstaltung);
         }
-        veranstaltungsRepo.saveAll(veranstaltungsListe);
+        veranstaltungsService.saveAll(veranstaltungsListe);
         return veranstaltungsListe;
     }
 
@@ -117,7 +105,7 @@ public class HbrsExcelParser {
 
         String aktuellerTag = "";
         String studienGangSemester = (row.getCell(0) + "").substring(16);
-        Optional<Studiengang> studiengang = studiengangsRepository.findAllByNameContaining(studienGangSemester.substring(0, studienGangSemester.length() - 2)).stream().findFirst();
+        Optional<Studiengang> studiengang = studiengangService.findAllByNameContaining(studienGangSemester.substring(0, studienGangSemester.length() - 2)).stream().findFirst();
 
         if (studiengang.isEmpty())
             throw new NotFoundException("Studiengang " + studienGangSemester + " wurde nicht gefunden, import für Stundenplan wird abgebrochen");
@@ -139,10 +127,10 @@ public class HbrsExcelParser {
             neuerStundenplanEintrag.setBis(Time.valueOf(row.getCell(2) + ":00"));
             neuerStundenplanEintrag.setRaum(row.getCell(3) + "");
             String tempModulName = row.getCell(4) + "";
-            Veranstaltung temp = veranstaltungsRepo.findFirstByNameAndStudiengang(tempModulName, studiengang.get());
+            Veranstaltung temp = veranstaltungsService.findFirstByNameAndStudiengang(tempModulName, studiengang.get());
             neuerStundenplanEintrag.setVeranstaltung(temp);
             neuerStundenplanEintrag.setTag(aktuellerTag);
-            StundenplanEintrag newObjectInDB = stundenplanRepo.save(neuerStundenplanEintrag);
+            StundenplanEintrag newObjectInDB = stundenplanService.save(neuerStundenplanEintrag);
 
             for (int j = 0; j < weeksInBetweenAmount; j++) {
                 dateVon = dateVon.plusWeeks(1);
@@ -153,16 +141,16 @@ public class HbrsExcelParser {
                 Appointment stundenplanDatumMN = new Appointment();
                 stundenplanDatumMN.setDate(dateTimeWithCorrectTime.getMillis());
                 stundenplanDatumMN.setStundenplanEintrag(newObjectInDB);
-                stundenplanDateMNRepo.save(stundenplanDatumMN);
+                appointmentService.save(stundenplanDatumMN);
             }
         }
 
-        return stundenplanRepo.findAll();
+        return stundenplanService.findAll();
     }
 
     @Transactional
     public String startParser(ArrayList<InputStream> files) {
-        Integer counterPlaene = 0;
+        int counterPlaene = 0;
         for (InputStream x : files) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             try {

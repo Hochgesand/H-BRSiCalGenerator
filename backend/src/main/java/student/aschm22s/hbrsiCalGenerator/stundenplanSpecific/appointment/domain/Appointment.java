@@ -1,8 +1,9 @@
-package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain;
+package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

@@ -5,8 +5,9 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
@@ -22,22 +23,24 @@ import java.util.Objects;
 @Service
 public class CalenderExportService {
     private final VeranstaltungsService veranstaltungsService;
+    private final AppointmentService appointmentService;
 
-    public CalenderExportService(VeranstaltungsService veranstaltungsService) {
+    public CalenderExportService(VeranstaltungsService veranstaltungsService, AppointmentService appointmentService) {
         this.veranstaltungsService = veranstaltungsService;
+        this.appointmentService = appointmentService;
     }
 
     public Calendar createCalenderForVeranstaltungen(List<Long> Ids) {
-        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdIn(Ids);
+        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(Ids);
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
         ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
 
         for (Veranstaltung x : veranstaltungIterable) {
-            stundenplanEintragArrayList.addAll((Collection<? extends StundenplanEintrag>) veranstaltungsService.findByVeranstaltung(x));
+            stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
         }
 
         for (StundenplanEintrag x : stundenplanEintragArrayList) {
-            stundenplanDateMNRepoArrayList.addAll((Collection<? extends Appointment>) veranstaltungsService.findByStundenplanEintrag(x));
+            stundenplanDateMNRepoArrayList.addAll(appointmentService.findByStundenplanEintrag(x));
         }
 
         CustomCalenderBase customCalenderBase = new CustomCalenderBase();
@@ -92,16 +95,16 @@ public class CalenderExportService {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("tag;von;bis;raum;veranstaltung;wer\n");
 
-        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdIn(veranstaltungsIdsDAO.getVeranstaltungsIds());
+        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(veranstaltungsIdsDAO.getVeranstaltungsIds());
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
         ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
 
         for (Veranstaltung x : veranstaltungIterable) {
-            stundenplanEintragArrayList.addAll((Collection<? extends StundenplanEintrag>) veranstaltungsService.findByVeranstaltung(x));
+            stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
         }
 
         for (StundenplanEintrag x : stundenplanEintragArrayList) {
-            stundenplanDateMNRepoArrayList.addAll((Collection<? extends Appointment>) veranstaltungsService.findAllByStundenplanEintragOrderByDateAsc(x));
+            stundenplanDateMNRepoArrayList.addAll((Collection<? extends Appointment>) appointmentService.findAllByStundenplanEintragOrderByDateAsc(x));
         }
 
         for (Appointment x : stundenplanDateMNRepoArrayList) {

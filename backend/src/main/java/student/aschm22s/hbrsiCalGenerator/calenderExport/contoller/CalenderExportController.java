@@ -3,13 +3,12 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.contoller;
 import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
 import student.aschm22s.hbrsiCalGenerator.email.service.EmailSendingService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-//TODO: Refactoring: Endpoints don't implement the REST paradigm
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
