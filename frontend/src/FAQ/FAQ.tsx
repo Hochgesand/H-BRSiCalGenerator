@@ -3,12 +3,19 @@ import {useNavigate} from "react-router-dom";
 export default function FAQ() {
     let history = useNavigate();
     return (
-        <div className={"flex-col gap-3"}>
-            <button
-                className="btn btn-lg mb-4"
-                onClick={() => history("/")}>
-                Back
-            </button>
+        <div className={"flex-col gap-3 w-full"}>
+            <div className={"md:flex-row grid grid-cols-2 md:grid-cols-1 gap-4 grid-rows-2 p-4 rounded-box bg-base-300 mb-4 md:w-1/4 h-20 md:h-44"}>
+                <button
+                  className="btn md:btn-lg md:w-full 1/2"
+                  onClick={() => history("/")}>
+                    Back
+                </button>
+                <a href={"https://moin.meister.ovh:8443/swagger-ui/index.html"} className={"md:ml-0 md:w-full 1/2"}>
+                    <button className="btn md:btn-lg w-full">
+                        API Dokumentation
+                    </button>
+                </a>
+            </div>
             <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-full md:w-3/4"}>
                 <p className={"text-3xl"}>Anleitung:</p>
                 <p className={"text-2xl"}>Schritt 1:</p>
