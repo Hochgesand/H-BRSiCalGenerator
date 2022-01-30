@@ -1,10 +1,10 @@
-package student.aschm22s.hbrsiCalGenerator.veranstaltung.controller;
+package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Studiengang;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Studiengang;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.util.List;
 

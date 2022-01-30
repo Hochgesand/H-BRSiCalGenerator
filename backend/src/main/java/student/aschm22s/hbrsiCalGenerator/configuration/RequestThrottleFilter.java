@@ -26,7 +26,7 @@ public class RequestThrottleFilter implements Filter {
 
     public RequestThrottleFilter(AbusingIPAddressRepository abusingIPAddressRepo) {
         requestCountsPerIpAddress = CacheBuilder.newBuilder().
-                expireAfterWrite(60, TimeUnit.SECONDS).build(new CacheLoader<String, Integer>() {
+                expireAfterWrite(60, TimeUnit.SECONDS).build(new CacheLoader<>() {
                     public Integer load(String key) {
                         return 0;
                     }
@@ -41,7 +41,6 @@ public class RequestThrottleFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String clientIpAddress = getClientIP((HttpServletRequest) request);
         if (isMaximumRequestsPerMinuteExceeded(clientIpAddress)) {
@@ -59,7 +58,7 @@ public class RequestThrottleFilter implements Filter {
     }
 
     private boolean isMaximumRequestsPerMinuteExceeded(String clientIpAddress) {
-        int requests = 0;
+        int requests;
         try {
             if (abusingIPAddressRepo.countAbusingIPAddressByIpAddress(clientIpAddress) > 10) return true;
             requests = requestCountsPerIpAddress.get(clientIpAddress);

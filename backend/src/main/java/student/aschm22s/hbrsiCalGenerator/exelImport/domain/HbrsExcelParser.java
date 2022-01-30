@@ -11,14 +11,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.Appointment;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.repository.StundenplanDateMNRepository;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.repository.StundenplanRepository;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Studiengang;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.repository.StudiengangsRepository;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanDateMNRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Studiengang;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.StudiengangsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.VeranstaltungsRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,11 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 //TODO: Refactoring: Parser has only one responsibility. It has not to write into repository.
 @Service
@@ -56,7 +54,6 @@ public class HbrsExcelParser {
         return false;
     }
 
-    @Transactional
     public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException, NotFoundException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
@@ -64,18 +61,32 @@ public class HbrsExcelParser {
         Row row = sheet.getRow(0);
 
         ArrayList<Veranstaltung> veranstaltungsListe = new ArrayList<>();
-        String studiengangString = (row.getCell(0) + "").substring(16);
+        String studiengangSemesterString = (row.getCell(0) + "").substring(16);
+        String studiengangString = studiengangSemesterString.substring(0, studiengangSemesterString.length() - 2);
 
-        Studiengang selectedStudiengang = studiengangsRepository.findFirstByName(studiengangString);
-        Integer semester = Integer.parseInt(studiengangString.substring(studiengangString.length() - 1));
+        Studiengang selectedStudiengang = studiengangsRepository.findFirstByNameContaining(studiengangString);
+        Integer semester;
+        try {
+            semester = Integer.parseInt(studiengangSemesterString.substring(studiengangSemesterString.length() - 1));
+        } catch (NumberFormatException e) {
+            studiengangString = studiengangSemesterString;
+            semester = 0;
+        }
         if (selectedStudiengang == null) {
             Studiengang studiengang = new Studiengang();
-            studiengang.setName(studiengangString.substring(0, studiengangString.length() - 2));
+            studiengang.setName(studiengangString);
             studiengangsRepository.save(studiengang);
-            selectedStudiengang = studiengangsRepository.findFirstById(studiengang.getId());
+            selectedStudiengang = studiengangsRepository.findFirstByNameContaining(studiengang.getName());
         }
-        veranstaltungsRepo.deleteAllByStudiengangAndSemester(selectedStudiengang, semester);
 
+        {
+            List<Veranstaltung> veranstaltungen = veranstaltungsRepo.findAllByStudiengangAndSemester(selectedStudiengang, semester);
+            for (Veranstaltung veranstaltung : veranstaltungen) {
+                Collection<StundenplanEintrag> stundenplanEintraege = veranstaltung.getStundenplanEintrags();
+                stundenplanRepo.deleteAll(stundenplanEintraege);
+            }
+            veranstaltungsRepo.deleteAll(veranstaltungen);
+        }
         for (int i = 5; i < rows - 1; ++i) {
             String veranstaltungsname;
             row = sheet.getRow(i);
@@ -97,6 +108,7 @@ public class HbrsExcelParser {
         return veranstaltungsListe;
     }
 
+    @Transactional
     public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException, NotFoundException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
@@ -150,50 +162,38 @@ public class HbrsExcelParser {
 
     @Transactional
     public String startParser(ArrayList<InputStream> files) {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-        AtomicInteger counterPlaene = new AtomicInteger();
-
+        Integer counterPlaene = 0;
         for (InputStream x : files) {
-            executorService.submit(() -> {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                try {
-                    x.transferTo(baos);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ArrayList<Veranstaltung> veranstaltungen = new ArrayList<>();
-                try {
-                    veranstaltungen = parseVeranstaltungen(new ByteArrayInputStream(baos.toByteArray()));
-                } catch (IOException | NotFoundException e) {
-                    e.printStackTrace();
-                }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                x.transferTo(baos);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ArrayList<Veranstaltung> veranstaltungen = new ArrayList<>();
+            try {
+                veranstaltungen = parseVeranstaltungen(new ByteArrayInputStream(baos.toByteArray()));
+            } catch (IOException | NotFoundException e) {
+                e.printStackTrace();
+            }
 
-                try {
-                    parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
-                } catch (IOException | NotFoundException e) {
-                    e.printStackTrace();
-                }
-                Veranstaltung veranstaltung = veranstaltungen.stream().findFirst().orElse(null);
-                if (veranstaltung == null) {
-                    System.out.println("Stundenplanimport fehler, siehe Stacktrace");
-                } else
-                    System.out.println("Stundenplan: " + veranstaltung.getStudiengang() + " wurde importiert");
-                counterPlaene.getAndIncrement();
-            });
+            try {
+                parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
+            } catch (IOException | NotFoundException e) {
+                e.printStackTrace();
+            }
+            Veranstaltung veranstaltung = veranstaltungen.stream().findFirst().orElse(null);
+            if (veranstaltung == null) {
+                System.out.println("Stundenplanimport fehler, siehe Stacktrace");
+            } else
+                System.out.println("Stundenplan: " + veranstaltung.getStudiengang().getName() + " wurde importiert");
+            counterPlaene++;
         }
-
-        executorService.shutdown();
 
         System.out.println("Importvorgang wurde gestartet");
-        try {
-            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        if (counterPlaene.get() != files.size()) {
-            return "Es gab einen Fehler beim importieren. " + counterPlaene.get() + " von" + files.size() + " wurden importiert";
+        if (counterPlaene != files.size()) {
+            return "Es gab einen Fehler beim importieren. " + counterPlaene + " von " + files.size() + " wurden importiert";
         }
 
         return "Alle " + files.size() + " Stundenpläne wurden importiert";

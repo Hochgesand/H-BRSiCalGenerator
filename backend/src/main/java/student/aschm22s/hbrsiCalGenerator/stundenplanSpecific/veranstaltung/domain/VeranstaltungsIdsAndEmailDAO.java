@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.veranstaltung.domain;
+package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain;
 
 import java.util.List;
 

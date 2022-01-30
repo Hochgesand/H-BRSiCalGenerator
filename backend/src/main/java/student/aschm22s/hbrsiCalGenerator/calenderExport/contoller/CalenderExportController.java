@@ -3,8 +3,8 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.contoller;
 import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
 import student.aschm22s.hbrsiCalGenerator.email.service.EmailSendingService;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsDAO;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
 
 import java.io.IOException;
 import java.util.Arrays;

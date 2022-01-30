@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

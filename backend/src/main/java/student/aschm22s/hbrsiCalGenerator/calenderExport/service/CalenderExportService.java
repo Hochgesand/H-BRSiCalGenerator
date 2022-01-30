@@ -5,11 +5,11 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.Appointment;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsDAO;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

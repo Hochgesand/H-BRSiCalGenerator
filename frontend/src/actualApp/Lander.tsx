@@ -70,7 +70,7 @@ export default function Lander() {
                             <li className={"m-1 text-white"}>
                                 <button
                                     className={"btn"}
-                                    onClick={() => navigate(`/H-BRSiCalGenerator/${studiengang}`)}
+                                    onClick={() => navigate(`/H-BRSiCalGenerator/${studiengang.name}`)}
                                 >
                                     {studiengang.name}
                                 </button>

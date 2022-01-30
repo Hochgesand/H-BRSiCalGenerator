@@ -1,10 +1,10 @@
-package student.aschm22s.hbrsiCalGenerator.stundenplan.service;
+package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service;
 
 import org.springframework.stereotype.Service;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.repository.StundenplanDateMNRepository;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.repository.StundenplanRepository;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanDateMNRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.repository.StundenplanRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 
 @Service
 public class StundenplanService {

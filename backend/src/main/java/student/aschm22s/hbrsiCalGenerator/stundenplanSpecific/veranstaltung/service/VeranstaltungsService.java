@@ -1,14 +1,13 @@
-package student.aschm22s.hbrsiCalGenerator.veranstaltung.service;
+package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service;
 
 import org.springframework.stereotype.Service;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.service.StundenplanService;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Studiengang;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.repository.StudiengangsRepository;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Studiengang;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.StudiengangsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -29,7 +28,7 @@ public class VeranstaltungsService {
 
     public List<Veranstaltung> findAllByStudiengang(String studiengang) {
         studiengang = studiengang.substring(0, studiengang.length() - 2);
-        Studiengang solidStudiengang = studiengangsRepository.findFirstByName(studiengang);
+        Studiengang solidStudiengang = studiengangsRepository.findFirstByNameContaining(studiengang);
         return veranstaltungsRepository.findAllByStudiengang(solidStudiengang);
     }
 
