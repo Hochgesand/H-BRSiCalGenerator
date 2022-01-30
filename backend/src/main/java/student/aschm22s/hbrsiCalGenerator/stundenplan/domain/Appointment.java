@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "stundenplanDatumMN")
-public class StundenplanDatumMN {
+@Table(name = "termin")
+public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
@@ -14,10 +14,10 @@ public class StundenplanDatumMN {
     private StundenplanEintrag stundenplanEintrag;
     private Timestamp date;
 
-    public StundenplanDatumMN() {
+    public Appointment() {
     }
 
-    public StundenplanDatumMN(StundenplanEintrag stundenplanEintrag, Timestamp date) {
+    public Appointment(StundenplanEintrag stundenplanEintrag, Timestamp date) {
         this.stundenplanEintrag = stundenplanEintrag;
         this.date = date;
     }

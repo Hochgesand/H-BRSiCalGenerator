@@ -17,7 +17,7 @@ public class StundenplanEintrag {
     private String raum;
     private String tag;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "stundenplanEintrag")
-    private Collection<StundenplanDatumMN> stundenplanDatumMNS;
+    private Collection<Appointment> stundenplanDatumMNS;
     @ManyToOne
     @JoinColumn(name = "veranstaltungs_id", nullable = false)
     private Veranstaltung veranstaltung;

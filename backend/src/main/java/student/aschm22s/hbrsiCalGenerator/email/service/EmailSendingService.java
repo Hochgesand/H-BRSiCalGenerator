@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsAndEmail;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -29,18 +29,18 @@ public class EmailSendingService {
         this.calenderExportService = calenderExportService;
     }
 
-    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) {
+    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmailDAO veranstaltungsIdsAndEmailDAO) {
         MimeMessage message = emailSender.createMimeMessage();
 
         MimeMessageHelper helper = null;
         try {
             helper = new MimeMessageHelper(message, true);
             helper.setFrom(emailUsername);
-            helper.setTo(veranstaltungsIdsAndEmail.getEmail());
+            helper.setTo(veranstaltungsIdsAndEmailDAO.getEmail());
             helper.setSubject("Dein Kalender");
             helper.setText("Hier ist dein Kalender :)");
 
-            helper.addAttachment("Calendar.ics", new ByteArrayResource(calenderExportService.createCalender(veranstaltungsIdsAndEmail)));
+            helper.addAttachment("Calendar.ics", new ByteArrayResource(calenderExportService.createCalender(veranstaltungsIdsAndEmailDAO)));
         } catch (MessagingException | IOException e) {
             return "Beim E-Mail zusammenstellen ist ein Fehler aufgetreten. Denke mal das ist ein Bug, würd mich freuen wenn du den mir melden würdest :)";
         }

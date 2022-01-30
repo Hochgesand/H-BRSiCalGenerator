@@ -2,6 +2,7 @@ package student.aschm22s.hbrsiCalGenerator.veranstaltung.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.veranstaltung.service.VeranstaltungsService;
 
@@ -40,7 +41,7 @@ public class VeranstaltungController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<String> getStudiengaenge() {
+    public List<Studiengang> getStudiengaenge() {
         return veranstaltungsService.findAllStudiengaenge();
     }
 }

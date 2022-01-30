@@ -4,6 +4,7 @@ import useGetRequest from "../api/useGetRequest";
 import Loading from "../Loading";
 import Error from "../Error";
 import {useNavigate} from "react-router-dom";
+import {Studiengang} from "../Objects/Studiengang";
 
 export default function Lander() {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ export default function Lander() {
     const {getData} = useGetRequest({path: studiengaengePath})
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [studiengaenge, setStudiengaenge] = useState([] as string[]);
+    const [studiengaenge, setStudiengaenge] = useState([] as Studiengang[]);
 
     useEffect(() => {
         async function fetchData() {
@@ -71,7 +72,7 @@ export default function Lander() {
                                     className={"btn"}
                                     onClick={() => navigate(`/H-BRSiCalGenerator/${studiengang}`)}
                                 >
-                                    {studiengang}
+                                    {studiengang.name}
                                 </button>
                             </li>
                         ))}

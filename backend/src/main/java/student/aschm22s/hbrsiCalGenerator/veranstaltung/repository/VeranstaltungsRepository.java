@@ -2,19 +2,20 @@ package student.aschm22s.hbrsiCalGenerator.veranstaltung.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VeranstaltungsRepository extends JpaRepository<Veranstaltung, Integer> {
-    Iterable<Veranstaltung> findByIdIn(Iterable<Integer> Ids);
+    Iterable<Veranstaltung> findByIdIn(List<Long> id);
 
-    List<Veranstaltung> findAllByStudienGangSemester(String studienGangSemester);
+    List<Veranstaltung> findAllByStudiengang(Studiengang studiengang);
 
-    List<Veranstaltung> findAllByStudienGangSemesterContaining(String studienGangSemester);
+    Veranstaltung findFirstByNameAndStudiengang(String name, Studiengang studiengang);
+    void deleteAllByStudiengangAndSemester(Studiengang studiengang, Integer semester);
 
-    Veranstaltung findFirstByNameAndStudienGangSemester(String name, String studienGangSemester);
-
-    void deleteAllByStudienGangSemester(String studienGangSemester);
+    void deleteAllByStudiengang(Studiengang studiengang);
 }

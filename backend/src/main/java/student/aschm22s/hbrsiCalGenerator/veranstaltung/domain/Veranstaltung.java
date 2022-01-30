@@ -1,57 +1,28 @@
 package student.aschm22s.hbrsiCalGenerator.veranstaltung.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanEintrag;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "veranstaltung")
 public class Veranstaltung {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String name;
     private String prof;
-    private String studienGangSemester;
+    private Integer semester;
+    @ManyToOne
+    @JoinColumn(name = "studiengang_id", nullable = false)
+    private Studiengang studiengang;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "veranstaltung")
     private Collection<StundenplanEintrag> stundenplanEintrags;
-
-    public Veranstaltung(String name, String prof, String studienGangSemester) {
-        this.name = name;
-        this.prof = prof;
-        this.studienGangSemester = studienGangSemester;
-    }
-
-    public Veranstaltung() {
-
-    }
-
-    public String getStudienGangSemester() {
-        return studienGangSemester;
-    }
-
-    public void setStudienGangSemester(String studienGangSemester) {
-        this.studienGangSemester = studienGangSemester;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getProf() {
-        return prof;
-    }
-
-    public void setProf(String prof) {
-        this.prof = prof;
-    }
 }

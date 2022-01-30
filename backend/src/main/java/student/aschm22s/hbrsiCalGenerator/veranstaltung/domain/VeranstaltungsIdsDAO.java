@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import java.util.List;
 
 @JsonAutoDetect
-public class VeranstaltungsIds {
-    List<Integer> veranstaltungsIds;
+public class VeranstaltungsIdsDAO {
+    List<Long> veranstaltungsIds;
 
-    public List<Integer> getVeranstaltungsIds() {
+    public List<Long> getVeranstaltungsIds() {
         return veranstaltungsIds;
     }
 
-    public void setVeranstaltungsIds(List<Integer> veranstaltungsIds) {
+    public void setVeranstaltungsIds(List<Long> veranstaltungsIds) {
         this.veranstaltungsIds = veranstaltungsIds;
     }
 }

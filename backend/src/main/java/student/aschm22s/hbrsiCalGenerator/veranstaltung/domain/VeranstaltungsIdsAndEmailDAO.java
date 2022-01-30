@@ -2,7 +2,7 @@ package student.aschm22s.hbrsiCalGenerator.veranstaltung.domain;
 
 import java.util.List;
 
-public class VeranstaltungsIdsAndEmail extends VeranstaltungsIds {
+public class VeranstaltungsIdsAndEmailDAO extends VeranstaltungsIdsDAO {
     String email;
 
     public String getEmail() {
@@ -13,11 +13,11 @@ public class VeranstaltungsIdsAndEmail extends VeranstaltungsIds {
         this.email = email;
     }
 
-    public List<Integer> getVeranstaltungsIds() {
+    public List<Long> getVeranstaltungsIds() {
         return veranstaltungsIds;
     }
 
-    public void setVeranstaltungsIds(List<Integer> veranstaltungsIds) {
+    public void setVeranstaltungsIds(List<Long> veranstaltungsIds) {
         this.veranstaltungsIds = veranstaltungsIds;
     }
 }

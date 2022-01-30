@@ -3,8 +3,8 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.contoller;
 import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
 import student.aschm22s.hbrsiCalGenerator.email.service.EmailSendingService;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIds;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsAndEmail;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsDAO;
+import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -30,12 +30,12 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmail veranstaltungsIdsAndEmail) {
-        if (Arrays.stream(blacklistedEMails).anyMatch(x -> veranstaltungsIdsAndEmail.getEmail().equals(x))) {
+    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmailDAO veranstaltungsIdsAndEmailDAO) {
+        if (Arrays.stream(blacklistedEMails).anyMatch(x -> veranstaltungsIdsAndEmailDAO.getEmail().equals(x))) {
             return "ne";
         }
 
-        return emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmail);
+        return emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmailDAO);
     }
 
     @RequestMapping(
@@ -43,8 +43,8 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
-        return calenderExportService.createCalender(veranstaltungsIds);
+    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
+        return calenderExportService.createCalender(veranstaltungsIdsDAO);
     }
 
     @RequestMapping(
@@ -52,7 +52,7 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/csv"
     )
-    public String getCalenderForSemesterAsCSV(@RequestBody VeranstaltungsIds veranstaltungsIds) throws IOException {
-        return calenderExportService.createCalenderAsCSV(veranstaltungsIds);
+    public String getCalenderForSemesterAsCSV(@RequestBody VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
+        return calenderExportService.createCalenderAsCSV(veranstaltungsIdsDAO);
     }
 }
