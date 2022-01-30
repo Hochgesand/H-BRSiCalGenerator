@@ -46,6 +46,5 @@ public class ExcelImportController {
         }
 
         return excelImportService.updateStundenplaene();
-
     }
 }

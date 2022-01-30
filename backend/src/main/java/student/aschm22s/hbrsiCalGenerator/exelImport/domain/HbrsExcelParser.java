@@ -1,5 +1,6 @@
 package student.aschm22s.hbrsiCalGenerator.exelImport.domain;
 
+import javassist.NotFoundException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -10,12 +11,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanDatumMN;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.repository.StundenplanDateMNRepository;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.repository.StundenplanRepository;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.repository.VeranstaltungsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,23 +26,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
+import java.util.Optional;
 
-//TODO: Refactoring: Parser has only one responsibility. It has not to write into repository.
 @Service
 public class HbrsExcelParser {
+    private final VeranstaltungsService veranstaltungsService;
+    private final StudiengangService studiengangService;
+    private final StundenplanService stundenplanService;
+    private final AppointmentService appointmentService;
 
-    private final VeranstaltungsRepository veranstaltungsRepo;
-    private final StundenplanRepository stundenplanRepo;
-    private final StundenplanDateMNRepository stundenplanDateMNRepo;
-
-    public HbrsExcelParser(VeranstaltungsRepository veranstaltungsRepo, StundenplanRepository stundenplanRepo, StundenplanDateMNRepository stundenplanDateMNRepo) {
-        this.veranstaltungsRepo = veranstaltungsRepo;
-        this.stundenplanRepo = stundenplanRepo;
-        this.stundenplanDateMNRepo = stundenplanDateMNRepo;
+    public HbrsExcelParser(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, StundenplanService stundenplanService, AppointmentService appointmentService) {
+        this.veranstaltungsService = veranstaltungsService;
+        this.studiengangService = studiengangService;
+        this.stundenplanService = stundenplanService;
+        this.appointmentService = appointmentService;
     }
 
     public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
@@ -50,17 +51,29 @@ public class HbrsExcelParser {
         return false;
     }
 
-    @Transactional
-    public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException {
+    public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException, NotFoundException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum();
         Row row = sheet.getRow(0);
 
         ArrayList<Veranstaltung> veranstaltungsListe = new ArrayList<>();
-        String studienGangSemester = (row.getCell(0) + "").substring(16);
+        String studiengangSemesterString = (row.getCell(0) + "").substring(16);
+        String studiengangString = studiengangSemesterString.substring(0, studiengangSemesterString.length() - 2);
+        Integer semester;
+        try {
+            semester = Integer.parseInt(studiengangSemesterString.substring(studiengangSemesterString.length() - 1));
+        } catch (NumberFormatException e) {
+            studiengangString = studiengangSemesterString;
+            semester = 0;
+        }
 
-        veranstaltungsRepo.deleteAllByStudienGangSemester(studienGangSemester);
+        Studiengang selectedStudiengang = studiengangService.findByNameIfNotExistCreate(studiengangString);
+
+        {
+            List<Veranstaltung> veranstaltungen = veranstaltungsService.findAllByStudiengangAndSemester(selectedStudiengang, semester);
+            veranstaltungsService.deleteAll(veranstaltungen);
+        }
 
         for (int i = 5; i < rows - 1; ++i) {
             String veranstaltungsname;
@@ -70,18 +83,21 @@ public class HbrsExcelParser {
             Veranstaltung neueVeranstaltung = new Veranstaltung();
             neueVeranstaltung.setName(veranstaltungsname);
             neueVeranstaltung.setProf(row.getCell(6) + "");
-            neueVeranstaltung.setStudienGangSemester(studienGangSemester);
+            neueVeranstaltung.setStudiengang(new Studiengang());
+            neueVeranstaltung.setStudiengang(selectedStudiengang);
+            neueVeranstaltung.setSemester(semester);
 
             if (veranstaltungAlreadyExists(neueVeranstaltung, veranstaltungsListe))
                 continue;
 
             veranstaltungsListe.add(neueVeranstaltung);
         }
-        veranstaltungsRepo.saveAll(veranstaltungsListe);
+        veranstaltungsService.saveAll(veranstaltungsListe);
         return veranstaltungsListe;
     }
 
-    public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException {
+    @Transactional
+    public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException, NotFoundException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum();
@@ -89,6 +105,10 @@ public class HbrsExcelParser {
 
         String aktuellerTag = "";
         String studienGangSemester = (row.getCell(0) + "").substring(16);
+        Optional<Studiengang> studiengang = studiengangService.findAllByNameContaining(studienGangSemester.substring(0, studienGangSemester.length() - 2)).stream().findFirst();
+
+        if (studiengang.isEmpty())
+            throw new NotFoundException("Studiengang " + studienGangSemester + " wurde nicht gefunden, import für Stundenplan wird abgebrochen");
 
         for (int i = 5; i < rows - 1; ++i) {
             row = sheet.getRow(i);
@@ -107,10 +127,10 @@ public class HbrsExcelParser {
             neuerStundenplanEintrag.setBis(Time.valueOf(row.getCell(2) + ":00"));
             neuerStundenplanEintrag.setRaum(row.getCell(3) + "");
             String tempModulName = row.getCell(4) + "";
-            Veranstaltung temp = veranstaltungsRepo.findFirstByNameAndStudienGangSemester(tempModulName, studienGangSemester);
+            Veranstaltung temp = veranstaltungsService.findFirstByNameAndStudiengang(tempModulName, studiengang.get());
             neuerStundenplanEintrag.setVeranstaltung(temp);
             neuerStundenplanEintrag.setTag(aktuellerTag);
-            StundenplanEintrag newObjectInDB = stundenplanRepo.save(neuerStundenplanEintrag);
+            StundenplanEintrag newObjectInDB = stundenplanService.save(neuerStundenplanEintrag);
 
             for (int j = 0; j < weeksInBetweenAmount; j++) {
                 dateVon = dateVon.plusWeeks(1);
@@ -118,62 +138,50 @@ public class HbrsExcelParser {
                 long tempTimeToAdd = neuerStundenplanEintrag.getVon().getTime();
                 dateTimeWithCorrectTime = dateTimeWithCorrectTime.plus(tempTimeToAdd).plusHours(1);
 
-                StundenplanDatumMN stundenplanDatumMN = new StundenplanDatumMN();
+                Appointment stundenplanDatumMN = new Appointment();
                 stundenplanDatumMN.setDate(dateTimeWithCorrectTime.getMillis());
                 stundenplanDatumMN.setStundenplanEintrag(newObjectInDB);
-                stundenplanDateMNRepo.save(stundenplanDatumMN);
+                appointmentService.save(stundenplanDatumMN);
             }
         }
 
-        return stundenplanRepo.findAll();
+        return stundenplanService.findAll();
     }
 
     @Transactional
     public String startParser(ArrayList<InputStream> files) {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-        AtomicInteger counterPlaene = new AtomicInteger();
-
+        int counterPlaene = 0;
         for (InputStream x : files) {
-            executorService.submit(() -> {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                try {
-                    x.transferTo(baos);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ArrayList<Veranstaltung> veranstaltungen = new ArrayList<>();
-                try {
-                    veranstaltungen = parseVeranstaltungen(new ByteArrayInputStream(baos.toByteArray()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                x.transferTo(baos);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ArrayList<Veranstaltung> veranstaltungen = new ArrayList<>();
+            try {
+                veranstaltungen = parseVeranstaltungen(new ByteArrayInputStream(baos.toByteArray()));
+            } catch (IOException | NotFoundException e) {
+                e.printStackTrace();
+            }
 
-                try {
-                    parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Veranstaltung veranstaltung = veranstaltungen.stream().findFirst().orElse(null);
-                if (veranstaltung == null) {
-                    System.out.println("Stundenplanimport fehler, siehe Stacktrace");
-                } else
-                    System.out.println("Stundenplan: " + veranstaltung.getStudienGangSemester() + " wurde importiert");
-                counterPlaene.getAndIncrement();
-            });
+            try {
+                parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
+            } catch (IOException | NotFoundException e) {
+                e.printStackTrace();
+            }
+            Veranstaltung veranstaltung = veranstaltungen.stream().findFirst().orElse(null);
+            if (veranstaltung == null) {
+                System.out.println("Stundenplanimport fehler, siehe Stacktrace");
+            } else
+                System.out.println("Stundenplan: " + veranstaltung.getStudiengang().getName() + " wurde importiert");
+            counterPlaene++;
         }
-
-        executorService.shutdown();
 
         System.out.println("Importvorgang wurde gestartet");
-        try {
-            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        if (counterPlaene.get() != files.size()) {
-            return "Es gab einen Fehler beim importieren. " + counterPlaene.get() + " von" + files.size() + " wurden importiert";
+        if (counterPlaene != files.size()) {
+            return "Es gab einen Fehler beim importieren. " + counterPlaene + " von " + files.size() + " wurden importiert";
         }
 
         return "Alle " + files.size() + " Stundenpläne wurden importiert";

@@ -5,11 +5,12 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanDatumMN;
-import student.aschm22s.hbrsiCalGenerator.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.domain.VeranstaltungsIds;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,32 +23,34 @@ import java.util.Objects;
 @Service
 public class CalenderExportService {
     private final VeranstaltungsService veranstaltungsService;
+    private final AppointmentService appointmentService;
 
-    public CalenderExportService(VeranstaltungsService veranstaltungsService) {
+    public CalenderExportService(VeranstaltungsService veranstaltungsService, AppointmentService appointmentService) {
         this.veranstaltungsService = veranstaltungsService;
+        this.appointmentService = appointmentService;
     }
 
-    public Calendar createCalenderForVeranstaltungen(List<Integer> Ids) {
-        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdIn(Ids);
+    public Calendar createCalenderForVeranstaltungen(List<Long> Ids) {
+        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(Ids);
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
-        ArrayList<StundenplanDatumMN> stundenplanDateMNRepoArrayList = new ArrayList<>();
+        ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
 
         for (Veranstaltung x : veranstaltungIterable) {
-            stundenplanEintragArrayList.addAll((Collection<? extends StundenplanEintrag>) veranstaltungsService.findByVeranstaltung(x));
+            stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
         }
 
         for (StundenplanEintrag x : stundenplanEintragArrayList) {
-            stundenplanDateMNRepoArrayList.addAll((Collection<? extends StundenplanDatumMN>) veranstaltungsService.findByStundenplanEintrag(x));
+            stundenplanDateMNRepoArrayList.addAll(appointmentService.findByStundenplanEintrag(x));
         }
 
         CustomCalenderBase customCalenderBase = new CustomCalenderBase();
 
-        for (StundenplanDatumMN x : stundenplanDateMNRepoArrayList) {
+        for (Appointment x : stundenplanDateMNRepoArrayList) {
             Veranstaltung veranstaltung;
             StundenplanEintrag stundenplanEintrag;
 
             stundenplanEintrag = stundenplanEintragArrayList.stream()
-                    .filter(j -> x.getStundenplanEintrag().getId() == j.getId())
+                    .filter(j -> x.getStundenplanEintrag().getId().equals(j.getId()))
                     .findFirst()
                     .orElse(null);
 
@@ -55,7 +58,7 @@ public class CalenderExportService {
                 continue;
 
             veranstaltung = veranstaltungIterable.stream()
-                    .filter(j -> stundenplanEintrag.getVeranstaltung().getId() == j.getId())
+                    .filter(j -> stundenplanEintrag.getVeranstaltung().getId().equals(j.getId()))
                     .findFirst()
                     .orElse(null);
 
@@ -74,11 +77,11 @@ public class CalenderExportService {
         return customCalenderBase.getiCalender();
     }
 
-    public byte[] createCalender(VeranstaltungsIds veranstaltungsIds) throws IOException {
-        if (veranstaltungsIds.getVeranstaltungsIds().size() == 0)
+    public byte[] createCalender(VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
+        if (veranstaltungsIdsDAO.getVeranstaltungsIds().size() == 0)
             return new byte[0x00];
 
-        Calendar calenderToReturn = createCalenderForVeranstaltungen(veranstaltungsIds.getVeranstaltungsIds());
+        Calendar calenderToReturn = createCalenderForVeranstaltungen(veranstaltungsIdsDAO.getVeranstaltungsIds());
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -88,23 +91,23 @@ public class CalenderExportService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public String createCalenderAsCSV(VeranstaltungsIds veranstaltungsIds) throws IOException {
+    public String createCalenderAsCSV(VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("tag;von;bis;raum;veranstaltung;wer\n");
 
-        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdIn(veranstaltungsIds.getVeranstaltungsIds());
+        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(veranstaltungsIdsDAO.getVeranstaltungsIds());
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
-        ArrayList<StundenplanDatumMN> stundenplanDateMNRepoArrayList = new ArrayList<>();
+        ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
 
         for (Veranstaltung x : veranstaltungIterable) {
-            stundenplanEintragArrayList.addAll((Collection<? extends StundenplanEintrag>) veranstaltungsService.findByVeranstaltung(x));
+            stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
         }
 
         for (StundenplanEintrag x : stundenplanEintragArrayList) {
-            stundenplanDateMNRepoArrayList.addAll((Collection<? extends StundenplanDatumMN>) veranstaltungsService.findAllByStundenplanEintragOrderByDateAsc(x));
+            stundenplanDateMNRepoArrayList.addAll(appointmentService.findAllByStundenplanEintragOrderByDateAsc(x));
         }
 
-        for (StundenplanDatumMN x : stundenplanDateMNRepoArrayList) {
+        for (Appointment x : stundenplanDateMNRepoArrayList) {
             // Need to get this value from appplication.properties.
             // This is a timeframe where every Event in a Week should take place, so I can extract information to make
             // a standard Stundenplan. English vocabulary 11/10

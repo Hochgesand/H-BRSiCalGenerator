@@ -3,7 +3,7 @@ package student.aschm22s.hbrsiCalGenerator.exelImport.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import student.aschm22s.hbrsiCalGenerator.exelImport.domain.HbrsExcelParser;
-import student.aschm22s.hbrsiCalGenerator.veranstaltung.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,9 +53,6 @@ public class ExcelImportService {
     }
 
     public String updateStundenplaene() throws IOException {
-        //TODO: Refactor deleteAll after successful parsing
-        veranstaltungsService.deleteAll();
-
         ArrayList<InputStream> inputstreams = new ArrayList<>();
         for (String string : evaLinks) {
             ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(string).openStream());
