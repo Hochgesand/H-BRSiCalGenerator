@@ -8,7 +8,7 @@ import {Studiengang} from "../Objects/Studiengang";
 
 export default function Lander() {
     const navigate = useNavigate();
-    const studiengaengePath = `${baseUrl}/getStudiengaenge`;
+    const studiengaengePath = `${baseUrl}/studiengang/getStudiengaenge`;
     const {getData} = useGetRequest({path: studiengaengePath})
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @RestController
+@RequestMapping("/api/calender")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
 

@@ -9,6 +9,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.serv
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/veranstaltung")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VeranstaltungController {
 

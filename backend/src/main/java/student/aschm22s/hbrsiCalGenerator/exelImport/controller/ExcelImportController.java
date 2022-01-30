@@ -16,6 +16,7 @@ import java.io.IOException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
+@RequestMapping("/api/excelImport")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ExcelImportController {
 

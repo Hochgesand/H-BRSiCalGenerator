@@ -22,7 +22,7 @@ export default function VeranstaltungsSelector() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const veranstaltungsPath = `${baseUrl}/getVeranstaltungByStudiengang?studiengang=${params.studiengang}`;
+  const veranstaltungsPath = `${baseUrl}/veranstaltung/getVeranstaltungByStudiengang?studiengang=${params.studiengang}`;
   const searchfield = useRef(null)
 
   const {getData} = useGetRequest({path: veranstaltungsPath})

@@ -21,15 +21,15 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
     let downloadUrl: string = "";
     const [loading, setLoading] = useState(false)
     const postGetiCal = usePostRequestCalendar({
-        path: (`${baseUrl}/sememesteriCal`),
+        path: (`${baseUrl}/calender/sememesteriCal`),
         veranstaltungsIds: props.veranstaltungsIds
     })
     const postGetCSV = usePostRequestCalendar({
-        path: (`${baseUrl}/sememesteriCalAsCSV`),
+        path: (`${baseUrl}/calender/sememesteriCalAsCSV`),
         veranstaltungsIds: props.veranstaltungsIds
     })
     const {getCalendarEmailResponse} = usePostRequestCalendarEmail({
-        path: `${baseUrl}/sememesteriCalEmail`,
+        path: `${baseUrl}/calender/sememesteriCalEmail`,
         body: {
             veranstaltungsIds: props.veranstaltungsIds,
             email: email
