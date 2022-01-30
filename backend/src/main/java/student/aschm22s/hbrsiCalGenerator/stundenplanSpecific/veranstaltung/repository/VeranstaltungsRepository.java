@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface VeranstaltungsRepository extends JpaRepository<Veranstaltung, Integer> {
     List<Veranstaltung> findByIdIn(List<Long> id);
+    List<Veranstaltung> findAllByProfContaining(String prof);
 
     List<Veranstaltung> findAllByStudiengang(Studiengang studiengang);
 

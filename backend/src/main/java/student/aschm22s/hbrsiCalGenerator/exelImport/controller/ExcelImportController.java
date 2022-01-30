@@ -29,7 +29,7 @@ public class ExcelImportController {
         this.userBucketPath = userBucketPath;
     }
 
-    @RequestMapping(value = "/webscrapeEva", method = POST)
+    @RequestMapping(value = "/force-update", method = POST)
     public String updateStundenplaene(@RequestParam("key") String key) throws IOException {
         if (!key.equals(userBucketPath)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not verify uploadkey, now fuck off!");
