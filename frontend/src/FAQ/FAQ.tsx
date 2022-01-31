@@ -10,7 +10,8 @@ export default function FAQ() {
                   onClick={() => history("/")}>
                     Back
                 </button>
-                <a href={"https://moin.meister.ovh:8443/swagger-ui/index.html"} className={"md:ml-0 md:w-full 1/2"}>
+                <a href={"https://moin.meister.ovh:8443/swagger-ui/index.html"} className={"md:ml-0 md:w-full 1/2"} target="_blank"
+                   rel="noopener noreferrer">
                     <button className="btn md:btn-lg w-full">
                         API Dokumentation
                     </button>
