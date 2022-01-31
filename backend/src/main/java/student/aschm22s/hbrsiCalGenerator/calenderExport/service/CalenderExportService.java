@@ -96,7 +96,11 @@ public class CalenderExportService {
 
         if (!veranstaltungsIdsDTO.isNotrack()){
             LoggedGeneration loggedGeneration = new LoggedGeneration();
-            loggedGeneration.setVeranstaltungen(veranstaltungen);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Veranstaltung x : veranstaltungen) {
+                                 stringBuilder.append(x.getName()).append(",");
+            }
+            loggedGeneration.setVeranstaltungen(stringBuilder.toString());
             if (veranstaltungsIdsDTO instanceof VeranstaltungsIdsAndEmailDTO) {
                 MessageDigest digest;
                 try{
