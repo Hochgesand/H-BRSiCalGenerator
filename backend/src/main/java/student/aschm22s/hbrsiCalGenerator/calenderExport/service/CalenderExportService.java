@@ -3,7 +3,6 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.service;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
-import org.apache.xmlbeans.impl.xb.xsdschema.All;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
@@ -12,8 +11,8 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.Trac
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDTO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.ByteArrayOutputStream;
@@ -83,11 +82,11 @@ public class CalenderExportService {
         return customCalenderBase.getiCalender();
     }
 
-    public byte[] createCalender(VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException, NoSuchAlgorithmException {
-        if (veranstaltungsIdsDAO.getVeranstaltungsIds().size() == 0)
+    public byte[] createCalender(VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException, NoSuchAlgorithmException {
+        if (veranstaltungsIdsDTO.getVeranstaltungsIds().size() == 0)
             return new byte[0x00];
 
-        List<Veranstaltung> veranstaltungen = veranstaltungsService.findByIdsIn(veranstaltungsIdsDAO.getVeranstaltungsIds());
+        List<Veranstaltung> veranstaltungen = veranstaltungsService.findByIdsIn(veranstaltungsIdsDTO.getVeranstaltungsIds());
         Calendar calenderToReturn = createCalenderForVeranstaltungen(veranstaltungen);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -95,17 +94,17 @@ public class CalenderExportService {
         CalendarOutputter outputter = new CalendarOutputter();
         outputter.output(calenderToReturn, byteArrayOutputStream);
 
-        if (!veranstaltungsIdsDAO.isNotrack()){
+        if (!veranstaltungsIdsDTO.isNotrack()){
             LoggedGeneration loggedGeneration = new LoggedGeneration();
             loggedGeneration.setVeranstaltungen(veranstaltungen);
-            if (veranstaltungsIdsDAO instanceof VeranstaltungsIdsAndEmailDAO) {
+            if (veranstaltungsIdsDTO instanceof VeranstaltungsIdsAndEmailDTO) {
                 MessageDigest digest;
                 try{
                      digest = MessageDigest.getInstance("SHA-256");
                 } catch (NoSuchAlgorithmException ignored) {
                     return byteArrayOutputStream.toByteArray();
                 }
-                final byte[] hash = digest.digest(((VeranstaltungsIdsAndEmailDAO) veranstaltungsIdsDAO).getEmail().getBytes());
+                final byte[] hash = digest.digest(((VeranstaltungsIdsAndEmailDTO) veranstaltungsIdsDTO).getEmail().getBytes());
                 final StringBuilder hexString = new StringBuilder();
                 for (byte b : hash) {
                     final String hex = Integer.toHexString(0xff & b);
@@ -122,11 +121,11 @@ public class CalenderExportService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public String createCalenderAsCSV(VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
+    public String createCalenderAsCSV(VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("tag;von;bis;raum;veranstaltung;wer\n");
 
-        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(veranstaltungsIdsDAO.getVeranstaltungsIds());
+        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(veranstaltungsIdsDTO.getVeranstaltungsIds());
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
         ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
 

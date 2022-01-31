@@ -3,8 +3,8 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.controller;
 import org.springframework.web.bind.annotation.*;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
 import student.aschm22s.hbrsiCalGenerator.email.service.EmailSendingService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDTO;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -31,12 +31,12 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmailDAO veranstaltungsIdsAndEmailDAO) {
-        if (Arrays.stream(blacklistedEMails).anyMatch(x -> veranstaltungsIdsAndEmailDAO.getEmail().equals(x))) {
+    public String getCalenderOverEmail(@RequestBody VeranstaltungsIdsAndEmailDTO veranstaltungsIdsAndEmailDTO) {
+        if (Arrays.stream(blacklistedEMails).anyMatch(x -> veranstaltungsIdsAndEmailDTO.getEmail().equals(x))) {
             return "ne";
         }
 
-        return emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmailDAO);
+        return emailSendingService.getCalenderOverEmail(veranstaltungsIdsAndEmailDTO);
     }
 
     @RequestMapping(
@@ -44,8 +44,8 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException, NoSuchAlgorithmException {
-        return calenderExportService.createCalender(veranstaltungsIdsDAO);
+    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException, NoSuchAlgorithmException {
+        return calenderExportService.createCalender(veranstaltungsIdsDTO);
     }
 
     @RequestMapping(
@@ -53,7 +53,7 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/csv"
     )
-    public String getCalenderForSemesterAsCSV(@RequestBody VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
-        return calenderExportService.createCalenderAsCSV(veranstaltungsIdsDAO);
+    public String getCalenderForSemesterAsCSV(@RequestBody VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException {
+        return calenderExportService.createCalenderAsCSV(veranstaltungsIdsDTO);
     }
 }

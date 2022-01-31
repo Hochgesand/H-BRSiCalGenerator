@@ -7,7 +7,7 @@ import java.util.List;
 
 @JsonAutoDetect
 @Data
-public class VeranstaltungsIdsDAO {
+public class VeranstaltungsIdsDTO {
     List<Long> veranstaltungsIds;
     boolean notrack = false;
 }
