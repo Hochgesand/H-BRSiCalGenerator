@@ -11,6 +11,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.servic
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/studiengang")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class StudiengangController {
     private final StudiengangService studiengangService;

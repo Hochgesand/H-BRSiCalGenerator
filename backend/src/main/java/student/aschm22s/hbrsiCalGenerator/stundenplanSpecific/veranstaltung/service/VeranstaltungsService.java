@@ -34,6 +34,11 @@ public class VeranstaltungsService {
         return veranstaltungsRepository.findAllByStudiengang(solidStudiengang);
     }
 
+    public List<Veranstaltung> findAllByStudiengangId(Long studiengang) {
+        Studiengang studiengangTemp = studiengangService.findById(studiengang);
+        return veranstaltungsRepository.findAllByStudiengang(studiengangTemp);
+    }
+
     public void deleteAll(List<Veranstaltung> veranstaltungen) {
         for (Veranstaltung veranstaltung : veranstaltungen) {
              List<StundenplanEintrag> stundenplanEintraege = stundenplanService.findAllByVeranstaltung(veranstaltung);
@@ -61,6 +66,10 @@ public class VeranstaltungsService {
 
     public List<Veranstaltung> findAllByStudiengangAndSemester(Studiengang studiengang, int semester) {
         return veranstaltungsRepository.findAllByStudiengangAndSemester(studiengang, semester);
+    }
+
+    public List<Veranstaltung> findAllByProfname(String profname) {
+        return veranstaltungsRepository.findAllByProfContaining(profname);
     }
 
     public Veranstaltung findFirstByNameAndStudiengang(String tempModulName, Studiengang studiengang) {

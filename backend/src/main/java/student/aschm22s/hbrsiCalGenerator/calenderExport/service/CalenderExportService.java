@@ -3,20 +3,25 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.service;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
+import org.apache.xmlbeans.impl.xb.xsdschema.All;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.LoggedGeneration;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.TrackService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDAO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,18 +29,19 @@ import java.util.Objects;
 public class CalenderExportService {
     private final VeranstaltungsService veranstaltungsService;
     private final AppointmentService appointmentService;
+    private final TrackService trackService;
 
-    public CalenderExportService(VeranstaltungsService veranstaltungsService, AppointmentService appointmentService) {
+    public CalenderExportService(VeranstaltungsService veranstaltungsService, AppointmentService appointmentService, TrackService trackService) {
         this.veranstaltungsService = veranstaltungsService;
         this.appointmentService = appointmentService;
+        this.trackService = trackService;
     }
 
-    public Calendar createCalenderForVeranstaltungen(List<Long> Ids) {
-        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(Ids);
+    public Calendar createCalenderForVeranstaltungen(List<Veranstaltung> veranstaltungen) {
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
         ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
 
-        for (Veranstaltung x : veranstaltungIterable) {
+        for (Veranstaltung x : veranstaltungen) {
             stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
         }
 
@@ -57,7 +63,7 @@ public class CalenderExportService {
             if (stundenplanEintrag == null)
                 continue;
 
-            veranstaltung = veranstaltungIterable.stream()
+            veranstaltung = veranstaltungen.stream()
                     .filter(j -> stundenplanEintrag.getVeranstaltung().getId().equals(j.getId()))
                     .findFirst()
                     .orElse(null);
@@ -77,16 +83,41 @@ public class CalenderExportService {
         return customCalenderBase.getiCalender();
     }
 
-    public byte[] createCalender(VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
+    public byte[] createCalender(VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException, NoSuchAlgorithmException {
         if (veranstaltungsIdsDAO.getVeranstaltungsIds().size() == 0)
             return new byte[0x00];
 
-        Calendar calenderToReturn = createCalenderForVeranstaltungen(veranstaltungsIdsDAO.getVeranstaltungsIds());
+        List<Veranstaltung> veranstaltungen = veranstaltungsService.findByIdsIn(veranstaltungsIdsDAO.getVeranstaltungsIds());
+        Calendar calenderToReturn = createCalenderForVeranstaltungen(veranstaltungen);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         CalendarOutputter outputter = new CalendarOutputter();
         outputter.output(calenderToReturn, byteArrayOutputStream);
+
+        if (!veranstaltungsIdsDAO.isNotrack()){
+            LoggedGeneration loggedGeneration = new LoggedGeneration();
+            loggedGeneration.setVeranstaltungen(veranstaltungen);
+            if (veranstaltungsIdsDAO instanceof VeranstaltungsIdsAndEmailDAO) {
+                MessageDigest digest;
+                try{
+                     digest = MessageDigest.getInstance("SHA-256");
+                } catch (NoSuchAlgorithmException ignored) {
+                    return byteArrayOutputStream.toByteArray();
+                }
+                final byte[] hash = digest.digest(((VeranstaltungsIdsAndEmailDAO) veranstaltungsIdsDAO).getEmail().getBytes());
+                final StringBuilder hexString = new StringBuilder();
+                for (byte b : hash) {
+                    final String hex = Integer.toHexString(0xff & b);
+                    if (hex.length() == 1)
+                        hexString.append('0');
+                    hexString.append(hex);
+                }
+
+                loggedGeneration.setEmail(hexString.toString());
+            }
+            trackService.generateLogEntry(loggedGeneration);
+        }
 
         return byteArrayOutputStream.toByteArray();
     }

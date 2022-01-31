@@ -43,15 +43,6 @@ public class ExcelImportService {
         this.veranstaltungsService = veranstaltungsService;
     }
 
-    public String importFiles(MultipartFile[] files) throws IOException {
-        ArrayList<InputStream> inputstreams = new ArrayList<>();
-        for (MultipartFile y : files) {
-            inputstreams.add(y.getInputStream());
-        }
-
-        return hbrsExcelParser.startParser(inputstreams);
-    }
-
     public String updateStundenplaene() throws IOException {
         ArrayList<InputStream> inputstreams = new ArrayList<>();
         for (String string : evaLinks) {

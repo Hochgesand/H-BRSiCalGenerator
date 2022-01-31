@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.LoggedGeneration;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 
@@ -31,6 +32,8 @@ public class Veranstaltung {
     @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "veranstaltung", orphanRemoval = true, cascade = CascadeType.ALL)
     private Collection<StundenplanEintrag> stundenplanEintrags;
+    @ManyToMany(mappedBy = "veranstaltungen")
+    private Collection<LoggedGeneration> loggedGenerations;
 
     @Override
     public String toString() {

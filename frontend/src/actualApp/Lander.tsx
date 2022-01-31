@@ -6,9 +6,9 @@ import Error from "../Error";
 import {useNavigate} from "react-router-dom";
 import {Studiengang} from "../Objects/Studiengang";
 
-export default function Lander() {
+export default function Lander(this: any) {
     const navigate = useNavigate();
-    const studiengaengePath = `${baseUrl}/getStudiengaenge`;
+    const studiengaengePath = `${baseUrl}/studiengang/getStudiengaenge`;
     const {getData} = useGetRequest({path: studiengaengePath})
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -49,7 +49,7 @@ export default function Lander() {
         <div className={"max-h-screen"}>
             <div className={"rounded-box p-3 bg-base-300 md:w-1/2 w-full m-auto"}>
                 <div className={"rounded-box p-4 bg-base-100 mb-4"}>
-                    <h2 className={"text-4xl mb-2 text-center font-bold"}>H-BRS Kalendergenerator v1.1</h2>
+                    <h2 className={"text-3xl mb-2 text-left md:text-center font-bold"}>H-BRS Kalendergenerator</h2>
                     <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen
                         und
                         Gewissen. </p>
@@ -79,6 +79,16 @@ export default function Lander() {
                     </ul>
                 </div>
             </div>
+            <a href={process.env.PUBLIC_URL + "/NVIDIA_Share_zDDqgVCJOh.gif"}>
+                <div className={"mt-4 rounded-box bg-base-300 px-3 pt-3 pb-4 md:w-1/2 w-full m-auto md:invisible md:h-0"}>
+                    <p className={"text-2xl font-bold text-center"}>Tipp des Jahrtausends</p>
+                    <div className={"text-center font-bold"}>
+                        <p>Pack mich auf den Homescreen!</p>
+                        <p>Drück mich!</p>
+                    </div>
+                    <img src={process.env.PUBLIC_URL + "/ScreenshotMitIcon.png"} alt={"Heftiges Bild"} className={"h-60 m-auto"}/>
+                </div>
+            </a>
         </div>
     );
 }

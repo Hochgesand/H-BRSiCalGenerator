@@ -12,6 +12,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.doma
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 public class EmailSendingService {
@@ -43,6 +44,8 @@ public class EmailSendingService {
             helper.addAttachment("Calendar.ics", new ByteArrayResource(calenderExportService.createCalender(veranstaltungsIdsAndEmailDAO)));
         } catch (MessagingException | IOException e) {
             return "Beim E-Mail zusammenstellen ist ein Fehler aufgetreten. Denke mal das ist ein Bug, würd mich freuen wenn du den mir melden würdest :)";
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
 
         try {

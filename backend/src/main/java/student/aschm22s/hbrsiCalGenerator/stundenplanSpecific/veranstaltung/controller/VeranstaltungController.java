@@ -9,6 +9,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.serv
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/veranstaltung")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VeranstaltungController {
 
@@ -34,5 +35,23 @@ public class VeranstaltungController {
     )
     public List<Veranstaltung> getVeranstaltungByStudiengang(@RequestParam("studiengang") String studiengang) {
         return veranstaltungsService.findAllByStudiengang(studiengang);
+    }
+
+    @RequestMapping(
+            value = "/getVeranstaltungByStudiengangId",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public List<Veranstaltung> getVeranstaltungByStudiengangId(@RequestParam("studiengang") Long studiengang) {
+        return veranstaltungsService.findAllByStudiengangId(studiengang);
+    }
+
+    @RequestMapping(
+            value = "/getVeranstaltungByProfessor",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public List<Veranstaltung> getVeranstaltungByProfessor(@RequestParam("studiengang") String prof) {
+        return veranstaltungsService.findAllByProfname(prof);
     }
 }

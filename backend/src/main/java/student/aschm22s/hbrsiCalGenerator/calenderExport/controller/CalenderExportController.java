@@ -7,9 +7,11 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.doma
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDAO;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 @RestController
+@RequestMapping("/api/calender")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CalenderExportController {
 
@@ -42,7 +44,7 @@ public class CalenderExportController {
             method = {RequestMethod.POST},
             produces = "text/calender"
     )
-    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException {
+    public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIdsDAO veranstaltungsIdsDAO) throws IOException, NoSuchAlgorithmException {
         return calenderExportService.createCalender(veranstaltungsIdsDAO);
     }
 

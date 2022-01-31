@@ -16,6 +16,7 @@ import java.io.IOException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
+@RequestMapping("/api/excelImport")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ExcelImportController {
 
@@ -28,18 +29,7 @@ public class ExcelImportController {
         this.userBucketPath = userBucketPath;
     }
 
-    @RequestMapping(value = "/uploadFile", method = POST)
-    public String submitExcelFileToImport(@RequestParam("files") MultipartFile[] files, @RequestParam("key") String key, ModelMap modelMap) throws IOException {
-        if (!key.equals(userBucketPath)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not verify uploadkey, now fuck off!");
-        }
-
-        modelMap.addAttribute("file", files);
-
-        return excelImportService.importFiles(files);
-    }
-
-    @RequestMapping(value = "/webscrapeEva", method = POST)
+    @RequestMapping(value = "/force-update", method = POST)
     public String updateStundenplaene(@RequestParam("key") String key) throws IOException {
         if (!key.equals(userBucketPath)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not verify uploadkey, now fuck off!");
