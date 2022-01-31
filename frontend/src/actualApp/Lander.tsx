@@ -79,6 +79,11 @@ export default function Lander() {
                     </ul>
                 </div>
             </div>
+            <div className={"mt-4 rounded-box bg-base-300 px-4 pt-3 pb-4 md:w-1/2 w-full m-auto"}>
+                <p className={"text-2xl font-bold text-center"}>Tipp des Jahrtausends</p>
+                <p className={"text-1xl font-bold text-center"}>Pack mich auf den Homescreen!</p>
+                <img src={process.env.PUBLIC_URL + "/ScreenshotMitIcon.png"} className={"h-96 m-auto"}/>
+            </div>
         </div>
     );
 }
