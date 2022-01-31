@@ -19,7 +19,7 @@ public class LoggedGeneration {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
-    private String email;
+    private String hashedemail;
     @Lob
     private String veranstaltungen;
 }

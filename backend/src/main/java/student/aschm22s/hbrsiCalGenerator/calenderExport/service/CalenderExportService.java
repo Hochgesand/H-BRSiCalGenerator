@@ -117,7 +117,7 @@ public class CalenderExportService {
                     hexString.append(hex);
                 }
 
-                loggedGeneration.setEmail(hexString.toString());
+                loggedGeneration.setHashedemail(hexString.toString());
             }
             trackService.generateLogEntry(loggedGeneration);
         }
