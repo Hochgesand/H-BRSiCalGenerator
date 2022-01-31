@@ -1,5 +1,6 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,14 @@ public class LoggedGeneration {
             joinColumns = @JoinColumn(name = "logged_generation_id"),
             inverseJoinColumns = @JoinColumn(name = "veranstaltung_id")
     )
-    @JsonManagedReference
+    @JsonBackReference
     private List<Veranstaltung> veranstaltungen;
+
+    @Override
+    public String toString() {
+        return "LoggedGeneration{" +
+                "Id=" + Id +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
