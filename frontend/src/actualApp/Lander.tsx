@@ -6,7 +6,7 @@ import Error from "../Error";
 import {useNavigate} from "react-router-dom";
 import {Studiengang} from "../Objects/Studiengang";
 
-export default function Lander() {
+export default function Lander(this: any) {
     const navigate = useNavigate();
     const studiengaengePath = `${baseUrl}/studiengang/getStudiengaenge`;
     const {getData} = useGetRequest({path: studiengaengePath})
@@ -79,11 +79,16 @@ export default function Lander() {
                     </ul>
                 </div>
             </div>
-            <div className={"mt-4 rounded-box bg-base-300 px-4 pt-3 pb-4 md:w-1/2 w-full m-auto"}>
-                <p className={"text-2xl font-bold text-center"}>Tipp des Jahrtausends</p>
-                <p className={"text-1xl font-bold text-center"}>Pack mich auf den Homescreen!</p>
-                <img src={process.env.PUBLIC_URL + "/ScreenshotMitIcon.png"} className={"h-96 m-auto"}/>
-            </div>
+            <a href={process.env.PUBLIC_URL + "/NVIDIA_Share_zDDqgVCJOh.gif"}>
+                <div className={"mt-4 rounded-box bg-base-300 px-3 pt-3 pb-4 md:w-1/2 w-full m-auto md:invisible md:h-0"}>
+                    <p className={"text-2xl font-bold text-center"}>Tipp des Jahrtausends</p>
+                    <div className={"text-center font-bold"}>
+                        <p>Pack mich auf den Homescreen!</p>
+                        <p>Drück mich!</p>
+                    </div>
+                    <img src={process.env.PUBLIC_URL + "/ScreenshotMitIcon.png"} alt={"Heftiges Bild"} className={"h-60 m-auto"}/>
+                </div>
+            </a>
         </div>
     );
 }
