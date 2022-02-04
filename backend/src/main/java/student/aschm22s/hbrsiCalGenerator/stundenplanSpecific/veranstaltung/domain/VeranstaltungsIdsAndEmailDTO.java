@@ -2,7 +2,7 @@ package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.dom
 
 import java.util.List;
 
-public class VeranstaltungsIdsAndEmailDAO extends VeranstaltungsIdsDAO {
+public class VeranstaltungsIdsAndEmailDTO extends VeranstaltungsIdsDTO {
     String email;
 
     public String getEmail() {

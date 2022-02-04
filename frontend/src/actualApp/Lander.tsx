@@ -53,7 +53,7 @@ export default function Lander(this: any) {
                     <p>Ich übernehme keine Haftung für die Richtigkeit der generierten Daten, alles nach bestem Wissen
                         und
                         Gewissen. </p>
-                    <p>Fehler bitte an a@andrevr.de melden.</p>
+                    <p>Fehler bitte an andre@schmitz.gg oder Discord: "Nullteiler#5241" melden.</p>
                     <p>Jetzt auch mobileoptimized/responsive!</p>
                     <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
                 </div>

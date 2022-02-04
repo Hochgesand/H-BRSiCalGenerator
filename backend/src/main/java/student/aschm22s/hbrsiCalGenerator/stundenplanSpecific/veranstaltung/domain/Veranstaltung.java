@@ -32,8 +32,6 @@ public class Veranstaltung {
     @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "veranstaltung", orphanRemoval = true, cascade = CascadeType.ALL)
     private Collection<StundenplanEintrag> stundenplanEintrags;
-    @ManyToMany(mappedBy = "veranstaltungen")
-    private Collection<LoggedGeneration> loggedGenerations;
 
     @Override
     public String toString() {

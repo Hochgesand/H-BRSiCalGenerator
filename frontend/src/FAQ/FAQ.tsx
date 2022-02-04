@@ -7,10 +7,11 @@ export default function FAQ() {
             <div className={"md:flex-row grid grid-cols-2 md:grid-cols-1 gap-4 grid-rows-2 p-4 rounded-box bg-base-300 mb-4 md:w-1/4 h-20 md:h-44"}>
                 <button
                   className="btn md:btn-lg md:w-full 1/2"
-                  onClick={() => history("/")}>
+                  onClick={() => history(-1)}>
                     Back
                 </button>
-                <a href={"https://moin.meister.ovh:8443/swagger-ui/index.html"} className={"md:ml-0 md:w-full 1/2"}>
+                <a href={"https://moin.meister.ovh:8443/swagger-ui/index.html"} className={"md:ml-0 md:w-full 1/2"} target="_blank"
+                   rel="noopener noreferrer">
                     <button className="btn md:btn-lg w-full">
                         API Dokumentation
                     </button>
