@@ -20,6 +20,13 @@ export default function FAQ() {
             <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-full md:w-3/4"}>
                 <p className={"text-3xl"}>Anleitung:</p>
                 <p className={"text-2xl"}>Schritt 0:</p>
+                <p className={"font-bold"}>
+                    Bitte erstellt euch vor Nutzung einen eigens für den Stundenplan erstellten Kalender in der Kalenderapp
+                    eurer wahl (Für Google Calendar siehe Beispiel 2).
+                    Hintergrund ist dass die Kalenderevents alle eigenständige Termine sind. Das führt dazu dass wenn ihr den Kalender korrigieren wollt
+                    das ihr jeden einzelnen Termin löschen müsst wenn ihr keinen eigenen Kalender dafür angelegt habt.
+                    Ich werde das fixen, nur nicht heute. Wenn ichs gefixt habe, wird dieser Text einfach verschwinden
+                </p>
                 <p>Es sei kurz angemerkt: Handyuser können die .ics Datei nicht direkt runterladen.
                     Hintergrund ist das ich ein iPhone habe und man kann ics Dateien öffnen, aber nicht importieren.
                     Das geht anscheinend nur über die Mailapp... Warum auch immer. Android kann ich nicht testen, daher nur per E-Mail.
@@ -72,7 +79,7 @@ export default function FAQ() {
                 <p className={"text-3xl"}>Beispiel 2: "Is ja alles schön und toll, aber was mache ich jetzt mit dieser
                     komischen
                     calendar.ics Datei? (Beispiel an Google Kalender)"</p>
-                <img src={process.env.PUBLIC_URL + "/Z795yqtZO4.gif"} alt={""}/>
+                <img src={process.env.PUBLIC_URL + "/NVIDIA_Share_hLP7Ats3C6.gif"} alt={""}/>
             </div>
 
         </div>
