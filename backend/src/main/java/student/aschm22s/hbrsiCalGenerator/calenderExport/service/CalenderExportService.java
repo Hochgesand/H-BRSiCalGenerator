@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,7 @@ public class CalenderExportService {
                                  stringBuilder.append(x.getName()).append(",");
             }
             loggedGeneration.setVeranstaltungen(stringBuilder.toString());
+            loggedGeneration.setTimestamp(new Timestamp(System.currentTimeMillis()));
             if (veranstaltungsIdsDTO instanceof VeranstaltungsIdsAndEmailDTO) {
                 MessageDigest digest;
                 try{

@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Lob;
+import java.sql.Timestamp;
 
 @Entity
 @AllArgsConstructor
@@ -22,4 +23,5 @@ public class LoggedGeneration {
     private String hashedemail;
     @Lob
     private String veranstaltungen;
+    private Timestamp timestamp;
 }
