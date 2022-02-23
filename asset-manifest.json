@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/H-BRSiCalGenerator/static/css/main.c4f65380.css",
-    "main.js": "/H-BRSiCalGenerator/static/js/main.fa43978f.js",
-    "static/js/787.2dfee415.chunk.js": "/H-BRSiCalGenerator/static/js/787.2dfee415.chunk.js",
-    "index.html": "/H-BRSiCalGenerator/index.html",
-    "main.c4f65380.css.map": "/H-BRSiCalGenerator/static/css/main.c4f65380.css.map",
-    "main.fa43978f.js.map": "/H-BRSiCalGenerator/static/js/main.fa43978f.js.map",
-    "787.2dfee415.chunk.js.map": "/H-BRSiCalGenerator/static/js/787.2dfee415.chunk.js.map"
+    "main.css": "/static/css/main.c4f65380.css",
+    "main.js": "/static/js/main.bf0bd3dd.js",
+    "static/js/787.2dfee415.chunk.js": "/static/js/787.2dfee415.chunk.js",
+    "index.html": "/index.html",
+    "main.c4f65380.css.map": "/static/css/main.c4f65380.css.map",
+    "main.bf0bd3dd.js.map": "/static/js/main.bf0bd3dd.js.map",
+    "787.2dfee415.chunk.js.map": "/static/js/787.2dfee415.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c4f65380.css",
-    "static/js/main.fa43978f.js"
+    "static/js/main.bf0bd3dd.js"
   ]
 }
