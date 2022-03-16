@@ -102,7 +102,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                         className={"m-auto rounded-box bg-base-300 md:w-3/4 w-full xl:w-2/3 2xl:1 h-screen flex-none z-20"}>
                         <div className={"p-4"}>
                             {error.length > 0 ? <Error msg={error}/> : null}
-                            <div className={"invisible md:visible h-0 md:h-auto"}>
+                            <div className={"h-0 h-auto"}>
                                 <div className={"grid grid-cols-2 grid-rows-1 gap-4"}>
                                     <button className={`btn h-14 md:btn-lg w-full mb-4 ${loading ? 'loading' : null}`}
                                             type={"submit"}
