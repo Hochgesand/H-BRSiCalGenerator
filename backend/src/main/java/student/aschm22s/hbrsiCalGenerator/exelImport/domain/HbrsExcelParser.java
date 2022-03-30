@@ -133,7 +133,6 @@ public class HbrsExcelParser {
             StundenplanEintrag newObjectInDB = stundenplanService.save(neuerStundenplanEintrag);
 
             for (int j = 0; j < weeksInBetweenAmount; j++) {
-                dateVon = dateVon.plusWeeks(1);
                 DateTime dateTimeWithCorrectTime = dateVon;
                 long tempTimeToAdd = neuerStundenplanEintrag.getVon().getTime();
                 dateTimeWithCorrectTime = dateTimeWithCorrectTime.plus(tempTimeToAdd).plusHours(1);
@@ -142,6 +141,7 @@ public class HbrsExcelParser {
                 stundenplanDatumMN.setDate(dateTimeWithCorrectTime.getMillis());
                 stundenplanDatumMN.setStundenplanEintrag(newObjectInDB);
                 appointmentService.save(stundenplanDatumMN);
+                dateVon = dateVon.plusWeeks(1);
             }
         }
 

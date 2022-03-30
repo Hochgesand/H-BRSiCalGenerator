@@ -19,19 +19,6 @@ export default function FAQ() {
             </div>
             <div className={"rounded-box p-4 bg-base-300 flex-grow-0 w-full md:w-3/4"}>
                 <p className={"text-3xl"}>Anleitung:</p>
-                <p className={"text-2xl"}>Schritt 0:</p>
-                <p className={"font-bold"}>
-                    Bitte erstellt euch vor Nutzung einen eigens für den Stundenplan erstellten Kalender in der Kalenderapp
-                    eurer wahl (Für Google Calendar siehe Beispiel 2).
-                    Hintergrund ist dass die Kalenderevents alle eigenständige Termine sind. Das führt dazu dass wenn ihr den Kalender korrigieren wollt
-                    das ihr jeden einzelnen Termin löschen müsst wenn ihr keinen eigenen Kalender dafür angelegt habt.
-                    Ich werde das fixen, nur nicht heute. Wenn ichs gefixt habe, wird dieser Text einfach verschwinden
-                </p>
-                <p>Es sei kurz angemerkt: Handyuser können die .ics Datei nicht direkt runterladen.
-                    Hintergrund ist das ich ein iPhone habe und man kann ics Dateien öffnen, aber nicht importieren.
-                    Das geht anscheinend nur über die Mailapp... Warum auch immer. Android kann ich nicht testen, daher nur per E-Mail.
-                    Alle Datenschutz-Freaks die mir nicht trauen, können einfach den Computer benutzen und es dort in
-                    ihren Kalender importieren. Da kann man die iCal Dateien runterladen.</p>
                 <p className={"text-2xl"}>Schritt 1:</p>
                 <p>Wähle dir einfach alle Veranstaltungen aus die du besuchen möchtest.
                     Du kannst die Tabelle nach belieben sortieren und mit dem Burgerbutton kannst du auch gezielt

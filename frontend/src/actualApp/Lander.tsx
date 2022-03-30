@@ -50,8 +50,6 @@ export default function Lander(this: any) {
             <div className={"rounded-box p-3 bg-base-300 md:w-1/2 w-full m-auto"}>
                 <div className={"rounded-box p-4 bg-base-100 mb-4"}>
                     <h2 className={"text-3xl mb-2 text-left md:text-center font-bold"}>H-BRS Kalendergenerator</h2>
-                    <p className={"font-bold"}>Bitte erstellt euch einen SEPERATEN Kalender in dem ihr eure Termine importiert!!!
-                        Hintergrund im FAQ in Schritt 0.</p>
                     <p>Fehler bitte an andre@schmitz.gg oder Discord: "Nullteiler#5241" melden.</p>
                     <p>Wenn's euch gefällt, empfehlt es euren Kommilitonen! 😁</p>
                 </div>

@@ -3,13 +3,14 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.service;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
+import org.javatuples.Quartet;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.LoggedGeneration;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.TrackService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDTO;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class CalenderExportService {
@@ -37,23 +39,31 @@ public class CalenderExportService {
         this.trackService = trackService;
     }
 
-    public Calendar createCalenderForVeranstaltungen(List<Veranstaltung> veranstaltungen) {
+    public Calendar createCalenderForVeranstaltungenEventRecurring(List<Veranstaltung> veranstaltungen) {
         ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
         ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
 
         for (Veranstaltung x : veranstaltungen) {
             stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
         }
-
         for (StundenplanEintrag x : stundenplanEintragArrayList) {
             stundenplanDateMNRepoArrayList.addAll(appointmentService.findByStundenplanEintrag(x));
         }
 
         CustomCalenderBase customCalenderBase = new CustomCalenderBase();
+        ArrayList<Quartet<Veranstaltung, StundenplanEintrag, AtomicInteger, Appointment>> tempZeugroot = new ArrayList<>();
+
+        for (Veranstaltung g : veranstaltungen) {
+            for (StundenplanEintrag f : g.getStundenplanEintrags()) {
+                tempZeugroot.add(Quartet.with(g, f, new AtomicInteger(1),
+                        f.getStundenplanDatumMNS().stream().findFirst().orElse(null)
+                ));
+            }
+        }
 
         for (Appointment x : stundenplanDateMNRepoArrayList) {
-            Veranstaltung veranstaltung;
             StundenplanEintrag stundenplanEintrag;
+            Veranstaltung veranstaltung;
 
             stundenplanEintrag = stundenplanEintragArrayList.stream()
                     .filter(j -> x.getStundenplanEintrag().getId().equals(j.getId()))
@@ -71,13 +81,26 @@ public class CalenderExportService {
             if (veranstaltung == null)
                 continue;
 
-            customCalenderBase.addEventToCalender(
-                    veranstaltung.getName(),
-                    new DateTime(x.getDate().getTime()),
-                    new DateTime(x.getDate().getTime() + (stundenplanEintrag.getBis().getTime() - stundenplanEintrag.getVon().getTime())),
-                    veranstaltung.getName(),
-                    veranstaltung.getProf(),
-                    stundenplanEintrag.getRaum());
+            for (Quartet<Veranstaltung, StundenplanEintrag, AtomicInteger, Appointment> z : tempZeugroot) {
+                if (z.getValue0() == veranstaltung &&
+                        z.getValue1().getTag().equals(stundenplanEintrag.getTag()) &&
+                        z.getValue1().getRaum().equals(stundenplanEintrag.getRaum())) {
+                    z.getValue2().incrementAndGet();
+                    break;
+                }
+            }
+        }
+
+        for (Quartet<Veranstaltung, StundenplanEintrag, AtomicInteger, Appointment> z : tempZeugroot) {
+            customCalenderBase.addRecurringEventToCalendar(
+                    z.getValue0().getName(),
+                    new DateTime(z.getValue3().getDate().getTime()),
+                    new DateTime(z.getValue3().getDate().getTime() + (z.getValue1().getBis().getTime() - z.getValue1().getVon().getTime())),
+                    z.getValue0().getName(),
+                    z.getValue0().getProf(),
+                    z.getValue1().getRaum(),
+                    z.getValue2().get()
+            );
         }
 
         return customCalenderBase.getiCalender();
@@ -88,25 +111,25 @@ public class CalenderExportService {
             return new byte[0x00];
 
         List<Veranstaltung> veranstaltungen = veranstaltungsService.findByIdsIn(veranstaltungsIdsDTO.getVeranstaltungsIds());
-        Calendar calenderToReturn = createCalenderForVeranstaltungen(veranstaltungen);
+        Calendar calenderToReturn = createCalenderForVeranstaltungenEventRecurring(veranstaltungen);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         CalendarOutputter outputter = new CalendarOutputter();
         outputter.output(calenderToReturn, byteArrayOutputStream);
 
-        if (!veranstaltungsIdsDTO.isNotrack()){
+        if (!veranstaltungsIdsDTO.isNotrack()) {
             LoggedGeneration loggedGeneration = new LoggedGeneration();
             StringBuilder stringBuilder = new StringBuilder();
             for (Veranstaltung x : veranstaltungen) {
-                                 stringBuilder.append(x.getName()).append(",");
+                stringBuilder.append(x.getName()).append(",");
             }
             loggedGeneration.setVeranstaltungen(stringBuilder.toString());
             loggedGeneration.setTimestamp(new Timestamp(System.currentTimeMillis()));
             if (veranstaltungsIdsDTO instanceof VeranstaltungsIdsAndEmailDTO) {
                 MessageDigest digest;
-                try{
-                     digest = MessageDigest.getInstance("SHA-256");
+                try {
+                    digest = MessageDigest.getInstance("SHA-256");
                 } catch (NoSuchAlgorithmException ignored) {
                     return byteArrayOutputStream.toByteArray();
                 }
@@ -127,7 +150,7 @@ public class CalenderExportService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public String createCalenderAsCSV(VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException {
+    public String createCalenderAsCSV(VeranstaltungsIdsDTO veranstaltungsIdsDTO) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("tag;von;bis;raum;veranstaltung;wer\n");
 
