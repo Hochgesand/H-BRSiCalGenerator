@@ -58,7 +58,7 @@ public class HbrsExcelParser {
         Row row = sheet.getRow(0);
 
         ArrayList<Veranstaltung> veranstaltungsListe = new ArrayList<>();
-        String studiengangSemesterString = (row.getCell(0) + "").substring(16);
+        String studiengangSemesterString = (row.getCell(0) + "").substring(13);
         String studiengangString = studiengangSemesterString.substring(0, studiengangSemesterString.length() - 2);
         Integer semester;
         try {
@@ -104,7 +104,7 @@ public class HbrsExcelParser {
         Row row = sheet.getRow(0);
 
         String aktuellerTag = "";
-        String studienGangSemester = (row.getCell(0) + "").substring(16);
+        String studienGangSemester = (row.getCell(0) + "").substring(13);
         Optional<Studiengang> studiengang = studiengangService.findAllByNameContaining(studienGangSemester.substring(0, studienGangSemester.length() - 2)).stream().findFirst();
 
         if (studiengang.isEmpty())
