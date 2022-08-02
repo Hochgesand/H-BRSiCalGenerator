@@ -2,7 +2,7 @@ import React from 'react';
 import './App.scss';
 import Lander from "./actualApp/Lander";
 import {Routes} from 'react-router-dom';
-import {Route} from "react-router-native";
+import {Route} from "react-router";
 import FAQ from "./FAQ/FAQ";
 import VeranstaltungsSelector from "./actualApp/VeranstaltungsSelector/VeranstaltungsSelector";
 

@@ -103,8 +103,8 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                         <div className={"p-4"}>
                             {error.length > 0 ? <Error msg={error}/> : null}
                             <div className={"h-0 h-auto"}>
-                                <div className={"grid grid-cols-2 grid-rows-1 gap-4"}>
-                                    <button className={`btn h-14 md:btn-lg w-full mb-4 ${loading ? 'loading' : null}`}
+                                <div className={"grid grid-cols-1 grid-rows-1 gap-4"}>
+                                    <button className={`btn h-14 btn-lg w-full mb-4 ${loading ? 'loading' : null}`}
                                             type={"submit"}
                                             disabled={props.veranstaltungsIds.length === 0 || loading}
                                             onClick={() => {
@@ -112,14 +112,6 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                                                 console.log(downloadUrl)
                                                 onButtonClickDownloadCalendar()
                                             }}>Download calendar.ics
-                                    </button>
-                                    <button className={`btn h-14 md:btn-lg w-full mb-4 ${loading ? 'loading' : null}`}
-                                            type={"submit"}
-                                            disabled={props.veranstaltungsIds.length === 0 || loading}
-                                            onClick={() => {
-                                                downloadUrl = `${baseUrl}/sememesteriCalAsCSV`
-                                                onButtonClickDownloadCalendarAsCsv()
-                                            }}>Download Kalender als CSV
                                     </button>
                                 </div>
                                 <div className={"rounded-box bg-base-200 h-6 w-full mb-4"}><p
