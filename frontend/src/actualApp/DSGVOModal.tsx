@@ -50,12 +50,16 @@ export default function DSGVOModal() {
               </p>
             </li>
           </ul>
-          <div className="modal-action">
-            <label htmlFor="my-modal-5" className="btn" onClick={() => {
-              writeNoTrack();
-              writeAck()
-            }}>Nein, speichere nicht meine Daten</label>
-            <label htmlFor="my-modal-5" className="btn" onClick={writeAck}>JA!, du darfst meine Daten netterweise nutzen :)</label>
+          <div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 mt-4">
+            <div className={"w-full "}>
+              <label className="btn btn-md w-full" onClick={() => {
+                writeNoTrack();
+                writeAck()
+              }}>Nein, speichere nicht meine Daten</label>
+            </div>
+            <div className={"w-full m-0"}>
+              <label className="btn btn-md w-full" onClick={writeAck}>JA!, du darfst meine Daten netterweise nutzen :)</label>
+            </div>
           </div>
         </div>
       </div>

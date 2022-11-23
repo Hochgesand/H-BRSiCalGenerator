@@ -7,6 +7,10 @@ module.exports = {
     variants: {
         extend: {},
     },
+    content: [
+        './pages/**/*.{html,js}',
+        './components/**/*.{html,js}',
+    ],
     plugins: [
         require('daisyui'),
     ],
