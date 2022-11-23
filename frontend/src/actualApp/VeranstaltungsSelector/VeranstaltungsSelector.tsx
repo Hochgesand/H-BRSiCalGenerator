@@ -169,7 +169,7 @@ export default function VeranstaltungsSelector() {
                             removeItemToSelectedItems(veranstaltung.id)
                           }
                         }}
-                        className="focus:ring-base-500 h-10 w-10 text-indigo-600 border-gray-300 rounded"
+                        className="focus:ring-base-500 h-10 w-10 text-primary border-gray-300 rounded"
                       />
                     </div>
                     <div className="min-w-0 flex-1 text-sm">

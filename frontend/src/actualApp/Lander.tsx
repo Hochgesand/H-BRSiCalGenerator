@@ -56,7 +56,7 @@ export default function Lander(this: any) {
                 <div className={"dropdown w-full"}>
                     <a href={"https://github.com/Hochgesand/H-BRSiCalGenerator"} target="_blank"
                        rel="noopener noreferrer">
-                        <button className={"btn md:btn-lg w-full mb-2 btn-ghost"}>Gib mir einen Stern auf Github ❤
+                        <button className={"btn md:btn-lg w-full mb-2"}>Gib mir einen Stern auf Github ❤
                         </button>
                     </a>
                     <button className={"btn md:btn-lg w-full"} onClick={showHelp}>Neu hier? &#8594; FAQ / HILFE!</button>
