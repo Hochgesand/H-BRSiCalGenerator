@@ -5,6 +5,7 @@ import Loading from "../Loading";
 import Error from "../Error";
 import {useNavigate} from "react-router-dom";
 import {Studiengang} from "../Objects/Studiengang";
+import DSGVOModal from "./DSGVOModal";
 
 export default function Lander(this: any) {
     const navigate = useNavigate();
@@ -85,6 +86,8 @@ export default function Lander(this: any) {
                     <img src={process.env.PUBLIC_URL + "/ScreenshotMitIcon.png"} alt={"Heftiges Bild"} className={"h-60 m-auto"}/>
                 </div>
             </a>
+            <input type="checkbox" id="my-modal-5" className="modal-toggle" />
+            <DSGVOModal/>
         </div>
     );
 }
