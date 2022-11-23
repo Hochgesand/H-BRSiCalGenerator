@@ -10,6 +10,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.LoggedGeneration;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.TrackService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
@@ -30,11 +31,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class CalenderExportService {
     private final VeranstaltungsService veranstaltungsService;
+    private final StudiengangService studiengangService;
     private final AppointmentService appointmentService;
     private final TrackService trackService;
 
-    public CalenderExportService(VeranstaltungsService veranstaltungsService, AppointmentService appointmentService, TrackService trackService) {
+    public CalenderExportService(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, AppointmentService appointmentService, TrackService trackService) {
         this.veranstaltungsService = veranstaltungsService;
+        this.studiengangService = studiengangService;
         this.appointmentService = appointmentService;
         this.trackService = trackService;
     }
@@ -143,6 +146,9 @@ public class CalenderExportService {
                 }
 
                 loggedGeneration.setHashedemail(hexString.toString());
+            }
+            if (veranstaltungen.stream().findFirst().isPresent()){
+                loggedGeneration.setStudiengang(veranstaltungen.stream().findFirst().get().getStudiengang().getName());
             }
             trackService.generateLogEntry(loggedGeneration);
         }
