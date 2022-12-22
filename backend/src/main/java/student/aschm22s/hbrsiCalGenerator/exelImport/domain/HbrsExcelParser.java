@@ -1,6 +1,5 @@
 package student.aschm22s.hbrsiCalGenerator.exelImport.domain;
 
-import javassist.NotFoundException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -11,11 +10,11 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
@@ -51,7 +50,7 @@ public class HbrsExcelParser {
         return false;
     }
 
-    public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException, NotFoundException {
+    public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum();
@@ -97,7 +96,7 @@ public class HbrsExcelParser {
     }
 
     @Transactional
-    public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException, NotFoundException {
+    public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum();
@@ -108,7 +107,7 @@ public class HbrsExcelParser {
         Optional<Studiengang> studiengang = studiengangService.findAllByNameContaining(studienGangSemester.substring(0, studienGangSemester.length() - 2)).stream().findFirst();
 
         if (studiengang.isEmpty())
-            throw new NotFoundException("Studiengang " + studienGangSemester + " wurde nicht gefunden, import für Stundenplan wird abgebrochen");
+            throw new RuntimeException("Studiengang " + studienGangSemester + " wurde nicht gefunden, import für Stundenplan wird abgebrochen");
 
         for (int i = 5; i < rows - 1; ++i) {
             row = sheet.getRow(i);
@@ -161,13 +160,13 @@ public class HbrsExcelParser {
             ArrayList<Veranstaltung> veranstaltungen = new ArrayList<>();
             try {
                 veranstaltungen = parseVeranstaltungen(new ByteArrayInputStream(baos.toByteArray()));
-            } catch (IOException | NotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
                 parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
-            } catch (IOException | NotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             Veranstaltung veranstaltung = veranstaltungen.stream().findFirst().orElse(null);

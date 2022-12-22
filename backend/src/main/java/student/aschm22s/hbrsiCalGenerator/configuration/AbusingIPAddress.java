@@ -1,13 +1,11 @@
 package student.aschm22s.hbrsiCalGenerator.configuration;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "AbusingIPAdresses")
 public class AbusingIPAddress {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
     private Timestamp timestamp;
     private String ipAddress;
