@@ -12,6 +12,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.Logg
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.TrackService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDTO;
@@ -32,12 +33,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CalenderExportService {
     private final VeranstaltungsService veranstaltungsService;
     private final StudiengangService studiengangService;
+    private final StundenplanService stundenplanService;
     private final AppointmentService appointmentService;
     private final TrackService trackService;
 
-    public CalenderExportService(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, AppointmentService appointmentService, TrackService trackService) {
+    public CalenderExportService(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, StundenplanService stundenplanService, AppointmentService appointmentService, TrackService trackService) {
         this.veranstaltungsService = veranstaltungsService;
         this.studiengangService = studiengangService;
+        this.stundenplanService = stundenplanService;
         this.appointmentService = appointmentService;
         this.trackService = trackService;
     }
@@ -57,7 +60,9 @@ public class CalenderExportService {
         ArrayList<Quartet<Veranstaltung, StundenplanEintrag, AtomicInteger, Appointment>> tempZeugroot = new ArrayList<>();
 
         for (Veranstaltung g : veranstaltungen) {
+            g.setStundenplanEintrags(stundenplanService.findAllByVeranstaltung(g));
             for (StundenplanEintrag f : g.getStundenplanEintrags()) {
+                f.setStundenplanDatumMNS(appointmentService.findByStundenplanEintrag(f));
                 tempZeugroot.add(Quartet.with(g, f, new AtomicInteger(1),
                         f.getStundenplanDatumMNS().stream().findFirst().orElse(null)
                 ));

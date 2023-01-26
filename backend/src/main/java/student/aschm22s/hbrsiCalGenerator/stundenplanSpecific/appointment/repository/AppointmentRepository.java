@@ -6,7 +6,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain
 
 import java.util.List;
 
-public interface AppointmentRepository extends MongoRepository<Appointment, Integer> {
+public interface AppointmentRepository extends MongoRepository<Appointment, String> {
     List<Appointment> findByStundenplanEintrag(StundenplanEintrag stundenplanEintrag);
 
     List<Appointment> findAllByStundenplanEintragOrderByDateAsc(StundenplanEintrag stundenplanEintrag);

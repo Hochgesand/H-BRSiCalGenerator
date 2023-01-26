@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,10 +15,10 @@ import java.sql.Timestamp;
 @ToString
 public class Appointment {
     @Id
-    private Integer Id;
+    private String Id;
     @JsonManagedReference
     private StundenplanEintrag stundenplanEintrag;
-    private Timestamp date;
+    private Date date;
 
     public void setDate(long date) {
         this.date = new Timestamp(date);

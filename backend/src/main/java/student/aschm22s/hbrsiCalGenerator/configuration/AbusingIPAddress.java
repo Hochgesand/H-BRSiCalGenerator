@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 public class AbusingIPAddress {
     @Id
-    private Integer Id;
+    private String Id;
     private Timestamp timestamp;
     private String ipAddress;
 

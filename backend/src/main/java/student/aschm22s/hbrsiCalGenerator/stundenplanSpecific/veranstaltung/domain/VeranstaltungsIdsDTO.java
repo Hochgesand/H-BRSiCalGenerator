@@ -8,6 +8,6 @@ import java.util.List;
 @JsonAutoDetect
 @Data
 public class VeranstaltungsIdsDTO {
-    List<Long> veranstaltungsIds;
+    List<String> veranstaltungsIds;
     boolean notrack = false;
 }

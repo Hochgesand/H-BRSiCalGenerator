@@ -5,7 +5,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain
 
 import java.util.List;
 
-public interface StudiengangsRepository extends MongoRepository<Studiengang, Long> {
+public interface StudiengangsRepository extends MongoRepository<Studiengang, String> {
     Studiengang findFirstByNameContaining(String name);
 
     List<Studiengang> findAllByNameContaining(String name);

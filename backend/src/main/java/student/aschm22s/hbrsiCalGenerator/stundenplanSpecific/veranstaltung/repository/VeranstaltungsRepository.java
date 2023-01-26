@@ -8,8 +8,8 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.doma
 import java.util.List;
 
 @Repository
-public interface VeranstaltungsRepository extends MongoRepository<Veranstaltung, Integer> {
-    List<Veranstaltung> findByIdIn(List<Long> id);
+public interface VeranstaltungsRepository extends MongoRepository<Veranstaltung, String> {
+    List<Veranstaltung> findByIdIn(List<String> id);
 
     List<Veranstaltung> findAllByProfContaining(String prof);
 

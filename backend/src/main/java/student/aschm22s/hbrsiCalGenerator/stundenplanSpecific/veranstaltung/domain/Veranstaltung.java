@@ -20,7 +20,7 @@ import java.util.Collection;
 @Document("Veranstaltung")
 public class Veranstaltung {
     @Id
-    private Long id;
+    private String id;
     private String name;
     private String prof;
     private Integer semester;

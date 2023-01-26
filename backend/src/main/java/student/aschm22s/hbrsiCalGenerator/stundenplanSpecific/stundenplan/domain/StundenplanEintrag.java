@@ -7,8 +7,8 @@ import org.springframework.data.annotation.Id;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 
-import java.sql.Time;
 import java.util.Collection;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,9 +17,9 @@ import java.util.Collection;
 @ToString
 public class StundenplanEintrag {
     @Id
-    private Integer Id;
-    private Time von;
-    private Time bis;
+    private String Id;
+    private Date von;
+    private Date bis;
     private String raum;
     private String tag;
     @JsonBackReference

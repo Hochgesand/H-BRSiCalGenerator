@@ -42,7 +42,7 @@ public class VeranstaltungController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<Veranstaltung> getVeranstaltungByStudiengangId(@RequestParam("studiengang") Long studiengang) {
+    public List<Veranstaltung> getVeranstaltungByStudiengangId(@RequestParam("studiengang") String studiengang) {
         return veranstaltungsService.findAllByStudiengangId(studiengang);
     }
 

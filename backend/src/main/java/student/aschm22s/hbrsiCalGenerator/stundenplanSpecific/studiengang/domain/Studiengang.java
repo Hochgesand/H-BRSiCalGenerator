@@ -16,7 +16,7 @@ import java.util.Collection;
 @NoArgsConstructor
 public class Studiengang {
     @Id
-    private Long id;
+    private String id;
     String name;
     @JsonBackReference
     Collection<Veranstaltung> veranstaltungen;

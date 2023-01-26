@@ -9,15 +9,7 @@ public class VeranstaltungsIdsAndEmailDTO extends VeranstaltungsIdsDTO {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Long> getVeranstaltungsIds() {
+    public List<String> getVeranstaltungsIds() {
         return veranstaltungsIds;
-    }
-
-    public void setVeranstaltungsIds(List<Long> veranstaltungsIds) {
-        this.veranstaltungsIds = veranstaltungsIds;
     }
 }

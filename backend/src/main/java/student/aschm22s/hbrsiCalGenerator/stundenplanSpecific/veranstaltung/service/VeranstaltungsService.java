@@ -34,7 +34,7 @@ public class VeranstaltungsService {
         return veranstaltungsRepository.findAllByStudiengang(solidStudiengang);
     }
 
-    public List<Veranstaltung> findAllByStudiengangId(Long studiengang) {
+    public List<Veranstaltung> findAllByStudiengangId(String studiengang) {
         Studiengang studiengangTemp = studiengangService.findById(studiengang);
         return veranstaltungsRepository.findAllByStudiengang(studiengangTemp);
     }
@@ -56,7 +56,7 @@ public class VeranstaltungsService {
         veranstaltungsRepository.deleteAll(veranstaltungen);
     }
 
-    public List<Veranstaltung> findByIdsIn(List<Long> ids) {
+    public List<Veranstaltung> findByIdsIn(List<String> ids) {
         return veranstaltungsRepository.findByIdIn(ids);
     }
 

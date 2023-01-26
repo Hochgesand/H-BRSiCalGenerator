@@ -36,7 +36,7 @@ public class StudiengangService {
         return studiengangsRepository.findAllByNameContaining(substring);
     }
 
-    public Studiengang findById(Long studiengang) {
+    public Studiengang findById(String studiengang) {
         return studiengangsRepository.findById(studiengang).orElse(new Studiengang());
     }
 }

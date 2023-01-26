@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import java.sql.Timestamp;
 
@@ -12,8 +13,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class LoggedGeneration {
-    @org.springframework.data.annotation.Id
-    private Long Id;
+    @Id
+    private String Id;
     private String hashedemail;
     private String veranstaltungen;
     private String studiengang;
