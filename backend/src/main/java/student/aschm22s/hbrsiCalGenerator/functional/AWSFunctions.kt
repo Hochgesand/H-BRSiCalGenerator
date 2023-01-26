@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.Functional
+package student.aschm22s.hbrsiCalGenerator.functional
 
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService
 import student.aschm22s.hbrsiCalGenerator.email.service.EmailSendingService

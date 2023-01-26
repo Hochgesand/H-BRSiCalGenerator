@@ -1,7 +1,7 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 

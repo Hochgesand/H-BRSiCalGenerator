@@ -1,8 +1,8 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service;
 
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.repository.AppointmentRepository;
 
 import java.util.List;
