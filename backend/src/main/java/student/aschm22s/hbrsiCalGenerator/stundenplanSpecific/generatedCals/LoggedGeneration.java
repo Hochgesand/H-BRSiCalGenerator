@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Meeting;
 
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
 @AllArgsConstructor
@@ -18,8 +20,8 @@ public class LoggedGeneration {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String hashedemail;
-    @Lob
-    private String veranstaltungen;
-    private String studiengang;
+    private String course;
     private Timestamp timestamp;
+    @OneToMany
+    private Collection<Meeting> meetings;
 }

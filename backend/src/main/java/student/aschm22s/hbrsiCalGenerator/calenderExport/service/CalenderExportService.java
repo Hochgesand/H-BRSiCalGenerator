@@ -76,22 +76,18 @@ public class CalenderExportService {
         if (meetingIdsDTO.getMeetingIds().size() == 0)
             return new byte[0x00];
 
-        var veranstaltungen = meetingService.findByIdsIn(meetingIdsDTO.getMeetingIds());
-        var calenderToReturn = createCalenderForMeetingAppointmentRecurring(veranstaltungen);
+        var meetings = meetingService.findByIdsIn(meetingIdsDTO.getMeetingIds());
+        var calenderToReturn = createCalenderForMeetingAppointmentRecurring(meetings);
 
         var byteArrayOutputStream = new ByteArrayOutputStream();
 
         var outputter = new CalendarOutputter();
         outputter.output(calenderToReturn, byteArrayOutputStream);
+        var loggedGeneration = new LoggedGeneration();
+        loggedGeneration.setTimestamp(new Timestamp(System.currentTimeMillis()));
 
         if (!meetingIdsDTO.isNotrack()) {
-            var loggedGeneration = new LoggedGeneration();
-            var stringBuilder = new StringBuilder();
-            for (Meeting x : veranstaltungen) {
-                stringBuilder.append(x.getName()).append(",");
-            }
-            loggedGeneration.setVeranstaltungen(stringBuilder.toString());
-            loggedGeneration.setTimestamp(new Timestamp(System.currentTimeMillis()));
+            loggedGeneration.setMeetings(meetings);
             if (meetingIdsDTO instanceof MeetingIdsAndEmailDTO) {
                 MessageDigest digest;
                 try {
@@ -110,11 +106,11 @@ public class CalenderExportService {
 
                 loggedGeneration.setHashedemail(hexString.toString());
             }
-            if (veranstaltungen.stream().findFirst().isPresent()) {
-                loggedGeneration.setStudiengang(veranstaltungen.stream().findFirst().get().getCourse().getName());
+            if (meetings.stream().findFirst().isPresent()) {
+                loggedGeneration.setCourse(meetings.stream().findFirst().get().getCourse().getName());
             }
-            trackService.generateLogEntry(loggedGeneration);
         }
+        trackService.generateLogEntry(loggedGeneration);
 
         return byteArrayOutputStream.toByteArray();
     }
