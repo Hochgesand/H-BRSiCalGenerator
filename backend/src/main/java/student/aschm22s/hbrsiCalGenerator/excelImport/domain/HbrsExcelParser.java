@@ -4,17 +4,11 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.joda.time.DateTime;
-import org.joda.time.Weeks;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
@@ -23,23 +17,24 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.time.*;
 
 @Service
 public class HbrsExcelParser {
     private final VeranstaltungsService veranstaltungsService;
     private final StudiengangService studiengangService;
     private final StundenplanService stundenplanService;
-    private final AppointmentService appointmentService;
 
-    public HbrsExcelParser(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, StundenplanService stundenplanService, AppointmentService appointmentService) {
+    public HbrsExcelParser(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, StundenplanService stundenplanService) {
         this.veranstaltungsService = veranstaltungsService;
         this.studiengangService = studiengangService;
         this.stundenplanService = stundenplanService;
-        this.appointmentService = appointmentService;
     }
 
     public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
@@ -92,7 +87,7 @@ public class HbrsExcelParser {
     }
 
     @Transactional
-    public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException, StudiengangNotFoundException {
+    public LinkedList<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException, StudiengangNotFoundException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum();
@@ -105,42 +100,51 @@ public class HbrsExcelParser {
         if (studiengang.isEmpty())
             throw new StudiengangNotFoundException("Studiengang " + studienGangSemester + " wurde nicht gefunden, import für Stundenplan wird abgebrochen");
 
+        var stundenplanEintraege = new LinkedList<StundenplanEintrag>();
+
         for (int i = 5; i < rows - 1; ++i) {
             row = sheet.getRow(i);
             String tempDay = row.getCell(0) + "";
             if (!tempDay.equals(""))
                 aktuellerTag = tempDay;
 
-            DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yyyy");
-            DateTime dateVon = DateTime.parse((row.getCell(5) + "").substring(0, 10), dateTimeFormatter);
-            DateTime dateBis = DateTime.parse((row.getCell(5) + "").substring(11, 21), dateTimeFormatter);
+            var timeHourMinuteStart = row.getCell(1).toString().trim();
+            if (timeHourMinuteStart.length() < 5){
+                timeHourMinuteStart = "0" + timeHourMinuteStart;
+            }
+            var timeHourMinuteEnd = row.getCell(2).toString().trim();
+            if (timeHourMinuteEnd.length() < 5){
+                timeHourMinuteEnd = "0" + timeHourMinuteStart;
+            }
 
-            int weeksInBetweenAmount = Weeks.weeksBetween(dateVon, dateBis).getWeeks();
+            LocalDateTime timeOfEventStart = LocalDateTime.of(
+                    LocalDate.parse((row.getCell(5).toString()).substring(0, 10), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    LocalTime.parse(timeHourMinuteStart, DateTimeFormatter.ofPattern("HH:mm"))
+            );
+            LocalDateTime timeOfEventEnd = LocalDateTime.of(
+                    LocalDate.parse((row.getCell(5) + "").substring(11, 21), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    LocalTime.parse(timeHourMinuteEnd, DateTimeFormatter.ofPattern("HH:mm"))
+            );
 
-            StundenplanEintrag neuerStundenplanEintrag = new StundenplanEintrag();
-            neuerStundenplanEintrag.setVon(Time.valueOf(row.getCell(1) + ":00"));
-            neuerStundenplanEintrag.setBis(Time.valueOf(row.getCell(2) + ":00"));
-            neuerStundenplanEintrag.setRaum(row.getCell(3) + "");
-            String tempModulName = row.getCell(4) + "";
-            Veranstaltung veranstaltung = veranstaltungsService.findFirstByNameAndStudiengang(tempModulName, studiengang.get());
-            neuerStundenplanEintrag.setVeranstaltung(veranstaltung);
-            neuerStundenplanEintrag.setTag(aktuellerTag);
-            StundenplanEintrag newObjectInDB = stundenplanService.save(neuerStundenplanEintrag);
+            var weeksInBetweenAmount = ChronoUnit.WEEKS.between(timeOfEventStart, timeOfEventEnd);
 
             for (int j = 0; j < weeksInBetweenAmount; j++) {
-                DateTime dateTimeWithCorrectTime = dateVon;
-                long tempTimeToAdd = neuerStundenplanEintrag.getVon().getTime();
-                dateTimeWithCorrectTime = dateTimeWithCorrectTime.plus(tempTimeToAdd).plusHours(1);
+                var timestampStart = timeOfEventStart.plusWeeks(j);
+                var timestampEnd = timeOfEventEnd.plusWeeks(j);
 
-                Appointment stundenplanDatumMN = new Appointment();
-                stundenplanDatumMN.setDate(dateTimeWithCorrectTime.getMillis());
-                stundenplanDatumMN.setStundenplanEintrag(newObjectInDB);
-                appointmentService.save(stundenplanDatumMN);
-                dateVon = dateVon.plusWeeks(1);
+                var neuerTermin = new StundenplanEintrag();
+                neuerTermin.setRaum(row.getCell(3) + "");
+                neuerTermin.setVon(timestampStart);
+                neuerTermin.setBis(timestampEnd);
+                String tempModulName = row.getCell(4) + "";
+                Veranstaltung veranstaltung = veranstaltungsService.findFirstByNameAndStudiengang(tempModulName, studiengang.get());
+                neuerTermin.setVeranstaltung(veranstaltung);
+                neuerTermin.setTag(aktuellerTag);
+                stundenplanEintraege.add(neuerTermin);
             }
         }
 
-        return stundenplanService.findAll();
+        return stundenplanEintraege;
     }
 
     @Transactional
@@ -161,7 +165,7 @@ public class HbrsExcelParser {
             }
 
             try {
-                parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
+                stundenplanService.saveAll(parseStundenplan(new ByteArrayInputStream(baos.toByteArray())));
             } catch (IOException | StudiengangNotFoundException e) {
                 e.printStackTrace();
             }

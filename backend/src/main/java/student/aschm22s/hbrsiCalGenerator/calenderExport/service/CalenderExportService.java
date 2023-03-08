@@ -3,15 +3,13 @@ package student.aschm22s.hbrsiCalGenerator.calenderExport.service;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
-import org.javatuples.Quartet;
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.service.AppointmentService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.LoggedGeneration;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.TrackService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDTO;
@@ -22,88 +20,53 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class CalenderExportService {
     private final VeranstaltungsService veranstaltungsService;
+    private final StundenplanService stundenplanService;
     private final StudiengangService studiengangService;
-    private final AppointmentService appointmentService;
     private final TrackService trackService;
 
-    public CalenderExportService(VeranstaltungsService veranstaltungsService, StudiengangService studiengangService, AppointmentService appointmentService, TrackService trackService) {
+    public CalenderExportService(VeranstaltungsService veranstaltungsService, StundenplanService stundenplanService, StudiengangService studiengangService, TrackService trackService) {
         this.veranstaltungsService = veranstaltungsService;
+        this.stundenplanService = stundenplanService;
         this.studiengangService = studiengangService;
-        this.appointmentService = appointmentService;
         this.trackService = trackService;
     }
 
     public Calendar createCalenderForVeranstaltungenEventRecurring(List<Veranstaltung> veranstaltungen) {
-        ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
-        ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
+        CustomCalenderBase customCalenderBase = new CustomCalenderBase();
+        var stundenplanMap = new HashMap<String, LinkedList<StundenplanEintrag>>();
 
         for (Veranstaltung x : veranstaltungen) {
-            stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
-        }
-        for (StundenplanEintrag x : stundenplanEintragArrayList) {
-            stundenplanDateMNRepoArrayList.addAll(appointmentService.findByStundenplanEintrag(x));
-        }
-
-        CustomCalenderBase customCalenderBase = new CustomCalenderBase();
-        ArrayList<Quartet<Veranstaltung, StundenplanEintrag, AtomicInteger, Appointment>> tempZeugroot = new ArrayList<>();
-
-        for (Veranstaltung g : veranstaltungen) {
-            for (StundenplanEintrag f : g.getStundenplanEintrags()) {
-                tempZeugroot.add(Quartet.with(g, f, new AtomicInteger(1),
-                        f.getStundenplanDatumMNS().stream().findFirst().orElse(null)
-                ));
-            }
-        }
-
-        for (Appointment x : stundenplanDateMNRepoArrayList) {
-            StundenplanEintrag stundenplanEintrag;
-            Veranstaltung veranstaltung;
-
-            stundenplanEintrag = stundenplanEintragArrayList.stream()
-                    .filter(j -> x.getStundenplanEintrag().getId().equals(j.getId()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (stundenplanEintrag == null)
-                continue;
-
-            veranstaltung = veranstaltungen.stream()
-                    .filter(j -> stundenplanEintrag.getVeranstaltung().getId().equals(j.getId()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (veranstaltung == null)
-                continue;
-
-            for (Quartet<Veranstaltung, StundenplanEintrag, AtomicInteger, Appointment> z : tempZeugroot) {
-                if (z.getValue0() == veranstaltung &&
-                        z.getValue1().getTag().equals(stundenplanEintrag.getTag()) &&
-                        z.getValue1().getRaum().equals(stundenplanEintrag.getRaum())) {
-                    z.getValue2().incrementAndGet();
-                    break;
+            stundenplanService.findByVeranstaltung(x).stream().forEach(stundenplanEintrag -> {
+                var hash = stundenplanEintrag.getHashWithoutId();
+                var list = stundenplanMap.get(hash);
+                if (list == null) {
+                    stundenplanMap.put(hash, new LinkedList<>());
+                    list = stundenplanMap.get(hash);
                 }
-            }
-        }
 
-        for (Quartet<Veranstaltung, StundenplanEintrag, AtomicInteger, Appointment> z : tempZeugroot) {
-            customCalenderBase.addRecurringEventToCalendar(
-                    z.getValue0().getName(),
-                    new DateTime(z.getValue3().getDate().getTime()),
-                    new DateTime(z.getValue3().getDate().getTime() + (z.getValue1().getBis().getTime() - z.getValue1().getVon().getTime())),
-                    z.getValue0().getName(),
-                    z.getValue0().getProf(),
-                    z.getValue1().getRaum(),
-                    z.getValue2().get()
-            );
+                list.add(stundenplanEintrag);
+            });
+
+            stundenplanMap.forEach((hash, liste) -> {
+                var firstEvent = liste.get(0);
+                customCalenderBase.addRecurringEventToCalendar(
+                        firstEvent.getVeranstaltung().getName(),
+                        new DateTime(firstEvent.getVon().toEpochSecond(ZoneOffset.ofHours(1))),
+                        new DateTime(firstEvent.getBis().toEpochSecond(ZoneOffset.ofHours(1))),
+                        firstEvent.getVeranstaltung().getName(),
+                        firstEvent.getVeranstaltung().getProf(),
+                        firstEvent.getRaum(),
+                        liste.size()
+                );
+            });
         }
 
         return customCalenderBase.getiCalender();
@@ -147,77 +110,12 @@ public class CalenderExportService {
 
                 loggedGeneration.setHashedemail(hexString.toString());
             }
-            if (veranstaltungen.stream().findFirst().isPresent()){
+            if (veranstaltungen.stream().findFirst().isPresent()) {
                 loggedGeneration.setStudiengang(veranstaltungen.stream().findFirst().get().getStudiengang().getName());
             }
             trackService.generateLogEntry(loggedGeneration);
         }
 
         return byteArrayOutputStream.toByteArray();
-    }
-
-    public String createCalenderAsCSV(VeranstaltungsIdsDTO veranstaltungsIdsDTO) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("tag;von;bis;raum;veranstaltung;wer\n");
-
-        ArrayList<Veranstaltung> veranstaltungIterable = (ArrayList<Veranstaltung>) veranstaltungsService.findByIdsIn(veranstaltungsIdsDTO.getVeranstaltungsIds());
-        ArrayList<StundenplanEintrag> stundenplanEintragArrayList = new ArrayList<>();
-        ArrayList<Appointment> stundenplanDateMNRepoArrayList = new ArrayList<>();
-
-        for (Veranstaltung x : veranstaltungIterable) {
-            stundenplanEintragArrayList.addAll(veranstaltungsService.findByVeranstaltung(x));
-        }
-
-        for (StundenplanEintrag x : stundenplanEintragArrayList) {
-            stundenplanDateMNRepoArrayList.addAll(appointmentService.findAllByStundenplanEintragOrderByDateAsc(x));
-        }
-
-        for (Appointment x : stundenplanDateMNRepoArrayList) {
-            // Need to get this value from appplication.properties.
-            // This is a timeframe where every Event in a Week should take place, so I can extract information to make
-            // a standard Stundenplan. English vocabulary 11/10
-            if (x.getDate().getTime() < 1634508000000L || x.getDate().getTime() > 1635109200000L) {
-                continue;
-            }
-
-            Veranstaltung veranstaltung;
-            StundenplanEintrag stundenplanEintrag;
-
-            stundenplanEintrag = stundenplanEintragArrayList.stream()
-                    .filter(j -> Objects.equals(x.getStundenplanEintrag().getId(), j.getId()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (stundenplanEintrag == null)
-                continue;
-
-            veranstaltung = veranstaltungIterable.stream()
-                    .filter(j -> Objects.equals(stundenplanEintrag.getVeranstaltung().getId(), j.getId()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (veranstaltung == null)
-                continue;
-
-            DateTime von = new DateTime(x.getDate());
-            String vonString = von.toString();
-            stringBuilder.append(new SimpleDateFormat("EEEE").format(x.getDate()));
-            stringBuilder.append(";");
-            vonString = vonString.substring(9, 11) + ":" + vonString.substring(11, 13);
-            stringBuilder.append(vonString);
-            stringBuilder.append(";");
-            String bis = new DateTime(x.getDate().getTime() + (stundenplanEintrag.getBis().getTime() - stundenplanEintrag.getVon().getTime())).toString();
-            bis = bis.substring(9, 11) + ":" + bis.substring(11, 13);
-            stringBuilder.append(bis);
-            stringBuilder.append(";");
-            stringBuilder.append(stundenplanEintrag.getRaum());
-            stringBuilder.append(";");
-            stringBuilder.append(veranstaltung.getName());
-            stringBuilder.append(";");
-            stringBuilder.append(veranstaltung.getProf());
-            stringBuilder.append("\n");
-        }
-
-        return stringBuilder.toString();
     }
 }

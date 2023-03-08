@@ -47,13 +47,4 @@ public class CalenderExportController {
     public byte[] getCalenderForSemester(@RequestBody VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException, NoSuchAlgorithmException {
         return calenderExportService.createCalender(veranstaltungsIdsDTO);
     }
-
-    @RequestMapping(
-            value = "/sememesteriCalAsCSV",
-            method = {RequestMethod.POST},
-            produces = "text/csv"
-    )
-    public String getCalenderForSemesterAsCSV(@RequestBody VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException {
-        return calenderExportService.createCalenderAsCSV(veranstaltungsIdsDTO);
-    }
 }

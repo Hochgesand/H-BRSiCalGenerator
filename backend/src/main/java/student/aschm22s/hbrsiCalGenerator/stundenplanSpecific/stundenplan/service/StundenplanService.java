@@ -34,4 +34,8 @@ public class StundenplanService {
     public StundenplanEintrag save(StundenplanEintrag neuerStundenplanEintrag) {
         return stundenplanRepository.save(neuerStundenplanEintrag);
     }
+
+    public Iterable<StundenplanEintrag> saveAll(Iterable<StundenplanEintrag> stundenplanEintragList){
+        return stundenplanRepository.saveAll(stundenplanEintragList);
+    }
 }

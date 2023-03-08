@@ -52,6 +52,7 @@ public class CustomCalenderBase {
         vEvent.getProperties().add(uidGenerator.generateUid());
         String recurrencePattern = "FREQ=WEEKLY;INTERVAL=1;COUNT=" + recurrForWeeks;
         vEvent.getProperties().add(new Description(modul + " in Raum: " + raum + " bei: " + prof));
+        vEvent.getProperties().add(new Location("raum"));
         try {
             vEvent.getProperties().add(new RRule(recurrencePattern));
         } catch (final ParseException ex){

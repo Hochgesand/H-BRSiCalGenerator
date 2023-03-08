@@ -26,7 +26,7 @@ class HbrsExcelParserTest {
         doNothing().when(mockedVeranstaltungsService).deleteAll(isA(List.class));
         doNothing().when(mockedVeranstaltungsService).saveAll(isA(ArrayList.class));
 
-        var parser = new HbrsExcelParser(mockedVeranstaltungsService, mockedStudiengangService, null, null);
+        var parser = new HbrsExcelParser(mockedVeranstaltungsService, mockedStudiengangService, null);
         // prepare Test
         var file = new FileInputStream("src/test/resources/testFiles/Timetable-Bachelor_Informatik_2.xls");
         var parsedVeranstaltungen = parser.parseVeranstaltungen(file);
@@ -48,7 +48,7 @@ class HbrsExcelParserTest {
         doNothing().when(mockedVeranstaltungsService).deleteAll(isA(List.class));
         doNothing().when(mockedVeranstaltungsService).saveAll(isA(ArrayList.class));
 
-        var parser = new HbrsExcelParser(mockedVeranstaltungsService, mockedStudiengangService, null, null);
+        var parser = new HbrsExcelParser(mockedVeranstaltungsService, mockedStudiengangService, null);
         // prepare Test
         var file = new FileInputStream("src/test/resources/testFiles/Timetable-Bachelor_Informatik_2.xls");
         var parsedVeranstaltungen = parser.parseVeranstaltungen(file);

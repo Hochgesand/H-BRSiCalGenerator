@@ -60,10 +60,6 @@ public class VeranstaltungsService {
         return veranstaltungsRepository.findByIdIn(ids);
     }
 
-    public List<StundenplanEintrag> findByVeranstaltung(Veranstaltung x) {
-        return stundenplanService.findByVeranstaltung(x);
-    }
-
     public List<Veranstaltung> findAllByStudiengangAndSemester(Studiengang studiengang, int semester) {
         return veranstaltungsRepository.findAllByStudiengangAndSemester(studiengang, semester);
     }
