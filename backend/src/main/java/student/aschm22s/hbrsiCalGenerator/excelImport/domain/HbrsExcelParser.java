@@ -17,13 +17,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
-import java.time.*;
 
 @Service
 public class HbrsExcelParser {
@@ -40,8 +41,8 @@ public class HbrsExcelParser {
     public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
         for (Veranstaltung x : veranstaltungen) {
             if (veranstaltung.getName().equals(x.getName()) &&
-                veranstaltung.getProf().equals(x.getProf()) &&
-                veranstaltung.getSemester() == x.getSemester())
+                    veranstaltung.getProf().equals(x.getProf()) &&
+                    veranstaltung.getSemester() == x.getSemester())
                 return true;
         }
         return false;
@@ -109,11 +110,11 @@ public class HbrsExcelParser {
                 aktuellerTag = tempDay;
 
             var timeHourMinuteStart = row.getCell(1).toString().trim();
-            if (timeHourMinuteStart.length() < 5){
+            if (timeHourMinuteStart.length() < 5) {
                 timeHourMinuteStart = "0" + timeHourMinuteStart;
             }
             var timeHourMinuteEnd = row.getCell(2).toString().trim();
-            if (timeHourMinuteEnd.length() < 5){
+            if (timeHourMinuteEnd.length() < 5) {
                 timeHourMinuteEnd = "0" + timeHourMinuteStart;
             }
 

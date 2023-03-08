@@ -1,12 +1,11 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
 
-import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity

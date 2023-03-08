@@ -19,13 +19,13 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Studiengang {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     String name;
     @JsonBackReference
     @OneToMany(mappedBy = "studiengang")
     Collection<Veranstaltung> veranstaltungen;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Override
     public boolean equals(Object o) {

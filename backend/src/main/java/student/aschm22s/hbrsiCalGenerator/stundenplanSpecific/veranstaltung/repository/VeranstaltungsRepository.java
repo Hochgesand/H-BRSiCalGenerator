@@ -10,11 +10,13 @@ import java.util.List;
 @Repository
 public interface VeranstaltungsRepository extends JpaRepository<Veranstaltung, Integer> {
     List<Veranstaltung> findByIdIn(List<Long> id);
+
     List<Veranstaltung> findAllByProfContaining(String prof);
 
     List<Veranstaltung> findAllByStudiengang(Studiengang studiengang);
 
     Veranstaltung findFirstByNameAndStudiengang(String name, Studiengang studiengang);
+
     void deleteAllByStudiengangAndSemester(Studiengang studiengang, Integer semester);
 
     void deleteAllByStudiengang(Studiengang studiengang);

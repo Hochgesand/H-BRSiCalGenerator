@@ -8,7 +8,6 @@ import org.hibernate.Hibernate;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -46,11 +45,10 @@ public class StundenplanEintrag {
     }
 
     public String getHashWithoutId() {
-        var stringBuilder = new StringBuilder();
-        stringBuilder.append(von.getHour() + von.getMinute());
-        stringBuilder.append(bis.getHour() + bis.getMinute());
-        stringBuilder.append(raum);
-        stringBuilder.append(tag);
-        return Hashing.sha256().hashString(stringBuilder.toString(), StandardCharsets.UTF_8).toString();
+        String stringBuilder = String.valueOf(von.getHour() + von.getMinute()) +
+                (bis.getHour() + bis.getMinute()) +
+                raum +
+                tag;
+        return Hashing.sha256().hashString(stringBuilder, StandardCharsets.UTF_8).toString();
     }
 }

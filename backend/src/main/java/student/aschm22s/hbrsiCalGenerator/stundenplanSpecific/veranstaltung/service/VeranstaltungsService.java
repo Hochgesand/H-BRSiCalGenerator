@@ -1,12 +1,12 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service;
 
 import org.springframework.stereotype.Service;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.VeranstaltungsRepository;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.repository.VeranstaltungsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +41,8 @@ public class VeranstaltungsService {
 
     public void deleteAll(List<Veranstaltung> veranstaltungen) {
         for (Veranstaltung veranstaltung : veranstaltungen) {
-             List<StundenplanEintrag> stundenplanEintraege = stundenplanService.findAllByVeranstaltung(veranstaltung);
-             stundenplanService.deleteAll(stundenplanEintraege);
+            List<StundenplanEintrag> stundenplanEintraege = stundenplanService.findAllByVeranstaltung(veranstaltung);
+            stundenplanService.deleteAll(stundenplanEintraege);
         }
         veranstaltungsRepository.deleteAll(veranstaltungen);
     }
@@ -50,8 +50,8 @@ public class VeranstaltungsService {
     public void deleteAll() {
         List<Veranstaltung> veranstaltungen = findAll();
         for (Veranstaltung veranstaltung : veranstaltungen) {
-             List<StundenplanEintrag> stundenplanEintraege = stundenplanService.findAllByVeranstaltung(veranstaltung);
-             stundenplanService.deleteAll(stundenplanEintraege);
+            List<StundenplanEintrag> stundenplanEintraege = stundenplanService.findAllByVeranstaltung(veranstaltung);
+            stundenplanService.deleteAll(stundenplanEintraege);
         }
         veranstaltungsRepository.deleteAll(veranstaltungen);
     }

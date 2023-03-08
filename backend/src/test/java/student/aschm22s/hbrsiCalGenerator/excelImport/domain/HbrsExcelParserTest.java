@@ -7,13 +7,13 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.doma
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 class HbrsExcelParserTest {
@@ -34,8 +34,9 @@ class HbrsExcelParserTest {
             assertEquals(2, x.getSemester());
         }
         var expectedVeranstaltung = parsedVeranstaltungen.stream().filter(n -> n.getName().equals("E. d. Analysis Gr. BI-1 (Ü)")).findFirst();
-        assertTrue(!expectedVeranstaltung.isEmpty());
+        assertFalse(expectedVeranstaltung.isEmpty());
     }
+
     @Test
     void parseVeranstaltungenExistingVeranstaltung() throws IOException {
         var mockedStudiengangService = mock(StudiengangService.class);
@@ -44,7 +45,7 @@ class HbrsExcelParserTest {
         var veranstaltungen = new ArrayList<Veranstaltung>();
         veranstaltungen.add(new Veranstaltung(0L, "E. d. Analysis Gr. BI-2 (Ü)", "", 2, new Studiengang(), null));
         veranstaltungen.add(new Veranstaltung(0L, "E. d. Analysis Gr. BI-1 (Ü)", "", 2, new Studiengang(), null));
-        when(mockedVeranstaltungsService.findAllByStudiengangAndSemester(isA(Studiengang.class), isA(Integer.class))).thenReturn(new ArrayList<>(        ));
+        when(mockedVeranstaltungsService.findAllByStudiengangAndSemester(isA(Studiengang.class), isA(Integer.class))).thenReturn(new ArrayList<>());
         doNothing().when(mockedVeranstaltungsService).deleteAll(isA(List.class));
         doNothing().when(mockedVeranstaltungsService).saveAll(isA(ArrayList.class));
 
@@ -57,8 +58,8 @@ class HbrsExcelParserTest {
         }
         var expectedVeranstaltung = parsedVeranstaltungen.stream().filter(n -> n.getName().equals("E. d. Analysis Gr. BI-1 (Ü)")).toList();
         var expectedVeranstaltung2 = parsedVeranstaltungen.stream().filter(n -> n.getName().equals("E. d. Analysis Gr. BI-2 (Ü)")).findFirst();
-        assertTrue(!expectedVeranstaltung2.isEmpty());
-        assertTrue(expectedVeranstaltung.size() == 1);
+        assertFalse(expectedVeranstaltung2.isEmpty());
+        assertEquals(1, expectedVeranstaltung.size());
     }
 
     @Test

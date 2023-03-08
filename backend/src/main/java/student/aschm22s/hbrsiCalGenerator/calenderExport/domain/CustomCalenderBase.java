@@ -6,7 +6,6 @@ import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.property.*;
 import net.fortuna.ical4j.util.RandomUidGenerator;
 import net.fortuna.ical4j.util.UidGenerator;
-import org.jruby.RubyProcess;
 
 import java.text.ParseException;
 
@@ -42,7 +41,7 @@ public class CustomCalenderBase {
         iCalender.getComponents().add(vEvent);
     }
 
-    public void addRecurringEventToCalendar(String eventName, DateTime startTime, DateTime endTime, String modul, String prof, String raum, int recurrForWeeks){
+    public void addRecurringEventToCalendar(String eventName, DateTime startTime, DateTime endTime, String modul, String prof, String raum, int recurrForWeeks) {
         // Hole mir unsere Timezone
         TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
         TimeZone timezone = registry.getTimeZone("Europe/Berlin");
@@ -55,7 +54,7 @@ public class CustomCalenderBase {
         vEvent.getProperties().add(new Location("raum"));
         try {
             vEvent.getProperties().add(new RRule(recurrencePattern));
-        } catch (final ParseException ex){
+        } catch (final ParseException ex) {
             System.out.println("An Error occured while setting the amount of recurring times.");
         }
 
