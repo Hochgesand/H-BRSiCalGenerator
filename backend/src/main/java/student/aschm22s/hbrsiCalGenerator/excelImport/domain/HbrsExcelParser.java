@@ -1,6 +1,5 @@
-package student.aschm22s.hbrsiCalGenerator.exelImport.domain;
+package student.aschm22s.hbrsiCalGenerator.excelImport.domain;
 
-import javassist.NotFoundException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -45,19 +44,20 @@ public class HbrsExcelParser {
 
     public boolean veranstaltungAlreadyExists(Veranstaltung veranstaltung, Iterable<Veranstaltung> veranstaltungen) {
         for (Veranstaltung x : veranstaltungen) {
-            if (veranstaltung.getName().equals(x.getName()) && veranstaltung.getProf().equals(x.getProf()))
+            if (veranstaltung.getName().equals(x.getName()) &&
+                veranstaltung.getProf().equals(x.getProf()) &&
+                veranstaltung.getSemester() == x.getSemester())
                 return true;
         }
         return false;
     }
 
-    public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException, NotFoundException {
+    public ArrayList<Veranstaltung> parseVeranstaltungen(InputStream excelFile) throws IOException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum();
         Row row = sheet.getRow(0);
 
-        ArrayList<Veranstaltung> veranstaltungsListe = new ArrayList<>();
         String studiengangSemesterString = (row.getCell(0) + "").substring(13);
         String studiengangString = studiengangSemesterString.substring(0, studiengangSemesterString.length() - 2);
         Integer semester;
@@ -69,11 +69,7 @@ public class HbrsExcelParser {
         }
 
         Studiengang selectedStudiengang = studiengangService.findByNameIfNotExistCreate(studiengangString);
-
-        {
-            List<Veranstaltung> veranstaltungen = veranstaltungsService.findAllByStudiengangAndSemester(selectedStudiengang, semester);
-            veranstaltungsService.deleteAll(veranstaltungen);
-        }
+        ArrayList<Veranstaltung> veranstaltungsListe = new ArrayList<>(veranstaltungsService.findAllByStudiengangAndSemester(selectedStudiengang, semester));
 
         for (int i = 5; i < rows - 1; ++i) {
             String veranstaltungsname;
@@ -83,7 +79,6 @@ public class HbrsExcelParser {
             Veranstaltung neueVeranstaltung = new Veranstaltung();
             neueVeranstaltung.setName(veranstaltungsname);
             neueVeranstaltung.setProf(row.getCell(6) + "");
-            neueVeranstaltung.setStudiengang(new Studiengang());
             neueVeranstaltung.setStudiengang(selectedStudiengang);
             neueVeranstaltung.setSemester(semester);
 
@@ -97,7 +92,7 @@ public class HbrsExcelParser {
     }
 
     @Transactional
-    public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException, NotFoundException {
+    public Iterable<StundenplanEintrag> parseStundenplan(InputStream excelFile) throws IOException, StudiengangNotFoundException {
         Workbook workbook = new HSSFWorkbook(excelFile);
         Sheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum();
@@ -108,7 +103,7 @@ public class HbrsExcelParser {
         Optional<Studiengang> studiengang = studiengangService.findAllByNameContaining(studienGangSemester.substring(0, studienGangSemester.length() - 2)).stream().findFirst();
 
         if (studiengang.isEmpty())
-            throw new NotFoundException("Studiengang " + studienGangSemester + " wurde nicht gefunden, import für Stundenplan wird abgebrochen");
+            throw new StudiengangNotFoundException("Studiengang " + studienGangSemester + " wurde nicht gefunden, import für Stundenplan wird abgebrochen");
 
         for (int i = 5; i < rows - 1; ++i) {
             row = sheet.getRow(i);
@@ -127,8 +122,8 @@ public class HbrsExcelParser {
             neuerStundenplanEintrag.setBis(Time.valueOf(row.getCell(2) + ":00"));
             neuerStundenplanEintrag.setRaum(row.getCell(3) + "");
             String tempModulName = row.getCell(4) + "";
-            Veranstaltung temp = veranstaltungsService.findFirstByNameAndStudiengang(tempModulName, studiengang.get());
-            neuerStundenplanEintrag.setVeranstaltung(temp);
+            Veranstaltung veranstaltung = veranstaltungsService.findFirstByNameAndStudiengang(tempModulName, studiengang.get());
+            neuerStundenplanEintrag.setVeranstaltung(veranstaltung);
             neuerStundenplanEintrag.setTag(aktuellerTag);
             StundenplanEintrag newObjectInDB = stundenplanService.save(neuerStundenplanEintrag);
 
@@ -161,13 +156,13 @@ public class HbrsExcelParser {
             ArrayList<Veranstaltung> veranstaltungen = new ArrayList<>();
             try {
                 veranstaltungen = parseVeranstaltungen(new ByteArrayInputStream(baos.toByteArray()));
-            } catch (IOException | NotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
                 parseStundenplan(new ByteArrayInputStream(baos.toByteArray()));
-            } catch (IOException | NotFoundException e) {
+            } catch (IOException | StudiengangNotFoundException e) {
                 e.printStackTrace();
             }
             Veranstaltung veranstaltung = veranstaltungen.stream().findFirst().orElse(null);

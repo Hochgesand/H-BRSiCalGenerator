@@ -1,5 +1,7 @@
 package student.aschm22s.hbrsiCalGenerator.email.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.service.CalenderExportService;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 

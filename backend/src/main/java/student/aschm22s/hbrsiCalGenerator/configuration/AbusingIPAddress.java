@@ -1,6 +1,6 @@
 package student.aschm22s.hbrsiCalGenerator.configuration;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity

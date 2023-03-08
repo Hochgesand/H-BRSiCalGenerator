@@ -1,4 +1,4 @@
-package student.aschm22s.hbrsiCalGenerator.exelImport.controller;
+package student.aschm22s.hbrsiCalGenerator.excelImport.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import student.aschm22s.hbrsiCalGenerator.exelImport.service.ExcelImportService;
+import student.aschm22s.hbrsiCalGenerator.excelImport.service.ExcelImportService;
 
 import java.io.IOException;
 

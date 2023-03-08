@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Lob;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -18,7 +15,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class LoggedGeneration {
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String hashedemail;

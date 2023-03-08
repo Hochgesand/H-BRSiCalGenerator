@@ -1,6 +1,7 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,6 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 
-import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -24,7 +24,7 @@ public class Studiengang {
     private Long id;
     String name;
     @JsonBackReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studiengang", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "studiengang")
     Collection<Veranstaltung> veranstaltungen;
 
     @Override

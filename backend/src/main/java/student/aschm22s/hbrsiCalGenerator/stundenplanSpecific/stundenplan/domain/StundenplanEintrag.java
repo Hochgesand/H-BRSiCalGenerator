@@ -7,7 +7,7 @@ import org.hibernate.Hibernate;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.appointment.domain.Appointment;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Time;
 import java.util.Collection;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class StundenplanEintrag {
     private String raum;
     private String tag;
     @JsonBackReference
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "stundenplanEintrag")
+    @OneToMany(mappedBy = "stundenplanEintrag")
     private Collection<Appointment> stundenplanDatumMNS;
     @ManyToOne
     @JsonManagedReference
