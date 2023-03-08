@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.calenderExport.domain.CustomCalenderBase;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.LoggedGeneration;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.TrackService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.StudiengangService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.StundenplanService;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsAndEmailDTO;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.VeranstaltungsIdsDTO;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.service.CourseService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.CourseEntry;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.service.TimetableService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Meeting;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.MeetingIdsAndEmailDTO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.MeetingIdsDTO;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.MeetingService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,24 +27,24 @@ import java.util.List;
 
 @Service
 public class CalenderExportService {
-    private final VeranstaltungsService veranstaltungsService;
-    private final StundenplanService stundenplanService;
-    private final StudiengangService studiengangService;
+    private final MeetingService meetingService;
+    private final TimetableService timetableService;
+    private final CourseService courseService;
     private final TrackService trackService;
 
-    public CalenderExportService(VeranstaltungsService veranstaltungsService, StundenplanService stundenplanService, StudiengangService studiengangService, TrackService trackService) {
-        this.veranstaltungsService = veranstaltungsService;
-        this.stundenplanService = stundenplanService;
-        this.studiengangService = studiengangService;
+    public CalenderExportService(MeetingService meetingService, TimetableService timetableService, CourseService courseService, TrackService trackService) {
+        this.meetingService = meetingService;
+        this.timetableService = timetableService;
+        this.courseService = courseService;
         this.trackService = trackService;
     }
 
-    public Calendar createCalenderForVeranstaltungenEventRecurring(List<Veranstaltung> veranstaltungen) {
+    public Calendar createCalenderForMeetingAppointmentRecurring(List<Meeting> veranstaltungen) {
         CustomCalenderBase customCalenderBase = new CustomCalenderBase();
-        var stundenplanMap = new HashMap<String, LinkedList<StundenplanEintrag>>();
+        var stundenplanMap = new HashMap<String, LinkedList<CourseEntry>>();
 
-        for (Veranstaltung x : veranstaltungen) {
-            stundenplanService.findByVeranstaltung(x).stream().forEach(stundenplanEintrag -> {
+        for (Meeting x : veranstaltungen) {
+            timetableService.findByVeranstaltung(x).stream().forEach(stundenplanEintrag -> {
                 var hash = stundenplanEintrag.getHashWithoutId();
                 var list = stundenplanMap.get(hash);
                 if (list == null) {
@@ -58,12 +58,12 @@ public class CalenderExportService {
             stundenplanMap.forEach((hash, liste) -> {
                 var firstEvent = liste.get(0);
                 customCalenderBase.addRecurringEventToCalendar(
-                        firstEvent.getVeranstaltung().getName(),
-                        new DateTime(firstEvent.getVon().toEpochSecond(ZoneOffset.ofHours(1))),
-                        new DateTime(firstEvent.getBis().toEpochSecond(ZoneOffset.ofHours(1))),
-                        firstEvent.getVeranstaltung().getName(),
-                        firstEvent.getVeranstaltung().getProf(),
-                        firstEvent.getRaum(),
+                        firstEvent.getMeeting().getName(),
+                        new DateTime(firstEvent.getStart().toEpochSecond(ZoneOffset.ofHours(1))),
+                        new DateTime(firstEvent.getEnd().toEpochSecond(ZoneOffset.ofHours(1))),
+                        firstEvent.getMeeting().getName(),
+                        firstEvent.getMeeting().getProfessor(),
+                        firstEvent.getRoom(),
                         liste.size()
                 );
             });
@@ -72,35 +72,35 @@ public class CalenderExportService {
         return customCalenderBase.getiCalender();
     }
 
-    public byte[] createCalender(VeranstaltungsIdsDTO veranstaltungsIdsDTO) throws IOException, NoSuchAlgorithmException {
-        if (veranstaltungsIdsDTO.getVeranstaltungsIds().size() == 0)
+    public byte[] createCalender(MeetingIdsDTO meetingIdsDTO) throws IOException, NoSuchAlgorithmException {
+        if (meetingIdsDTO.getMeetingIds().size() == 0)
             return new byte[0x00];
 
-        List<Veranstaltung> veranstaltungen = veranstaltungsService.findByIdsIn(veranstaltungsIdsDTO.getVeranstaltungsIds());
-        Calendar calenderToReturn = createCalenderForVeranstaltungenEventRecurring(veranstaltungen);
+        var veranstaltungen = meetingService.findByIdsIn(meetingIdsDTO.getMeetingIds());
+        var calenderToReturn = createCalenderForMeetingAppointmentRecurring(veranstaltungen);
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        var byteArrayOutputStream = new ByteArrayOutputStream();
 
-        CalendarOutputter outputter = new CalendarOutputter();
+        var outputter = new CalendarOutputter();
         outputter.output(calenderToReturn, byteArrayOutputStream);
 
-        if (!veranstaltungsIdsDTO.isNotrack()) {
-            LoggedGeneration loggedGeneration = new LoggedGeneration();
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Veranstaltung x : veranstaltungen) {
+        if (!meetingIdsDTO.isNotrack()) {
+            var loggedGeneration = new LoggedGeneration();
+            var stringBuilder = new StringBuilder();
+            for (Meeting x : veranstaltungen) {
                 stringBuilder.append(x.getName()).append(",");
             }
             loggedGeneration.setVeranstaltungen(stringBuilder.toString());
             loggedGeneration.setTimestamp(new Timestamp(System.currentTimeMillis()));
-            if (veranstaltungsIdsDTO instanceof VeranstaltungsIdsAndEmailDTO) {
+            if (meetingIdsDTO instanceof MeetingIdsAndEmailDTO) {
                 MessageDigest digest;
                 try {
                     digest = MessageDigest.getInstance("SHA-256");
                 } catch (NoSuchAlgorithmException ignored) {
                     return byteArrayOutputStream.toByteArray();
                 }
-                final byte[] hash = digest.digest(((VeranstaltungsIdsAndEmailDTO) veranstaltungsIdsDTO).getEmail().getBytes());
-                final StringBuilder hexString = new StringBuilder();
+                final byte[] hash = digest.digest(((MeetingIdsAndEmailDTO) meetingIdsDTO).getEmail().getBytes());
+                final var hexString = new StringBuilder();
                 for (byte b : hash) {
                     final String hex = Integer.toHexString(0xff & b);
                     if (hex.length() == 1)
@@ -111,7 +111,7 @@ public class CalenderExportService {
                 loggedGeneration.setHashedemail(hexString.toString());
             }
             if (veranstaltungen.stream().findFirst().isPresent()) {
-                loggedGeneration.setStudiengang(veranstaltungen.stream().findFirst().get().getStudiengang().getName());
+                loggedGeneration.setStudiengang(veranstaltungen.stream().findFirst().get().getCourse().getName());
             }
             trackService.generateLogEntry(loggedGeneration);
         }

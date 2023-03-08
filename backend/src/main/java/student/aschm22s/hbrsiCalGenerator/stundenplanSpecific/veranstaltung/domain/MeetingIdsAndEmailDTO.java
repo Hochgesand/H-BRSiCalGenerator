@@ -2,7 +2,7 @@ package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.dom
 
 import java.util.List;
 
-public class VeranstaltungsIdsAndEmailDTO extends VeranstaltungsIdsDTO {
+public class MeetingIdsAndEmailDTO extends MeetingIdsDTO {
     String email;
 
     public String getEmail() {
@@ -13,11 +13,11 @@ public class VeranstaltungsIdsAndEmailDTO extends VeranstaltungsIdsDTO {
         this.email = email;
     }
 
-    public List<Long> getVeranstaltungsIds() {
-        return veranstaltungsIds;
+    public List<Long> getMeetingIds() {
+        return meetingIds;
     }
 
-    public void setVeranstaltungsIds(List<Long> veranstaltungsIds) {
-        this.veranstaltungsIds = veranstaltungsIds;
+    public void setMeetingIds(List<Long> meetingIds) {
+        this.meetingIds = meetingIds;
     }
 }

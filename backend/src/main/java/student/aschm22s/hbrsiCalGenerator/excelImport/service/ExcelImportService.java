@@ -3,7 +3,7 @@ package student.aschm22s.hbrsiCalGenerator.excelImport.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import student.aschm22s.hbrsiCalGenerator.excelImport.domain.HbrsExcelParser;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.MeetingService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,13 +16,13 @@ import java.util.ArrayList;
 public class ExcelImportService {
 
     private final HbrsExcelParser hbrsExcelParser;
-    private final VeranstaltungsService veranstaltungsService;
+    private final MeetingService meetingService;
 
     private final String[] evaLinks = new String[]{"Ah mimimi Evas links verfallen lol."};
 
-    public ExcelImportService(HbrsExcelParser hbrsExcelParser, VeranstaltungsService veranstaltungsService) {
+    public ExcelImportService(HbrsExcelParser hbrsExcelParser, MeetingService meetingService) {
         this.hbrsExcelParser = hbrsExcelParser;
-        this.veranstaltungsService = veranstaltungsService;
+        this.meetingService = meetingService;
     }
 
     public String importFiles(MultipartFile[] files) throws IOException {

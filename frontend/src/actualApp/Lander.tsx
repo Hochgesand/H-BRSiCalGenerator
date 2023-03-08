@@ -4,7 +4,7 @@ import useGetRequest from "../api/useGetRequest";
 import Loading from "../Loading";
 import Error from "../Error";
 import {useNavigate} from "react-router-dom";
-import {Studiengang} from "../Objects/Studiengang";
+import {Course} from "../Objects/Course";
 import DSGVOModal from "./DSGVOModal";
 
 export default function Lander(this: any) {
@@ -13,7 +13,7 @@ export default function Lander(this: any) {
     const {getData} = useGetRequest({path: studiengaengePath})
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [studiengaenge, setStudiengaenge] = useState([] as Studiengang[]);
+    const [studiengaenge, setStudiengaenge] = useState([] as Course[]);
 
     useEffect(() => {
         async function fetchData() {

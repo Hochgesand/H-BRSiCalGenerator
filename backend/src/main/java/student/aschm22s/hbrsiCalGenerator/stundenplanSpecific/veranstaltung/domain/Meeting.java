@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Studiengang;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.StundenplanEintrag;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Course;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.CourseEntry;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -16,29 +16,28 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "veranstaltung")
-@Data
-public class Veranstaltung {
+@Table(name = "meeting")
+public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String prof;
+    private String professor;
     private Integer semester;
     @ManyToOne
     @JsonManagedReference
-    @JoinColumn(name = "studiengang_id", nullable = false)
-    private Studiengang studiengang;
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
     @JsonBackReference
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "veranstaltung")
-    private Collection<StundenplanEintrag> stundenplanEintrags;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "meeting")
+    private Collection<CourseEntry> courseEntries;
 
     @Override
     public String toString() {
-        return "Veranstaltung{" +
+        return "Course{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", prof='" + prof + '\'' +
+                ", prof='" + professor + '\'' +
                 ", semester=" + semester +
                 '}';
     }
@@ -47,7 +46,7 @@ public class Veranstaltung {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Veranstaltung that = (Veranstaltung) o;
+        Meeting that = (Meeting) o;
         return id != null && Objects.equals(id, that.id);
     }
 

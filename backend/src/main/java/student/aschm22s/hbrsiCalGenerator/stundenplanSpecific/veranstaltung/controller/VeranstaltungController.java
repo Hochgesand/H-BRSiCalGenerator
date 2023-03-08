@@ -2,8 +2,8 @@ package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.con
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Veranstaltung;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.VeranstaltungsService;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Meeting;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.service.MeetingService;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VeranstaltungController {
 
-    private final VeranstaltungsService veranstaltungsService;
+    private final MeetingService meetingService;
 
-    public VeranstaltungController(VeranstaltungsService veranstaltungsService) {
-        this.veranstaltungsService = veranstaltungsService;
+    public VeranstaltungController(MeetingService meetingService) {
+        this.meetingService = meetingService;
     }
 
     @RequestMapping(
@@ -23,8 +23,8 @@ public class VeranstaltungController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<Veranstaltung> getVeranstaltungen() {
-        return veranstaltungsService.findAll();
+    public List<Meeting> getVeranstaltungen() {
+        return meetingService.findAll();
     }
 
     @RequestMapping(
@@ -32,8 +32,8 @@ public class VeranstaltungController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<Veranstaltung> getVeranstaltungByStudiengang(@RequestParam("studiengang") String studiengang) {
-        return veranstaltungsService.findAllByStudiengang(studiengang);
+    public List<Meeting> getVeranstaltungByStudiengang(@RequestParam("studiengang") String studiengang) {
+        return meetingService.findAllByStudiengang(studiengang);
     }
 
     @RequestMapping(
@@ -41,8 +41,8 @@ public class VeranstaltungController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<Veranstaltung> getVeranstaltungByStudiengangId(@RequestParam("studiengang") Long studiengang) {
-        return veranstaltungsService.findAllByStudiengangId(studiengang);
+    public List<Meeting> getVeranstaltungByStudiengangId(@RequestParam("studiengang") Long studiengang) {
+        return meetingService.findAllByStudiengangId(studiengang);
     }
 
     @RequestMapping(
@@ -50,7 +50,7 @@ public class VeranstaltungController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<Veranstaltung> getVeranstaltungByProfessor(@RequestParam("studiengang") String prof) {
-        return veranstaltungsService.findAllByProfname(prof);
+    public List<Meeting> getVeranstaltungByProfessor(@RequestParam("studiengang") String prof) {
+        return meetingService.findAllByProfessorName(prof);
     }
 }

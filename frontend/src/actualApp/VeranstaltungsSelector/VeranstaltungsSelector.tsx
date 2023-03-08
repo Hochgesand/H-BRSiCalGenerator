@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
-import Veranstaltung from "../../Objects/Veranstaltung";
+import Meeting from "../../Objects/Meeting";
 import {baseUrl} from "../../Objects/endpoints";
 import useGetRequest from "../../api/useGetRequest";
 import Loading from "../../Loading";
@@ -14,9 +14,9 @@ export default function VeranstaltungsSelector() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const [veranstaltungsData, setVeranstaltungsData] = useState([] as Veranstaltung[]);
-  const [searchedVeranstaltungsData, setSearchedVeranstaltungsData] = useState([] as Veranstaltung[]);
-  const [selectedDataProp, setSelectedDataProp] = useState([] as Veranstaltung[])
+  const [veranstaltungsData, setVeranstaltungsData] = useState([] as Meeting[]);
+  const [searchedVeranstaltungsData, setSearchedVeranstaltungsData] = useState([] as Meeting[]);
+  const [selectedDataProp, setSelectedDataProp] = useState([] as Meeting[])
   const [veranstaltungsIds, setVeranstaltungsIds] = useState([] as number[])
   const [showKalendarModal, setShowKalendarModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,7 +29,7 @@ export default function VeranstaltungsSelector() {
 
   useEffect(() => {
     async function fetchData() {
-      await getData().then((json: Veranstaltung[]) => {
+      await getData().then((json: Meeting[]) => {
         setVeranstaltungsData(json);
         setSearchedVeranstaltungsData(json)
         setLoading(false)
@@ -54,7 +54,7 @@ export default function VeranstaltungsSelector() {
         return
       }
 
-      const searchVeranstaltung: Veranstaltung[] = []
+      const searchVeranstaltung: Meeting[] = []
       // eslint-disable-next-line array-callback-return
       veranstaltungsData.find(x => {
         let name: string = (x.name).toLowerCase()
@@ -83,7 +83,7 @@ export default function VeranstaltungsSelector() {
   const addItemToSelectedItems = (i: number) => {
     let newSelectedItems = selectedDataProp
 
-    let selectedVeranstaltung: Veranstaltung | null = veranstaltungsData.find(x => {
+    let selectedVeranstaltung: Meeting | null = veranstaltungsData.find(x => {
       if (x.id === i)
         return x
       return null
@@ -97,7 +97,7 @@ export default function VeranstaltungsSelector() {
   }
 
   const removeItemToSelectedItems = (i: number) => {
-    let newSelectedItems: Veranstaltung[] = []
+    let newSelectedItems: Meeting[] = []
     selectedDataProp.forEach(x => {
       if (x.id !== i)
         newSelectedItems.push(x)
@@ -127,7 +127,7 @@ export default function VeranstaltungsSelector() {
   return (
     <>
       <GenerateKalendarModal showKalendarModal={showKalendarModal} setShowKalendarModal={setShowKalendarModal}
-                             selectedData={selectedDataProp} veranstaltungsIds={veranstaltungsIds}/>
+                             selectedData={selectedDataProp} meetingIds={veranstaltungsIds}/>
 
       <div className={showKalendarModal ? "filter blur-lg" : ""} onClick={() => setShowKalendarModal(false)}>
         <div
@@ -177,7 +177,7 @@ export default function VeranstaltungsSelector() {
                         {veranstaltung.name}
                       </label>
                       <p id="comments-description" className="text-gray-500">
-                        {veranstaltung.prof}
+                        {veranstaltung.professor}
                       </p>
                     </div>
                   </div>

@@ -1,14 +1,14 @@
 interface PostRequestProps {
   readonly path: string;
-  readonly veranstaltungsIds: number[];
+  readonly meetingIds: number[];
 }
 
-export default function usePostRequestCalendar({ path, veranstaltungsIds }: PostRequestProps) {
+export default function usePostRequestCalendar({ path, meetingIds }: PostRequestProps) {
   const notrack: boolean = localStorage.getItem("notrack") !== null
   const getCalendar = () => fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({veranstaltungsIds, notrack} )
+    body: JSON.stringify({meetingIds: meetingIds, notrack} )
   }).then(async (response) => {
     if (!response.ok){
       return response.text().then(text => {throw Error(text)});
