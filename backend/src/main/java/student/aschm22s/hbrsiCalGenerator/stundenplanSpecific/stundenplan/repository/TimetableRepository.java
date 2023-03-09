@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface TimetableRepository extends CrudRepository<CourseEntry, Integer> {
     List<CourseEntry> findByMeeting(Meeting meeting);
+    List<CourseEntry> findAllByMeetingOrderByStart(Meeting meeting);
 
     List<CourseEntry> findAllByMeeting(Meeting meeting);
 }

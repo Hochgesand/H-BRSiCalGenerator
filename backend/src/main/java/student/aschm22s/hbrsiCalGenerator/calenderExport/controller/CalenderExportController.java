@@ -8,6 +8,7 @@ import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.doma
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @RestController

@@ -38,4 +38,8 @@ public class TimetableService {
     public Iterable<CourseEntry> saveAll(Iterable<CourseEntry> stundenplanEintragList) {
         return timetableRepository.saveAll(stundenplanEintragList);
     }
+
+    public List<CourseEntry> findAllByMeetingOrderByStart(Meeting meeting){
+        return timetableRepository.findAllByMeetingOrderByStart(meeting);
+    }
 }

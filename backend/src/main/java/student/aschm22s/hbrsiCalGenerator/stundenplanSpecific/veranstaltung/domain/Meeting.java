@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals.LoggedGeneration;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Course;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.stundenplan.domain.CourseEntry;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,7 +32,7 @@ public class Meeting {
     private Course course;
     @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "meeting")
-    private Collection<CourseEntry> courseEntries;
+    private List<CourseEntry> courseEntries;
 
     @Override
     public String toString() {

@@ -118,20 +118,24 @@ public class HbrsExcelParser {
                 timeHourMinuteEnd = "0" + timeHourMinuteStart;
             }
 
-            LocalDateTime timeOfEventStart = LocalDateTime.of(
+            LocalDateTime timeOfEventStartFirstAppointment = LocalDateTime.of(
                     LocalDate.parse((row.getCell(5).toString()).substring(0, 10), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                     LocalTime.parse(timeHourMinuteStart, DateTimeFormatter.ofPattern("HH:mm"))
             );
-            LocalDateTime timeOfEventEnd = LocalDateTime.of(
+            LocalDateTime timeOfEventEndFirstAppointment = LocalDateTime.of(
+                    LocalDate.parse((row.getCell(5).toString()).substring(0, 10), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    LocalTime.parse(timeHourMinuteEnd, DateTimeFormatter.ofPattern("HH:mm"))
+            );
+            LocalDateTime timeOfEventEndLastAppointment = LocalDateTime.of(
                     LocalDate.parse((row.getCell(5) + "").substring(11, 21), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                     LocalTime.parse(timeHourMinuteEnd, DateTimeFormatter.ofPattern("HH:mm"))
             );
 
-            var weeksInBetweenAmount = ChronoUnit.WEEKS.between(timeOfEventStart, timeOfEventEnd);
+            var weeksInBetweenAmount = ChronoUnit.WEEKS.between(timeOfEventStartFirstAppointment, timeOfEventEndLastAppointment) + 1;
 
             for (int j = 0; j < weeksInBetweenAmount; j++) {
-                var timestampStart = timeOfEventStart.plusWeeks(j);
-                var timestampEnd = timeOfEventEnd.plusWeeks(j);
+                var timestampStart = timeOfEventStartFirstAppointment.plusWeeks(j);
+                var timestampEnd = timeOfEventEndFirstAppointment.plusWeeks(j);
 
                 var newAppointment = new CourseEntry();
                 newAppointment.setRoom(row.getCell(3) + "");

@@ -1,6 +1,9 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.generatedCals;
 
 import org.springframework.stereotype.Service;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain.Meeting;
+
+import java.util.List;
 
 @Service
 public class TrackService {

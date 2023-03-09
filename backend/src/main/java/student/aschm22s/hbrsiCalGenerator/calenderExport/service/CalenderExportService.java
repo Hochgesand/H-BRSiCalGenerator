@@ -54,20 +54,20 @@ public class CalenderExportService {
 
                 list.add(stundenplanEintrag);
             });
-
-            stundenplanMap.forEach((hash, liste) -> {
-                var firstEvent = liste.get(0);
-                customCalenderBase.addRecurringEventToCalendar(
-                        firstEvent.getMeeting().getName(),
-                        new DateTime(firstEvent.getStart().toEpochSecond(ZoneOffset.ofHours(1))),
-                        new DateTime(firstEvent.getEnd().toEpochSecond(ZoneOffset.ofHours(1))),
-                        firstEvent.getMeeting().getName(),
-                        firstEvent.getMeeting().getProfessor(),
-                        firstEvent.getRoom(),
-                        liste.size()
-                );
-            });
         }
+
+        stundenplanMap.forEach((hash, liste) -> {
+            var firstEvent = liste.get(0);
+            customCalenderBase.addRecurringEventToCalendar(
+                    firstEvent.getMeeting().getName(),
+                    new DateTime(firstEvent.getStart().toEpochSecond(ZoneOffset.ofHours(2)) * 1000),
+                    new DateTime(firstEvent.getEnd().toEpochSecond(ZoneOffset.ofHours(2)) * 1000),
+                    firstEvent.getMeeting().getName(),
+                    firstEvent.getMeeting().getProfessor(),
+                    firstEvent.getRoom(),
+                    liste.size()
+            );
+        });
 
         return customCalenderBase.getiCalender();
     }

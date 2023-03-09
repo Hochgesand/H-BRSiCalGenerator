@@ -1,7 +1,12 @@
 package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.veranstaltung.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class MeetingIdsAndEmailDTO extends MeetingIdsDTO {
     String email;
 

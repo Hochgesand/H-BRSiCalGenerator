@@ -15,6 +15,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "logged_generation")
 public class LoggedGeneration {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +23,6 @@ public class LoggedGeneration {
     private String hashedemail;
     private String course;
     private Timestamp timestamp;
-    @OneToMany
+    @ManyToMany
     private Collection<Meeting> meetings;
 }

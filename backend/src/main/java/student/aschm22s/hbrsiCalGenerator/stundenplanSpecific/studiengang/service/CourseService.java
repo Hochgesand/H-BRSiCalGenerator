@@ -2,41 +2,41 @@ package student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.servi
 
 import org.springframework.stereotype.Service;
 import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.domain.Course;
-import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.repository.StudiengangsRepository;
+import student.aschm22s.hbrsiCalGenerator.stundenplanSpecific.studiengang.repository.CourseRepository;
 
 import java.util.List;
 
 @Service
 public class CourseService {
-    private final StudiengangsRepository studiengangsRepository;
+    private final CourseRepository courseRepository;
 
-    public CourseService(StudiengangsRepository studiengangsRepository) {
-        this.studiengangsRepository = studiengangsRepository;
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     public List<Course> findAllStudiengaenge() {
-        return studiengangsRepository.findAll();
+        return courseRepository.findAll();
     }
 
     public Course findFirstByNameContaining(String name) {
-        return studiengangsRepository.findFirstByNameContaining(name);
+        return courseRepository.findFirstByNameContaining(name);
     }
 
     public Course findByNameIfNotExistCreate(String name) {
-        Course course = studiengangsRepository.findFirstByNameContaining(name);
+        Course course = courseRepository.findFirstByNameContaining(name);
         if (course == null) {
             course = new Course();
             course.setName(name);
-            studiengangsRepository.save(course);
+            courseRepository.save(course);
         }
         return course;
     }
 
     public List<Course> findAllByNameContaining(String substring) {
-        return studiengangsRepository.findAllByNameContaining(substring);
+        return courseRepository.findAllByNameContaining(substring);
     }
 
     public Course findById(Long studiengang) {
-        return studiengangsRepository.findById(studiengang).orElse(new Course());
+        return courseRepository.findById(studiengang).orElse(new Course());
     }
 }
