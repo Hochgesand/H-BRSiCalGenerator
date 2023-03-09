@@ -18,9 +18,14 @@ export default function VeranstaltungsSelector() {
   const [filteredMeetings, setFilteredMeetings] = useState([] as Meeting[]);
   const [selectedMeetings, setSelectedMeetings] = useState([] as Meeting[])
   const [showKalendarModal, setShowKalendarModal] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false)
 
   useEffect(() => {
     cleanNonSelectedMeetings()
+    if (selectedMeetings.length + filteredMeetings.length !== meetingData.data.length)
+      setIsFiltered(true)
+    else
+      setIsFiltered(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMeetings, filteredMeetings])
 
@@ -87,12 +92,10 @@ export default function VeranstaltungsSelector() {
           <div className={"rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
             <StringSearch meetingData={meetingData.data} setFilteredMeetings={setFilteredMeetings}/>
             <div
-              className={"grid md:grid-cols-3 md:grid-rows-1 grid-cols-1 grid-rows-2 gap-4 rounded-box p-3 bg-base-300 md:w-3/4 w-full m-auto"}>
+              className={"grid md:grid-cols-3 md:grid-rows-1 grid-cols-1 grid-rows-3 gap-4 rounded-box p-3 bg-base-300 w-full m-auto"}>
               <ProfessorSearchDropdown meetingData={meetingData.data} setFilteredMeetings={setFilteredMeetings}/>
               <SemesterSearchDropdown meetingData={meetingData.data} setFilteredMeetings={setFilteredMeetings}/>
-              <div>
-                <button className={"btn btn-error mr-0 w-full"} onClick={resetFilter}>ResetFilter</button>
-              </div>
+              <button className={`btn ${isFiltered ? "btn-error" : "btn-disabled"} mr-0 w-full`} onClick={resetFilter}>ResetFilter</button>
             </div>
             <VeranstaltungsListe selectedMeetings={selectedMeetings} setSelectedMeetings={setSelectedMeetings}
                                  filteredMeetings={selectedMeetings} defaultSelected={true}/>
