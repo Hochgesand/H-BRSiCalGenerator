@@ -1,38 +1,37 @@
 import Meeting from "../../../Objects/Meeting";
-import React from "react";
+import React, {Dispatch, SetStateAction} from "react";
 
-export default function VeranstaltungsListe(props: {veranstaltungen: Meeting[], selectedVeranstaltungen: Meeting[], setSelectedVeranstaltungen: React.Dispatch<React.SetStateAction<Meeting[]>>, defaultSelected: boolean}){
-  const addItemToSelectedItems = (i: Meeting) => {
+interface DisplayMeetingData{
+  selectedMeetings: Meeting[]
+  setSelectedMeetings: Dispatch<SetStateAction<Meeting[]>>
+  filteredMeetings: Meeting[]
+  defaultSelected: boolean
+}
+
+export default function VeranstaltungsListe(props: DisplayMeetingData){
+  const addItemToSelectedItems = (newMeeting: Meeting) => {
     let newSelectedItems: Meeting[] = []
-    props.selectedVeranstaltungen.forEach(x => {
+    props.selectedMeetings.forEach(x => {
       newSelectedItems.push(x)
     })
-    newSelectedItems.push(i)
-    props.setSelectedVeranstaltungen(newSelectedItems)
+    if (newSelectedItems.find(x => x.id === newMeeting.id) === undefined)
+      newSelectedItems.push(newMeeting)
+    props.setSelectedMeetings(newSelectedItems)
   }
 
-  const removeItemToSelectedItems = (i: number) => {
+  const removeItemToSelectedItems = (meetingToRemove: Meeting) => {
     let newSelectedItems: Meeting[] = []
-    props.selectedVeranstaltungen.forEach(x => {
-      if (x.id !== i)
+    props.selectedMeetings.forEach(x => {
+      if (x.id !== meetingToRemove.id)
         newSelectedItems.push(x)
     })
-    props.setSelectedVeranstaltungen(newSelectedItems)
-  }
-
-  const checkIfIsSelected = (meeting: Meeting): boolean => {
-    let temp = false
-    props.selectedVeranstaltungen.forEach(x => {
-      if (x.name === meeting.name)
-        temp = true
-    })
-    return temp
+    props.setSelectedMeetings(newSelectedItems)
   }
 
   return(
     <fieldset className="border-t border-b border-gray-500">
       <div className="divide-y divide-gray-500">
-        {props.veranstaltungen.map((veranstaltung, id) => (
+        {props.filteredMeetings.map((meeting) => (
           <div className="relative flex items-start py-2 md:py-4">
             <div className="mr-3 m-auto flex items-center h-5">
               <input
@@ -43,10 +42,10 @@ export default function VeranstaltungsListe(props: {veranstaltungen: Meeting[], 
                 checked={props.defaultSelected}
                 onChange={event => {
                   if (event.target.checked) {
-                    addItemToSelectedItems(veranstaltung)
+                    addItemToSelectedItems(meeting)
                     event.target.checked = true
                   } else {
-                    removeItemToSelectedItems(veranstaltung.id)
+                    removeItemToSelectedItems(meeting)
                     event.target.checked = false
                   }
                 }}
@@ -55,10 +54,10 @@ export default function VeranstaltungsListe(props: {veranstaltungen: Meeting[], 
             </div>
             <div className="min-w-0 flex-1 text-sm">
               <label htmlFor="comments" className="font-medium text-gray-700">
-                {veranstaltung.name}
+                {meeting.name}
               </label>
               <p id="comments-description" className="text-gray-500">
-                {veranstaltung.professor}
+                {meeting.professor}
               </p>
             </div>
           </div>
