@@ -126,6 +126,7 @@ function StringSearch(props: SearchProps) {
         if (name.includes(e.toLowerCase()))
           searchVeranstaltung.push(x)
       })
+
       props.setFilteredMeetings(searchVeranstaltung)
     }, 300)
     callback()
@@ -150,6 +151,7 @@ function ProfessorSearchDropdown(props: SearchProps) {
         profs.push(veranstaltung.professor)
       }
     })
+    profs.sort()
     setProfessors(profs)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.meetingData])
@@ -188,6 +190,7 @@ function SemesterSearchDropdown(props: SearchProps) {
         semesters.push(veranstaltung.semester)
       }
     })
+    semesters.sort()
     setSemesters(semesters)
   }, [props.meetingData])
 

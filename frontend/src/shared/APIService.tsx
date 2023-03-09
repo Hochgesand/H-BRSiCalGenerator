@@ -26,6 +26,14 @@ async function postRequest(path: string, ...params: any) {
 const APIService = {
   getMeetings: async(course: string) => {
     const response: Meeting[] = await getRequest(`${baseUrl}/veranstaltung/getVeranstaltungByStudiengang?studiengang=${course}`, "")
+    response.sort((firstElement, secondElement) => { if (firstElement.name < secondElement.name) {
+        return -1;
+      }
+        if (firstElement > secondElement) {
+          return 1;
+        }
+        return 0; }
+    );
     return response
   }
 }
