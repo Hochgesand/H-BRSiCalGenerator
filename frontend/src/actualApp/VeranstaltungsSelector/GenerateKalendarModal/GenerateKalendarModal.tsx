@@ -11,27 +11,29 @@ import Meeting from "../../../Objects/Meeting";
 export interface kalendarModalInterface {
     showKalendarModal: boolean;
     setShowKalendarModal: React.Dispatch<React.SetStateAction<boolean>>
-    meetingIds: number[]
+    meetings: Meeting[]
     selectedData: Meeting[]
 }
 
 export default function GenerateKalendarModal(props: kalendarModalInterface) {
+    const meetingIds = props.meetings.map(x => x.id)
+
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     let downloadUrl: string = "";
     const [loading, setLoading] = useState(false)
     const postGetiCal = usePostRequestCalendar({
         path: (`${baseUrl}/calender/sememesteriCal`),
-        meetingIds: props.meetingIds
+        meetingIds: meetingIds
     })
     const postGetCSV = usePostRequestCalendar({
         path: (`${baseUrl}/calender/sememesteriCalAsCSV`),
-        meetingIds: props.meetingIds
+        meetingIds: meetingIds
     })
     const {getCalendarEmailResponse} = usePostRequestCalendarEmail({
         path: `${baseUrl}/calender/sememesteriCalEmail`,
         body: {
-            meetingIds: props.meetingIds,
+            meetingIds: props.meetings,
             email: email
         }
     })
@@ -106,7 +108,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                                 <div className={"grid grid-cols-1 grid-rows-1 gap-4"}>
                                     <button className={`btn h-14 btn-lg w-full mb-4 ${loading ? 'loading' : null}`}
                                             type={"submit"}
-                                            disabled={props.meetingIds.length === 0 || loading}
+                                            disabled={props.meetings.length === 0 || loading}
                                             onClick={() => {
                                                 downloadUrl = (`${baseUrl}/sememesteriCal`)
                                                 console.log(downloadUrl)
@@ -124,7 +126,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
                                     onChange={e => setEmail(e.target.value)}
                                 />
                                 <button className={`btn btn-lg w-full ${loading ? 'loading' : null}`} type={"submit"}
-                                        disabled={props.meetingIds.length === 0 || loading || email.length === 0}
+                                        disabled={props.meetings.length === 0 || loading || email.length === 0}
                                         onClick={onEmailWantToSchick}>Schick's per E-Mail
                                 </button>
                             </div>

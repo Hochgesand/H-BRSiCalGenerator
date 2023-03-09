@@ -1,17 +1,33 @@
-import axios from "axios";
+import axios, {Axios} from "axios";
+import Meeting from "../Objects/Meeting";
+import {baseUrl} from "../Objects/endpoints";
 
 async function getRequest(path: string, token: string) {
   return axios.get(path, {headers: {
       Authorization: `Bearer ${token}`
-    }});
+    }}).then(async (response) => {
+    if (response.status != 200){
+      throw Error("Could not fetch data");
+    }
+    return response.data
+  })
 }
 
 // TODO: params solution is temporary
 async function postRequest(path: string, ...params: any) {
-  return axios.post(path, params);
+  return axios.post(path, params).then(async (response) => {
+    if (response.status != 200){
+      throw Error("Could not fetch data");
+    }
+    return response.data
+  })
 }
 
 const APIService = {
+  getMeetings: async(course: string) => {
+    const response: Meeting[] = await getRequest(`${baseUrl}/veranstaltung/getVeranstaltungByStudiengang?studiengang=${course}`, "")
+    return response
+  }
 }
 
 export default APIService;
