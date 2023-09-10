@@ -57,7 +57,7 @@ export default function VeranstaltungsListe(props: DisplayMeetingData){
                 {meeting.name}
               </label>
               <p id="comments-description" className="text-gray-500">
-                {meeting.professor}
+                Bei: {meeting.professor}, Semester: {meeting.semester}
               </p>
             </div>
           </div>
