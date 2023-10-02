@@ -33,7 +33,7 @@ export default function GenerateKalendarModal(props: kalendarModalInterface) {
     const {getCalendarEmailResponse} = usePostRequestCalendarEmail({
         path: `${baseUrl}/calender/sememesteriCalEmail`,
         body: {
-            meetingIds: props.meetings,
+            meetingIds: meetingIds,
             email: email
         }
     })
