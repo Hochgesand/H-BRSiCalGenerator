@@ -1,4 +1,5 @@
-
+.DS_Store/
+.DS_Store
 backend/src/main/resources/application.properties
-
+Resources/
 .idea/
